@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Preguntados</title>
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+</head>
+<body>
+        <form method="POST" action="/register/register" 
+          class="w3-card w3-padding w3-light-grey w3-display-inline-block" 
+          style="min-width:300px">
+
+        {{#error}}
+            <div class="w3-panel w3-red">{{error}}</div>
+        {{/error}}
+
+        <p>
+            <input class="w3-input w3-border" 
+                   type="text" name="usuario" 
+                   placeholder="Usuario">
+        </p>
+
+        <p>
+            <input class="w3-input w3-border" 
+                   type="email" name="mail" 
+                   placeholder="Email">
+        </p>
+
+        <p>
+            <input class="w3-input w3-border" 
+                   type="password" name="password1" 
+                   placeholder="Password">
+        </p>
+
+        <p>
+            <input class="w3-input w3-border" 
+                   type="password" name="password2" 
+                   placeholder="Confirmar contraseña">
+        </p>
+
+        <p>
+            <input class="w3-button w3-blue" 
+                   type="submit" value="Registrarse">
+        </p>
+    </form>
+
+    <p>
+        <a href="/?controller=login&method=loginForm" class="w3-button w3-green">¿Ya tienes cuenta? Ingresa: </a>
+    </p>
+
+</body>
+</html>
