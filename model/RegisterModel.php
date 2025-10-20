@@ -11,20 +11,18 @@ class RegisterModel
 
     public function userExists($usuario, $mail)
     {
-        // Same style as LoginModel
         $sql = "SELECT id FROM usuarios WHERE usuario = '$usuario' OR mail = '$mail'";
         $result = $this->conexion->query($sql);
 
-        // Check if any row exists
         return !empty($result) && count($result) > 0;
     }
 
-    public function createUser($usuario, $mail, $password)
-    {
-        // Hash password
+    public function createUser($nombre_completo, $anio_nacimiento, $sexo, $pais, $ciudad, $usuario, $mail, $password, $foto_perfil){
         $hashed = password_hash($password, PASSWORD_DEFAULT);
 
-        $sql = "INSERT INTO usuarios (usuario, mail, password) VALUES ('$usuario', '$mail', '$hashed')";
+        $sql = "INSERT INTO usuarios (nombre_completo, anio_nacimiento, sexo, pais, ciudad, usuario, mail, password, foto_perfil) 
+            VALUES ('$nombre_completo', '$anio_nacimiento', '$sexo', '$pais', '$ciudad', '$usuario', '$mail', '$hashed', '$foto_perfil')";
+
         $this->conexion->query($sql);
     }
 }

@@ -6,4 +6,7 @@ include("helper/ConfigFactory.php");
 $configFactory = new ConfigFactory();
 $router = $configFactory->get("router");
 
-$router->executeController($_GET["controller"], $_GET["method"]);
+$controllerParam = $_GET["controller"] ?? null;
+$methodParam = $_GET["method"] ?? null;
+
+$router->executeController($controllerParam, $methodParam);

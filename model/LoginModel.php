@@ -12,7 +12,6 @@ class LoginModel
 
     public function getUserWith($user, $password)
     {
-        // Get user by username
         $sql = "SELECT * FROM usuarios WHERE usuario = '$user'";
         $result = $this->conexion->query($sql);
 
@@ -20,15 +19,13 @@ class LoginModel
             return [];
         }
 
-        // Assuming $result[0] is the user row
         $userRow = $result[0];
 
-        // Verify hashed password
         if (password_verify($password, $userRow['password'])) {
-            return [$userRow]; // login successful
+            return [$userRow];
         }
 
-        return []; // password incorrect
+        return [];
     }
 
 }

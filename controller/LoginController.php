@@ -48,13 +48,13 @@ class LoginController
 
     public function goToIndex()
     {
-        header("Location: /");
+        header("Location: /Preguntados/login");
         exit;
     }
 
     public function goToInicio()
     {
-        header("Location: /?controller=inicio&method=base");
+        header("Location: /Preguntados/login");
         exit;
     }
 }
