@@ -191,11 +191,10 @@
         <form method="POST" action="/Preguntados/register/register" enctype="multipart/form-data">
 
             <p><input type="text" name="nombre_completo" placeholder="Nombre completo" required></p>
-            <p><input type="date" name="anio_nacimiento" required></p>
-
+            <p> <input type="date" name="anio_nacimiento" required min="{{minDate}}" max="{{maxDate}}"></p>
             <p>
                 <label>Sexo:</label><br>
-                <label><input type="radio" name="sexo" value="Masculino" required> Masculino</label>
+                <label><input type="radio" name="sexo" value="Masculino" > Masculino</label>
                 <label><input type="radio" name="sexo" value="Femenino"> Femenino</label>
                 <label><input type="radio" name="sexo" value="Prefiero no cargarlo"> Prefiero no cargarlo</label>
             </p>

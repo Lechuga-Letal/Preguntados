@@ -17,8 +17,14 @@ class RegisterController
     }
 
     public function registerForm()
-    {
-        $this->renderer->render("register");
+    { //Cuenta esto como logica de negocio?? 
+        $today = date('Y-m-d');
+        $minDate = date('Y-m-d', strtotime('-99 years'));
+
+        $this->renderer->render('register', [
+            'minDate' => $minDate,
+            'maxDate' => $today
+        ]);
     }
 
     public function register()
@@ -47,13 +53,18 @@ class RegisterController
                 move_uploaded_file($_FILES['foto_perfil']['tmp_name'], $foto_perfil);
             }
 
-            $required = [$nombre_completo, $anio_nacimiento, $sexo, $pais, $usuario, $mail, $pass1, $pass2];
+            $required = [$nombre_completo, $anio_nacimiento, $pais, $usuario, $mail, $pass1, $pass2];
             
             foreach ($required as $field) {
                 if (empty($field)) {
                     $this->renderer->render('register', ['error' => 'Todos los campos son obligatorios']);
                     return;
                 }
+            }
+
+            $sexo = $_POST['sexo'] ?? '';
+            if (empty($sexo)) {
+                $sexo = "Prefiero no cargarlo";
             }
 
             if (empty($ciudad) && (empty($latitud) || empty($longitud))) { //El usuario usa el mapa o una ciudad
