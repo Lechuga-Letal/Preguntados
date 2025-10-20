@@ -1,6 +1,5 @@
 <?php
 
-// Incluir PHPMailer (las 3 clases)
 require_once __DIR__ . '/../phpmailer/src/Exception.php';
 require_once __DIR__ . '/../phpmailer/src/PHPMailer.php';
 require_once __DIR__ . '/../phpmailer/src/SMTP.php';
@@ -16,7 +15,6 @@ class MailService
     {
         $this->mailer = new PHPMailer(true);
 
-        // Configuración SMTP (puedes moverla a config luego)
         $this->mailer->isSMTP();
         $this->mailer->Host = 'smtp.gmail.com';
         $this->mailer->SMTPAuth = true;
@@ -25,7 +23,6 @@ class MailService
         $this->mailer->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
         $this->mailer->Port = 587;
 
-        // Remitente
         $this->mailer->setFrom('vetconnect.twi@gmail.com', 'PW2 - Preguntados');
     }
 

@@ -29,10 +29,8 @@ class RegisterModel
 
         $success = $this->conexion->query($sql);
 
-        if ($success) {
-            $mailService = new MailService();
-            $mailService->enviarBienvenida($usuario, $mail);
-        }
+        $mailService = new MailService();
+        $mailService->enviarBienvenida($usuario, $mail);
 
         return $success;
     }

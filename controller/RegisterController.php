@@ -37,9 +37,9 @@ class RegisterController
             $mail= $_POST['mail'] ?? '';
             $pass1= $_POST['password1'] ?? '';
             $pass2= $_POST['password2'] ?? '';
-            $latitud = $_POST['latitud'] ?? '';
-            $longitud = $_POST['longitud'] ?? '';
-
+            //$latitud = $_POST['latitud'] ?? '';
+            //$longitud = $_POST['longitud'] ?? '';
+            
             $foto_perfil = null;
             if (!empty($_FILES['foto_perfil']['name'])) {
                 $imagen = "imagenes/";
@@ -55,7 +55,6 @@ class RegisterController
                     return;
                 }
             }
-
 
             $this->model->createUser($nombre_completo, $anio_nacimiento, $sexo, $pais, $ciudad, $usuario, $mail, $pass1, $foto_perfil);
 
