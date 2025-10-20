@@ -28,10 +28,8 @@ class LoginController
 
             if (sizeof($resultado) > 0) {
                 $_SESSION["usuario"] = $_POST["usuario"];
-                echo"Deberia funcionar";
                 $this->goToInicio();
             } else {
-                echo"error";
                 $this->renderer->render("login", ["error" => "Usuario o clave incorrecta"]);
             }
         } else {

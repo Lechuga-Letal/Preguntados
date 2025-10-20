@@ -18,22 +18,22 @@ class MailService
         $this->mailer->isSMTP();
         $this->mailer->Host = 'smtp.gmail.com';
         $this->mailer->SMTPAuth = true;
-        $this->mailer->Username = 'vetconnect.twi@gmail.com';
-        $this->mailer->Password = 'pwsqjxaglmqowzlj';
+        $this->mailer->Username = 'preguntadostpfinal.pw2@gmail.com';
+        $this->mailer->Password = 'mktsemvsyduyanfy';
         $this->mailer->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
         $this->mailer->Port = 587;
 
-        $this->mailer->setFrom('vetconnect.twi@gmail.com', 'PW2 - Preguntados');
+        $this->mailer->setFrom('preguntadostpfinal.pw2@gmail.com', 'PW2 - Preguntados');
     }
 
     public function enviarBienvenida($usuario, $mail)
     {
         try {
-            $this->mailer->clearAllRecipients(); // Importante si se usa el mismo objeto más de una vez
+            $this->mailer->clearAllRecipients(); 
             $this->mailer->addAddress($mail, $usuario);
 
             $this->mailer->isHTML(true);
-            $this->mailer->Subject = 'Bienvenido a la plataforma';
+            $this->mailer->Subject = 'Bienvenido al Preguntados';
             $this->mailer->Body = "<h1>Hola $usuario!</h1><p>Gracias por registrarte.</p>";
             $this->mailer->AltBody = "Hola $usuario! Gracias por registrarte.";
 
