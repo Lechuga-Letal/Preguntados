@@ -1,5 +1,7 @@
 <?php
 
+require_once __DIR__ . '/../helper/MailService.php';
+
 class RegisterModel
 {
     private $conexion;
@@ -17,13 +19,22 @@ class RegisterModel
         return !empty($result) && count($result) > 0;
     }
 
-    public function createUser($nombre_completo, $anio_nacimiento, $sexo, $pais, $ciudad, $usuario, $mail, $password, $foto_perfil){
+    public function createUser($nombre_completo, $anio_nacimiento, $sexo, $pais, $ciudad, $usuario, $mail, $password, $foto_perfil)
+    {
         $hashed = password_hash($password, PASSWORD_DEFAULT);
 
-        $sql = "INSERT INTO usuarios (nombre_completo, anio_nacimiento, sexo, pais, ciudad, usuario, mail, password, foto_perfil) 
+        $sql = "INSERT INTO usuarios 
+            (nombre_completo, anio_nacimiento, sexo, pais, ciudad, usuario, mail, password, foto_perfil) 
             VALUES ('$nombre_completo', '$anio_nacimiento', '$sexo', '$pais', '$ciudad', '$usuario', '$mail', '$hashed', '$foto_perfil')";
 
-        $this->conexion->query($sql);
+        $success = $this->conexion->query($sql);
+
+        if ($success) {
+            $mailService = new MailService();
+            $mailService->enviarBienvenida($usuario, $mail);
+        }
+
+        return $success;
     }
 }
 

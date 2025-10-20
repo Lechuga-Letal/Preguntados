@@ -21,4 +21,9 @@ class InicioController
         $usuario = $_SESSION["usuario"] ?? "Invitado";
         $this->renderer->render("inicio", ["usuario" => $usuario]);
     }
+
+    public function logout()
+    {
+        $this->model->logout();
+    }
 }

@@ -39,22 +39,9 @@ class LoginController
         }
     }
 
-
-    public function logout()
-    {
-        session_destroy();
-        $this->goToIndex();
-    }
-
-    public function goToIndex()
-    {
-        header("Location: /Preguntados/login");
-        exit;
-    }
-
     public function goToInicio()
     {
-        header("Location: /Preguntados/login");
+        header("Location: /Preguntados/inicio");
         exit;
     }
 }
