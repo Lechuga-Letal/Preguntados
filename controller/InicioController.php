@@ -4,11 +4,13 @@ class InicioController
 {
     private $model;
     private $renderer;
+    private $redirectModel; 
 
-    public function __construct($model, $renderer)
+    public function __construct($model, $renderer, $redirectModel)
     {
         $this->model = $model;     
         $this->renderer = $renderer; 
+        $this->redirectModel = $redirectModel;
     }
 
     public function base()
@@ -25,5 +27,6 @@ class InicioController
     public function logout()
     {
         $this->model->logout();
+        $this->redirectModel->redirect("login/loginForm"); 
     }
 }

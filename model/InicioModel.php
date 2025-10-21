@@ -14,14 +14,6 @@ class InicioModel
     {
         session_start(); 
         $_SESSION = []; 
-        session_destroy(); 
-        header("Location: /Preguntados/login"); 
-        exit;
-    }
-
-    public function goToPaginaPrincipal()
-    {
-        header("Location: /Preguntados/login");
-        exit;
+        session_destroy();
     }
 }

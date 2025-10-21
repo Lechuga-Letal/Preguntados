@@ -4,11 +4,13 @@ class RegisterController
 {
     private $model;
     private $renderer;
+    private $redirectModel;
 
-    public function __construct($model, $renderer)
+    public function __construct($model, $renderer, $redirectModel)
     {
         $this->model = $model;
         $this->renderer = $renderer;
+        $this->redirectModel = $redirectModel;
     }
 
     public function base()
@@ -77,17 +79,10 @@ class RegisterController
             if(!$this->model->userExists($usuario, $mail)) {    
                 $this->model->createUser($nombre_completo, $anio_nacimiento, $sexo, $pais, $ciudad_db, $usuario, $mail, $pass1, $foto_perfil);
 
-                $this->redirectToLogin();
+                $this->redirectModel->redirect("login/loginForm");
             } else {
                 $this->renderer->render('register', ['error' => 'El usuario o email ya está registrado']);
             }
         }
-
-    public function redirectToLogin()
-    {
-        header("Location: /Preguntados/login/loginForm");
-        exit;
-    }
-
 }
 

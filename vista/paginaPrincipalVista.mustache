@@ -1,158 +1,17 @@
 <title>Preguntados</title>
-    <style>
-        body {
-            margin: 0;
-            height: 100vh;
-            background: linear-gradient(135deg, #181818, #1f1f1f);
-            font-family: 'Poppins', sans-serif;
-            color: #e0e0e0;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            overflow-x: hidden;
-        }
-
-        .container {
-            text-align: center;
-            padding: 0 20px;
-        }
-
-        .logo {
-            width: 200px;
-            height: 200px;
-            margin-bottom: 25px;
-            filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.2))
-            drop-shadow(0 0 15px rgba(255, 255, 255, 0.1));
-        }
-
-        .logo:hover {
-            transform: scale(1.05);
-            filter: drop-shadow(0 0 20px rgba(255, 255, 255, 0.4))
-            drop-shadow(0 0 30px rgba(255, 255, 255, 0.2));
-        }
-
-        h1 {
-            font-size: 3rem;
-            font-weight: 700;
-            letter-spacing: 2px;
-            color: #d9d9d9;
-            text-shadow: 0 3px 6px rgba(0, 0, 0, 0.6);
-            margin-bottom: 40px;
-            text-transform: uppercase;
-        }
-
-        .subtitle {
-            font-size: 1.1rem;
-            color: #aaaaaa;
-            margin-top: -25px;
-            margin-bottom: 35px;
-            text-shadow: 0 1px 2px rgba(0,0,0,0.6);
-        }
-
-        .button-container {
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
-            align-items: center;
-        }
-
-        .btn {
-            background: linear-gradient(145deg, #2a2a2a, #1a1a1a);
-            color: #dcdcdc;
-            text-decoration: none;
-            font-weight: 600;
-            padding: 15px 60px;
-            border-radius: 10px;
-            box-shadow: 3px 3px 6px #0f0f0f, -3px -3px 6px #2d2d2d;
-            transition: all 0.2s ease;
-        }
-
-        .btn:hover {
-            background: linear-gradient(145deg, #1a1a1a, #2a2a2a);
-            transform: translateY(-2px);
-            box-shadow: 4px 4px 8px #0f0f0f, -4px -4px 8px #2d2d2d;
-        }
-
-        .btn.secondary {
-            background: transparent;
-            border: 2px solid #555;
-            color: #bdbdbd;
-        }
-
-        .btn.secondary:hover {
-            background: #222;
-            border-color: #777;
-        }
-
-
-       @media (max-width: 768px) {
-            .logo {
-                width: 150px;
-                height: 150px;
-            }
-
-            h1 {
-                font-size: 2.3rem;
-            }
-
-            .subtitle {
-                font-size: 1rem;
-                margin-bottom: 25px;
-            }
-
-            .btn {
-                padding: 12px 45px;
-                font-size: 0.95rem;
-            }
-        }
-
-        @media (max-width: 480px) {
-            body {
-                justify-content: flex-start;
-                padding-top: 80px;
-            }
-
-            .logo {
-                width: 120px;
-                height: 120px;
-                margin-bottom: 15px;
-            }
-
-            h1 {
-                font-size: 1.9rem;
-                margin-bottom: 25px;
-            }
-
-            .subtitle {
-                font-size: 0.95rem;
-                margin-bottom: 20px;
-            }
-
-            .button-container {
-                gap: 15px;
-            }
-
-            .btn {
-                width: 80%;
-                padding: 12px 0;
-                font-size: 0.9rem;
-            }
-
-        }
-    </style>
+<link rel="stylesheet" href="/public/css/paginaPrincipalStyle.css">
 
 </head>
 
 <body>
-<img src="./imagenes/Logo.png" alt="logo" class="logo">
+<a href="#"><img src="/imagenes/Logo.png" alt="logo" class="logo"></a>
 <div class="container">
     <h1>PREGUNTADOS</h1>
     <p class="subtitle">Poné a prueba tus conocimientos en este desafío de preguntas y respuestas</p>
 
     <div class="button-container">
-        <a href="/Preguntados/?controller=login&method=base" class="btn">Iniciar Sesión</a>
-        <a href="/Preguntados/?controller=register&method=base" class="btn secondary">Registrarse</a>
+        <a href="/login/loginForm" class="btn">Iniciar Sesión</a>
+        <a href="/register/registerForm" class="btn secondary">Registrarse</a>
     </div>
 </div>
 

@@ -4,11 +4,13 @@ class LoginController
 {
     private $model;
     private $renderer;
+    private $redirectModel;
 
-    public function __construct($model, $renderer)
+    public function __construct($model, $renderer, $redirectModel)
     {
         $this->model = $model;
         $this->renderer = $renderer;
+        $this->redirectModel = $redirectModel;
     }
 
     public function base()
@@ -28,19 +30,13 @@ class LoginController
 
             if (sizeof($resultado) > 0) {
                 $_SESSION["usuario"] = $_POST["usuario"];
-                $this->goToInicio();
+                $this->redirectModel->redirect("inicio/");
             } else {
                 $this->renderer->render("login", ["error" => "Usuario o clave incorrecta"]);
             }
         } else {
             $this->loginForm();
         }
-    }
-
-    public function goToInicio()
-    {
-        header("Location: /Preguntados/inicio");
-        exit;
     }
 }
 
