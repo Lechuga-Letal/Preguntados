@@ -25,17 +25,27 @@ class LoginController
 
     public function login()
     {
-        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $resultado = $this->model->getUserWith($_POST["usuario"], $_POST["password"]);
-
-            if (sizeof($resultado) > 0) {
-                $_SESSION["usuario"] = $_POST["usuario"];
-                $this->redirectModel->redirect("inicio/");
-            } else {
-                $this->renderer->render("login", ["error" => "Usuario o clave incorrecta"]);
-            }
-        } else {
+        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
             $this->loginForm();
+            return;
+        }
+
+        $usuario = $_POST['usuario'] ?? '';
+        $password = $_POST['password'] ?? '';
+
+        /*
+        if (empty($usuario) || empty($password)) {
+            $this->renderer->render('login', ['error' => 'Debes completar todos los campos']);
+            return;
+        } */
+
+        $resultado = $this->model->getUserWith($usuario, $password);
+
+        if (!empty($resultado) && count($resultado) > 0) {
+            $_SESSION['usuario'] = $usuario;
+            $this->redirectModel->redirect('inicio/');
+        } else {
+            $this->renderer->render('login', ['error' => 'Usuario o contraseña incorrectos']);
         }
     }
 }
