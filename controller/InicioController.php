@@ -29,4 +29,11 @@ class InicioController
         $this->model->logout();
         $this->redirectModel->redirect("login/loginForm"); 
     }
+
+    public function ingresoPorMail(){
+        //TODO darle comportamiento al metodo como deberia
+        $usuario = "admin";
+        $this->renderer->render("inicio",
+                                ["usuario" => $usuario]);
+    }
 }
