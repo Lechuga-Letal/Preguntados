@@ -1,0 +1,69 @@
+    <title>Login</title>
+    <link rel="stylesheet" href="/public/css/paginaPrincipalStyle.css">
+</head>
+
+<body>
+<h1>Nueva pregunta</h1>
+<p class="subtitle">Aca podes crear una nueva pregunta y sugerirla, o puedes crear una y darla de alta d1 si sos un usuario editor! dea cuanto explicaba la web</p>
+<div>
+    <div>
+
+        <!--Tambien estaria bueno subir una sola imagen por pregunta, no? como en preguntados a-->
+        <form method="POST" action="/nuevaPregunta/guardarPregunta">
+        <h3>Crear Nueva Pregunta</h3>
+
+        {{#error}}
+            <div>{{error}}</div>
+        {{/error}}
+
+        {{#mensaje}}
+            <div>{{mensaje}}</div>
+        {{/mensaje}}
+
+        <p>
+            <label for="descripcion">Descripción:</label>
+            <input type="text" name="descripcion" id="descripcion" required>
+        </p>
+
+        <p>
+            <label for="categoria">Categoría:</label> <!--No olvidarse de sacar el disabled y cambiar el controller-->
+            <select name="id_categoria" id="categoria" disabled>
+            <option value="" disabled selected>Selecciona una categoría</option>
+            {{#categorias}}
+                <option value="{{id_categoria}}">{{nombre}}</option>
+            {{/categorias}}
+            </select>
+        </p>
+
+        <hr>
+        <h4>Respuestas</h4>
+
+        <p>
+            <input type="text" name="respuestas[]" placeholder="Respuesta 1" required>
+            <label><input type="radio" name="es_correcta" value="0" required> Correcta</label>
+        </p>
+
+        <p>
+            <input type="text" name="respuestas[]" placeholder="Respuesta 2" required>
+            <label><input type="radio" name="es_correcta" value="1" required> Correcta</label>
+        </p>
+
+        <p>
+            <input type="text" name="respuestas[]" placeholder="Respuesta 3" required>
+            <label><input type="radio" name="es_correcta" value="2" required> Correcta</label>
+        </p>
+
+        <p>
+            <input type="text" name="respuestas[]" placeholder="Respuesta 4" required>
+            <label><input type="radio" name="es_correcta" value="3" required> Correcta</label>
+        </p>
+
+        <p>
+            <input type="submit" value="Guardar Pregunta">
+        </p>
+        </form>
+
+
+    </div>
+</div>
+
