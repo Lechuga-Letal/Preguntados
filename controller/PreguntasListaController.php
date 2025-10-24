@@ -51,7 +51,10 @@ class PreguntasListaController
                     $tmp[$id] = [
                         'pregunta_id' => $id,
                         'pregunta' => $fila['pregunta'],
-                        'respuestas' => []
+                        'respuestas' => [],
+                        'cantidad_reportes' => $fila['cantidad_reportes'] ?? 0,
+                        'usuario_sugirio' => $fila['usuario_sugirio'] ?? null,
+                        'tipo' => $_GET['tipo'] ?? 'activas' //Hay que volver a pasar el parametro, no se bien porque
                     ];
                 }
 
@@ -68,7 +71,5 @@ class PreguntasListaController
         $agrupadas = array_values($tmp);
 
         $this->renderer->render("preguntasLista", ['preguntas' => $agrupadas]);
-
-        }
-
+    }
 }

@@ -9,13 +9,23 @@
 <div>
     {{#preguntas}}
         <div class="pregunta">
-            <h3>{{pregunta}}</h3>
+            <h3>
+                <a href="/gestionarPregunta?tipo={{tipo}}&id={{pregunta_id}}">{{pregunta}}</a>
+            </h3>
+
+            {{#cantidad_reportes}}
+                <p><strong>Reportes:</strong> {{cantidad_reportes}}</p>
+            {{/cantidad_reportes}}
+
+            {{#usuario_sugirio}}
+                <p><strong>Sugerida por:</strong> {{usuario_sugirio}}</p>
+            {{/usuario_sugirio}}
+
             <ul>
                 {{#respuestas}}
                 <li>
                     {{descripcion}} 
-                    {{#es_correcta}}—Correcta{{/es_correcta}}
-                    {{^es_correcta}}{{/es_correcta}}
+                    {{#es_correcta}} Correcta {{/es_correcta}}
                 </li>
                 {{/respuestas}}
             </ul>
@@ -24,7 +34,10 @@
     {{/preguntas}}
 
     {{^preguntas}}
-    <p>No hay preguntas cargadas.</p>
+        <p>No hay preguntas.</p>
     {{/preguntas}}
 </div>
+
+<a href="/editor">volver</a>
+
 

@@ -19,6 +19,7 @@ include_once("controller/NuevaPreguntaController.php");
 include_once("controller/PreguntasListaController.php");
 include_once("model/PreguntasModel.php");
 include_once("model/RespuestasModel.php");
+include_once("controller/GestionarPreguntaController.php");
 
 class ConfigFactory
 {
@@ -65,6 +66,8 @@ class ConfigFactory
         $this->objetos["NuevaPreguntaController"] = new NuevaPreguntaController(($this->conexion), $this->renderer, $this->redirectModel, $this->preguntasModel, $this->respuestasModel);
     
         $this->objetos["PreguntasListaController"] = new PreguntasListaController(($this->conexion), $this->renderer, $this->redirectModel, $this->preguntasModel); 
+    
+        $this->objetos["GestionarPreguntaController"] = new GestionarPreguntaController(($this->conexion), $this->renderer, $this->redirectModel, $this->preguntasModel, $this->respuestasModel);
     }
 
     public function get($objectName)

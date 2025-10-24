@@ -1,0 +1,75 @@
+    <title>Login</title>
+    <link rel="stylesheet" href="/public/css/paginaPrincipalStyle.css">
+</head>
+
+<body>
+<h1>Gestionar preguntas</h1>
+<p class="subtitle">ACa podes gestionar preguntas! Ver si tiene reportes, eliminarla, editarla o, si es una pregunta sugerida, agregarla!</p> <br>
+<div>
+    <!--
+    Dejen espacios entre corcheas a la hora de comentar porque sino mustache trata de leerlo y te explota
+        Mini guia de como funciona esto en mustache:    
+            { {#variable} }{ {/variable} } -> Solo si la variable existe y no esta vacia -> Itera por item
+            { {#is_variable} } { {/variable} } -> if la variable es true (bool)
+            { {^is_variable} } { {/variable} } -> if la variable es false (bool)
+    -->
+    {{#pregunta}}
+        <h2>{{descripcion}}</h2>
+        {{#tipo}}
+            {{#is_sugerida}}
+                <p><strong>Tipo:</strong> Pregunta sugerida</p>
+            {{/is_sugerida}}
+            {{^is_sugerida}}
+                <p><strong>Tipo:</strong> Pregunta activa</p>
+            {{/is_sugerida}}
+        {{/tipo}}
+    {{/pregunta}}
+
+    <ul>
+        {{#respuestas}}
+            <li>
+                {{descripcion}}
+                {{#es_correcta}} — Correcta{{/es_correcta}}
+            </li>
+        {{/respuestas}}
+    </ul>
+
+    {{#reports}}
+        <hr>
+        <h4>Reportes ({{cantidad}})</h4>
+        <ul>
+            {{#reportes}}
+                <li>
+                    {{usuario}}: {{descripcion}}
+                </li>
+            {{/reportes}}
+        </ul>
+    {{/reports}}
+
+    <hr>
+
+    <!--
+        De momento no se pueden editar las sugerencias. Me parecio too much
+        Y las preguntas activas que fueron sugerencias anteriormente, no guardan la info del usuairo que las sugirio inicialmente, Les parece dejarlo asi?
+        Tampoco hay preguntas "inactivas", ni una cant de reportes hecho por un usuairo en particular. A tener en cuenta! 
+    
+        Cada link vuelve a llamar a esta vista pero pasando por url la funcion que se debe realizar 
+    -->
+    {{#tipo}}
+        {{#is_sugerida}}
+            <a href="/gestionarPregunta?id={{pregunta_id}}&action=aceptar_sugerencia"><button>Aceptar sugerencia</button></a>
+            <a href="/gestionarPregunta?id={{pregunta_id}}&action=rechazar_sugerencia"><button>Rechazar sugerencia</button></a>
+        {{/is_sugerida}}
+        {{^is_sugerida}}
+            <a href="/gestionarPregunta?id={{pregunta_id}}&action=editar"><button disabled>Editar pregunta</button></a>
+            <a href="/gestionarPregunta?id={{pregunta_id}}&action=eliminar"><button>Eliminar pregunta</button></a>
+            {{#reports}}
+                <a href="/gestionarPregunta?id={{pregunta_id}}&action=rechazar_reportes"><button>Desestimar reportes</button></a>
+            {{/reports}}
+        {{/is_sugerida}}
+    {{/tipo}}
+
+    <a href="{{actions.volver}}"><button>Volver</button></a>
+</div>
+
+

@@ -21,4 +21,10 @@ class RespuestasModel
         $sql = "SELECT * FROM respuesta WHERE id_pregunta = $id_pregunta";
         return $this->conexion->query($sql);
     }
+
+    public function obtenerRespuestasSugeridas($id_sugerencia)
+    {
+        $sql = "SELECT * FROM respuesta_sugerida WHERE id_sugerencia = $id_sugerencia";
+        return $this->conexion->query($sql);
+    }
 }
