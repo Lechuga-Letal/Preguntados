@@ -16,36 +16,55 @@ class PreguntasListaController
 
     public function base()
     {
-        $this->listarPreguntas();
+        $this->obtenerOperacion();
     }
 
-    public function listarPreguntas()
-        {
-        $preguntas = $this->preguntasModel->obtenerPreguntasConRespuestas();
+    public function obtenerOperacion()
+    {
+        $tipo = $_GET["tipo"] ?? 'activas';
 
+        switch ($tipo) {
+            case 'reportes':
+                $preguntas = $this->preguntasModel->obtenerPreguntasReportadas();
+                break;
+            case 'sugeridas':
+                $preguntas = $this->preguntasModel->obtenerPreguntasSugeridas();
+                break;
+            default:
+                $preguntas = $this->preguntasModel->obtenerPreguntasConRespuestas();
+                break;
+        }
+        
+        $this->listarPreguntas($preguntas);
+    }
+
+    public function listarPreguntas($preguntas)
+        {
         $agrupadas = [];
         $tmp = [];
+        
+        if(!empty($preguntas)) {    
+            foreach ($preguntas as $fila) {
+                $id = $fila['pregunta_id'];
 
-        foreach ($preguntas as $fila) {
-            $id = $fila['pregunta_id'];
+                if (!isset($tmp[$id])) {
+                    $tmp[$id] = [
+                        'pregunta_id' => $id,
+                        'pregunta' => $fila['pregunta'],
+                        'respuestas' => []
+                    ];
+                }
 
-            if (!isset($tmp[$id])) {
-                $tmp[$id] = [
-                    'pregunta_id' => $id,
-                    'pregunta' => $fila['pregunta'],
-                    'respuestas' => []
-                ];
-            }
-
-            if (!empty($fila['respuesta'])) {
-                $tmp[$id]['respuestas'][] = [
-                    'descripcion' => $fila['respuesta'],
-                    'es_correcta' => $fila['es_correcta']
-                ];
+                if (!empty($fila['respuesta'])) {
+                    $tmp[$id]['respuestas'][] = [
+                        'descripcion' => $fila['respuesta'],
+                        'es_correcta' => $fila['es_correcta']
+                    ];
+                }
+                
             }
         }
 
-        // Convert associative array to sequential array
         $agrupadas = array_values($tmp);
 
         $this->renderer->render("preguntasLista", ['preguntas' => $agrupadas]);
