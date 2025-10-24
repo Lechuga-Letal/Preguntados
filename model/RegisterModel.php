@@ -35,4 +35,3 @@ class RegisterModel
         return $success;
     }
 }
-
