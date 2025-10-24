@@ -12,6 +12,7 @@ include_once("model/RegisterModel.php");
 include_once('vendor/mustache/src/Mustache/Autoloader.php');
 include_once ("helper/MustacheRenderer.php");
 include_once("controller/PaginaPrincipalController.php");
+include_once("controller/MapaController.php");
 
 class ConfigFactory
 {
@@ -46,6 +47,8 @@ class ConfigFactory
         $this->objetos["InicioController"] = new InicioController(new InicioModel($this->conexion), $this->renderer, $this->redirectModel);
 
         $this->objetos["PaginaPrincipalController"] = new PaginaPrincipalController(($this->conexion), $this->renderer);
+
+        $this->objetos["MapaController"] = new MapaController();    
 
     }
 

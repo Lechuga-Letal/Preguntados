@@ -31,8 +31,8 @@
                 <label><input type="radio" name="sexo" value="Prefiero no cargarlo"> Prefiero no cargarlo</label>
             </p>
 
-            <p><input type="text" name="pais" placeholder="País" required></p>
-            <p><input type="text" name="ciudad" id="ciudad" placeholder="Ciudad" required></p>
+            <p><input type="text" name="pais" placeholder="País" id="pais" required disabled></p>
+            <p><input type="text" name="ciudad" id="ciudad" placeholder="Ciudad" required disabled></p>
             <p><input type="text" name="usuario" placeholder="Nombre de usuario" required></p>
             <p><input type="email" name="mail" placeholder="Email" required></p>
             <p><input type="password" name="password1" placeholder="Contraseña" required></p>
@@ -62,14 +62,33 @@
     }).addTo(mapa);
 
     let marcador;
-    mapa.on('click', function(e) {
-        const { lat, lng } = e.latlng;
-        if (marcador) mapa.removeLayer(marcador);
-        marcador = L.marker([lat, lng]).addTo(mapa);
-        document.getElementById('latitud').value = lat;
-        document.getElementById('longitud').value = lng;
-        document.getElementById('ciudad').value = `Lat: ${lat.toFixed(3)}, Lng: ${lng.toFixed(3)}`;
-    });
+        mapa.on('click', function(e) { 
+            var lat = e.latlng.lat.toFixed(3);
+            var lng = e.latlng.lng.toFixed(3);
+            if (marcador) mapa.removeLayer(marcador);
+            marcador = L.marker([lat, lng]).addTo(mapa);
+            /*
+            document.getElementById('latitud').value = lat;
+            document.getElementById('longitud').value = lng;
+            document.getElementById('ciudad').value = `Lat: ${lat}, Lng: ${lng}`;//})*/
+
+            fetch('/mapa/obtenerCiudadYPais', {  
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ lat: lat, lng: lng })
+            }) 
+            .then(respuesta => respuesta.json())
+            .then(ubicacion =>{
+                var pais= document.getElementById('pais');
+                pais.value=ubicacion.pais;
+
+                var provincia= document.getElementById('ciudad');
+                provincia.value=ubicacion.provincia;
+            })
+
+
+            })
+        
 </script>
 
 
