@@ -4,16 +4,51 @@
             background: linear-gradient(135deg, #181818, #1f1f1f);
             font-family: 'Poppins', sans-serif;
             color: #e0e0e0;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
         }
 
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #ffffff;
+    padding: 10px 30px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.titulo {
+
+    text-align: center;
+    font-size: 24px;
+    margin: 0;
+    color: #333;
+}
+
+.usuario {
+    color: #333;
+    display: flex;
+    align-items: center;
+}
+
+.fotoUsuario{
+    height: 45px;
+    width: 45px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid #ddd;
+}
+
+.info-usuario {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.nombre-usuario {
+    font-weight: bold;
+    color: #333;
+}
+
         .logo {
-            position: absolute;
-            top: 20px;
-            left: 25px;
             width: 80px;
             height: 80px;
             filter: drop-shadow(0 0 5px rgba(255, 255, 255, 0.15))
@@ -21,9 +56,6 @@
         }
 
         .logout-btn {
-            position: absolute;
-            top: 25px;
-            right: 30px;
             background: linear-gradient(145deg, #2a2a2a, #1a1a1a);
             color: #dcdcdc;
             text-decoration: none;
@@ -43,6 +75,13 @@
         }
 
         .container {
+            max-width: 600px;
+            margin: 80px auto;
+            padding: 40px;
+            background: rgba(31, 31, 31, 0.8);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.6);
             text-align: center;
         }
 
@@ -52,10 +91,17 @@
             text-shadow: 0 0 10px rgba(255,255,255,0.1);
         }
 
-        p {
+        .boton {
+            display:block;
+            margin: 15px 10px;
+            padding: 12px 35px;
             font-size: 1.1rem;
-            margin-bottom: 30px;
-            color: #bdbdbd;
+            color: #e0e0e0;
+            background: linear-gradient(145deg, #2a2a2a, #1a1a1a);
+            border-radius: 12px;
+            text-decoration: none;
+            box-shadow: 3px 3px 6px #0f0f0f, -3px -3px 6px #2d2d2d;
+            transition: all 0.2s ease;
         }
 
         footer {

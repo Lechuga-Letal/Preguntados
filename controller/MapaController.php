@@ -10,7 +10,7 @@ class MapaController
 
     public function base()
     {
-        echo "hola";
+        $this->obtenerCiudadYPais();
     }
 
     public function obtenerCiudadYPais(){
