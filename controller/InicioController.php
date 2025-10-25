@@ -20,8 +20,19 @@ class InicioController
 
     public function inicio()
     {
-        $usuario = $_SESSION["usuario"] ?? "Invitado";
-        $this->renderer->render("inicio", ["usuario" => $usuario]);
+        if (!isset($_SESSION['usuario'])) {
+            $this->redirectModel->redirect('login/loginForm');
+            return;
+        }
+
+        $usuario = $_SESSION['usuario'];
+        $rol = $_SESSION['rol'] ?? 'Jugador';
+
+        if ($rol === 'Administrador') {
+            $this->renderer->render("InicioAdmin", ["usuario" => $usuario, "rol" => $rol]);
+        } else {
+            $this->renderer->render("inicio", ["usuario" => $usuario, "rol" => $rol]);
+        }
     }
 
     public function logout()

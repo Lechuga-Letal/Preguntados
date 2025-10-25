@@ -5,15 +5,15 @@ include_once("helper/NewRouter.php");
 include_once("controller/LoginController.php");
 include_once("controller/RegisterController.php");
 include_once("controller/InicioController.php");
-include_once("model/LoginModel.php");
+include_once("model/UsuarioModel.php");
 include_once("model/InicioModel.php");
 include_once("model/RedirectModel.php");
-include_once("model/RegisterModel.php");
 include_once('vendor/mustache/src/Mustache/Autoloader.php');
 include_once ("helper/MustacheRenderer.php");
 include_once("controller/PaginaPrincipalController.php");
 include_once("controller/MapaController.php");
-
+include_once("controller/InicioAdminController.php");
+include_once("model/InicioAdminModel.php");
 class ConfigFactory
 {
     private $config;
@@ -40,15 +40,17 @@ class ConfigFactory
 
         $this->objetos["router"] = new NewRouter($this, "LoginController", "base");
 
-        $this->objetos["LoginController"] = new LoginController(new LoginModel($this->conexion), $this->renderer, $this->redirectModel);
+        $this->objetos["LoginController"] = new LoginController(new UsuarioModel($this->conexion), $this->renderer, $this->redirectModel);
     
-        $this->objetos["RegisterController"] = new RegisterController(new RegisterModel($this->conexion), $this->renderer, $this->redirectModel);
+        $this->objetos["RegisterController"] = new RegisterController(new UsuarioModel($this->conexion), $this->renderer, $this->redirectModel);
         
         $this->objetos["InicioController"] = new InicioController(new InicioModel($this->conexion), $this->renderer, $this->redirectModel);
 
         $this->objetos["PaginaPrincipalController"] = new PaginaPrincipalController(($this->conexion), $this->renderer);
 
-        $this->objetos["MapaController"] = new MapaController();    
+        $this->objetos["InicioAdminController"] = new InicioAdminController(new InicioAdminModel($this->conexion), $this->renderer);
+
+        $this->objetos["MapaController"] = new MapaController();
 
     }
 

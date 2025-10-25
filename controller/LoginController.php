@@ -33,19 +33,31 @@ class LoginController
         $usuario = $_POST['usuario'] ?? '';
         $password = $_POST['password'] ?? '';
 
-        /*
+
         if (empty($usuario) || empty($password)) {
             $this->renderer->render('login', ['error' => 'Debes completar todos los campos']);
             return;
-        } */
+        }
 
         $resultado = $this->model->getUserWith($usuario, $password);
 
         if (!empty($resultado) && count($resultado) > 0) {
             $_SESSION['usuario'] = $usuario;
-            $this->redirectModel->redirect('inicio/');
+            $_SESSION['rol'] = $resultado[0]['rol'];
+            $this->vistaSegunRol();
         } else {
             $this->renderer->render('login', ['error' => 'Usuario o contraseña incorrectos']);
+        }
+    }
+
+    private function vistaSegunRol()
+    {
+        $rol = $_SESSION['rol'] ?? 'Jugador';
+
+        if ($rol === 'Administrador') {
+            $this->redirectModel->redirect('InicioAdmin/inicio');
+        } else {
+            $this->redirectModel->redirect('inicio/');
         }
     }
 }

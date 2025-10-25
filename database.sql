@@ -15,9 +15,10 @@ CREATE TABLE usuarios (
     sexo ENUM('Masculino', 'Femenino', 'Prefiero no cargarlo') DEFAULT 'Prefiero no cargarlo',
     pais VARCHAR(100) NOT NULL,
     ciudad VARCHAR(100) NOT NULL,
-    foto_perfil VARCHAR(255) DEFAULT NULL
-                      );
+    foto_perfil VARCHAR(255) DEFAULT NULL,
+    rol ENUM('Administrador', 'Editor', 'Jugador') NOT NULL DEFAULT 'Jugador',
+    creacion DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
 
-
-INSERT INTO usuarios (usuario, password) VALUES ('admin', 'admin');
-
+INSERT INTO usuarios (usuario, mail, password, anio_nacimiento, nombre_completo, pais, rol)
+VALUES ('admin', 'admin@preguntados.com', '$2y$10$VUtlqJI6Ycv1f/LCecC1le2CcmHXnJHJalGOH12qhsIZMtC9FL3NK', 2025,'Administrador del Sistema', 'Brasil' , 'Administrador');

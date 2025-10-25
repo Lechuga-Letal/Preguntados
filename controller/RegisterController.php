@@ -50,7 +50,7 @@ class RegisterController
             
             $foto_perfil = null;
             if (!empty($_FILES['foto_perfil']['name'])) {
-                $imagen = "imagenes/";
+                $imagen = "public/imagenes/";
                 $foto_perfil = $imagen . basename($_FILES['foto_perfil']['name']);
                 move_uploaded_file($_FILES['foto_perfil']['tmp_name'], $foto_perfil);
             }
@@ -76,7 +76,7 @@ class RegisterController
 
             $ciudad_db = !empty($ciudad) ? $ciudad : "Lat: $latitud, Lon: $longitud";
 
-            if(!$this->model->userExists($usuario, $mail)) {    
+            if(!$this->model->userExists($usuario, $mail)) {
                 $this->model->createUser($nombre_completo, $anio_nacimiento, $sexo, $pais, $ciudad_db, $usuario, $mail, $pass1, $foto_perfil);
 
                 $this->redirectModel->redirect("login/loginForm");
