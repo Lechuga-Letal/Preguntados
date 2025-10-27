@@ -30,9 +30,15 @@ class InicioController
 
         if ($rol === 'Administrador') {
             $this->renderer->render("InicioAdmin", ["usuario" => $usuario, "rol" => $rol]);
-        } else {
-            $this->renderer->render("inicio", ["usuario" => $usuario, "rol" => $rol]);
-        }
+        } 
+
+        $isEditor = ($rol === "Editor");
+
+        $data = [
+            "usuario" => $usuario,  
+            "isEditor" => $isEditor
+        ];
+        $this->renderer->render("inicio", $data);
     }
 
     public function logout()

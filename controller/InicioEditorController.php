@@ -13,12 +13,24 @@ class InicioEditorController
 
     public function base()
     {
-        $this->editor();
+        $this->inicioEditor();
     }
 
-    public function editor()
+    public function inicioEditor()
     {
-        $this->renderer->render("inicioEditor");
+        if (!isset($_SESSION["usuario"])) {
+            header("Location: /login/loginForm");
+            exit;
+        }
+
+        if ($_SESSION["rol"] === "Editor") {
+            $this->renderer->render("inicioEditor");
+            exit;
+        } else {
+            header("Location: /login/loginForm");
+        }
+
+
     }
 
 }

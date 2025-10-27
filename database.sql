@@ -67,12 +67,14 @@ CREATE TABLE respuesta_sugerida (
 
 -- Aca dejo un par de datos para hacer pruebas!!!
 
+-- Las contrasenias son 123!
 INSERT INTO usuarios (usuario, mail, password, nombre_completo, anio_nacimiento, sexo, pais, ciudad)
 VALUES
-('Joaco', 'Xeneixe2015@example.com', '123', 'Xeneixe1905', 1990, 'Masculino', 'Argentina', 'Buenos Aires'),
-('Mia', 'juan@example.com', '1234', 'Juan Pérez', 2001, 'Masculino', 'Argentina', 'Rosario'),
-('Jere', 'ana@example.com', '1234', 'Ana López', 1999, 'Femenino', 'Argentina', 'Córdoba');
+('Joaco pro', 'Xeneixe2015@example.com', '$2y$10$gVthlUqs36PVJIYh3XNWyeIE71jyNjkUnVWs1l6PbRZbtU4tbTlz6', 'Joaquin', 1990, 'Masculino', 'Argentina', 'Buenos Aires'),
+('Mia', 'juan@example.com', '$2y$10$gVthlUqs36PVJIYh3XNWyeIE71jyNjkUnVWs1l6PbRZbtU4tbTlz6', 'Juan Pérez', 2001, 'Femenino', 'Argentina', 'Rosario'),
+('Jere', 'ana@example.com', '$2y$10$gVthlUqs36PVJIYh3XNWyeIE71jyNjkUnVWs1l6PbRZbtU4tbTlz6', 'Ana López', 1999, 'Masculino', 'Argentina', 'Córdoba');
 
+-- admin123
 INSERT INTO usuarios (usuario, mail, password, anio_nacimiento, nombre_completo, pais, rol)
 VALUES 
 ('admin', 'admin@preguntados.com', '$2y$10$VUtlqJI6Ycv1f/LCecC1le2CcmHXnJHJalGOH12qhsIZMtC9FL3NK', 2025,'Administrador del Sistema', 'Brasil' , 'Administrador');

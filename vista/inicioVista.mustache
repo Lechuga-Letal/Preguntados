@@ -22,17 +22,16 @@
 
 <body>
 <div class="container">
-    <h1>Bienvenido!</h1>
+    <h1>Bienvenido {{usuario}}!</h1>
     
     <div>
         <a href="/preguntas" class="boton">Jugar Preguntados</a>
         <a href="/tablaPuntajes" class="boton">Ver Tabla de Puntajes</a>
     </div>
 
-    
-    <h2>Bienvenido al inicio!</h2>
-    <p>Usuario: {{usuario}}</p>
+    {{#isEditor}}
+       <a href="/inicioEditor/" class="btn btn-warning mt-3">Sos editor? Edite!</a>
+    {{/isEditor}}
 
-    <a href="/inicioEditor/" class="boton">Sos editor? edita!</a>
 </div>
 
