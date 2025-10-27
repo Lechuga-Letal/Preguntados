@@ -1,0 +1,43 @@
+    <title>Login</title>
+    <link rel="stylesheet" href="/public/css/paginaPrincipalStyle.css">
+</head>
+
+<body>
+<h1>Lista de preguntas</h1>
+<p class="subtitle">Aca podes ver la lista de preguntas, seleccionarlas-> editarlas->bocharlas->agregarlas etc etc!!!</p> <br>
+<p class="subtitle">Aca tambien podes ver todas las preguntas segun tu criterio: Las reportadas, las sugeridas y las actuales!</p>
+<div>
+    {{#preguntas}}
+        <div class="pregunta">
+            <h3>
+                <a href="/gestionarPregunta?tipo={{tipo}}&id={{pregunta_id}}">{{pregunta}}</a>
+            </h3>
+
+            {{#cantidad_reportes}}
+                <p><strong>Reportes:</strong> {{cantidad_reportes}}</p>
+            {{/cantidad_reportes}}
+
+            {{#usuario_sugirio}}
+                <p><strong>Sugerida por:</strong> {{usuario_sugirio}}</p>
+            {{/usuario_sugirio}}
+
+            <ul>
+                {{#respuestas}}
+                <li>
+                    {{descripcion}} 
+                    {{#es_correcta}} Correcta {{/es_correcta}}
+                </li>
+                {{/respuestas}}
+            </ul>
+        </div>
+        <hr>
+    {{/preguntas}}
+
+    {{^preguntas}}
+        <p>No hay preguntas.</p>
+    {{/preguntas}}
+</div>
+
+<a href="/editor">volver</a>
+
+

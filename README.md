@@ -14,6 +14,7 @@
 4. Modificar las direcciones agregando "/Preguntados" al final. Asi:
    DocumentRoot "D:/xampp/htdocs/Preguntados"
   <Directory "D:/xampp/htdocs/Preguntados">
+5. Reiniciar el Xampp
 
 ## Por favor no se olviden de utilizar el trello, muchas gracias 
 1. Esta en el grupo chicuelos

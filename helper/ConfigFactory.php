@@ -14,6 +14,15 @@ include_once("controller/PaginaPrincipalController.php");
 include_once("controller/MapaController.php");
 include_once("controller/InicioAdminController.php");
 include_once("model/InicioAdminModel.php");
+
+include_once("controller/EditorController.php");
+include_once("model/PreguntasModel.php");
+include_once("controller/NuevaPreguntaController.php");
+include_once("controller/PreguntasListaController.php");
+include_once("model/PreguntasModel.php");
+include_once("model/RespuestasModel.php");
+include_once("controller/GestionarPreguntaController.php");
+
 class ConfigFactory
 {
     private $config;
@@ -22,6 +31,8 @@ class ConfigFactory
     private $conexion;
     private $renderer;
     private $redirectModel;
+    private $preguntasModel;
+    private $respuestasModel; 
 
     public function __construct()
     {
@@ -38,6 +49,10 @@ class ConfigFactory
 
         $this->redirectModel = new RedirectModel(); 
 
+        $this->preguntasModel = new PreguntasModel($this->conexion);
+
+        $this->respuestasModel = new RespuestasModel(conexion: $this->conexion);
+
         $this->objetos["router"] = new NewRouter($this, "LoginController", "base");
 
         $this->objetos["LoginController"] = new LoginController(new UsuarioModel($this->conexion), $this->renderer, $this->redirectModel);
@@ -52,6 +67,14 @@ class ConfigFactory
 
         $this->objetos["MapaController"] = new MapaController();
 
+    
+        $this->objetos["EditorController"] = new EditorController(($this->conexion), $this->renderer); 
+    
+        $this->objetos["NuevaPreguntaController"] = new NuevaPreguntaController(($this->conexion), $this->renderer, $this->redirectModel, $this->preguntasModel, $this->respuestasModel);
+    
+        $this->objetos["PreguntasListaController"] = new PreguntasListaController(($this->conexion), $this->renderer, $this->redirectModel, $this->preguntasModel); 
+    
+        $this->objetos["GestionarPreguntaController"] = new GestionarPreguntaController(($this->conexion), $this->renderer, $this->redirectModel, $this->preguntasModel, $this->respuestasModel);
     }
 
     public function get($objectName)
