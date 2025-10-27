@@ -5,12 +5,13 @@ class PartidaController{
     private $model;
     private $renderer;
     private $redirectModel;
-
-    public function __construct($model, $renderer, $redirectModel){
+    private $usuarioModel;
+    public function __construct($model, $renderer, $redirectModel, $usuarioModel){
 
         $this->model = $model;
         $this->renderer = $renderer;
         $this->redirectModel = $redirectModel;
+        $this->usuarioModel = $usuarioModel;
     }
 
     public function base(){
@@ -27,21 +28,30 @@ class PartidaController{
         $this->renderer->render("oponente");
     }
 
-    public function iniciarPartida() {
+    public function iniciarPartida() 
+    {
 
         if (!isset($_SESSION['usuario'])) {
             header("Location: /login/loginForm");
             exit();
         }
 
-    $idUsuario = $_SESSION['usuario']['id'] ?? $_SESSION['usuario'];
+        $usuarioNomrbe = $_SESSION['usuario']['id'] ?? $_SESSION['usuario']; //no id
+        $idOponente = $_POST['id_oponente'] ?? 0; //Cero en caso de bot(? 
 
-     $idPartida = $this->model->crearPartida($idUsuario);
+        $idPartida = $this->model->crearPartida($usuarioNomrbe, $idOponente);
 
-     $_SESSION['id'] = $idPartida;
+        $_SESSION['id'] = $idPartida;
 
-    $this->renderer->render("partida");
-}
+        $oponente = $this->usuarioModel->getUsuarioById($idOponente);
+
+        $data = [
+            'idOponente' => $idOponente, 
+            'nombreOponente' => $oponente['usuario'] ?? 'Desconocido'        
+        ];
+
+        $this->renderer->render("partida", $data);
+    }
 
 //Según mi logica se terminan de completar los datos en la tabla de la bd cuando el usuario responde mal
 // y de ahí se llamaria a este metodo para hacer el update. Pero como no estoy segura de como hacerlo

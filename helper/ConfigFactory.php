@@ -35,7 +35,7 @@ class ConfigFactory
     private $redirectModel;
     private $preguntasModel;
     private $respuestasModel;
-
+    private $usuarioModel; 
     public function __construct()
     {
         $this->config = parse_ini_file("config/config.ini");
@@ -56,6 +56,8 @@ class ConfigFactory
 
         $this->respuestasModel = new RespuestasModel(conexion: $this->conexion);
 
+        $this->usuarioModel = new UsuarioModel($this->conexion);
+
         $this->objetos["router"] = new NewRouter($this, "PaginaPrincipalController", "base");
 
         $this->objetos["LoginController"] = new LoginController(new UsuarioModel($this->conexion), $this->renderer, $this->redirectModel);
@@ -68,7 +70,7 @@ class ConfigFactory
 
         $this->objetos["InicioAdminController"] = new InicioAdminController(new InicioAdminModel($this->conexion), $this->renderer);
 
-        $this->objetos["PartidaController"]= new PartidaController(new PartidaModel($this->conexion), $this->renderer, $this->redirectModel);
+        $this->objetos["PartidaController"]= new PartidaController(new PartidaModel($this->conexion), $this->renderer, $this->redirectModel, $this->usuarioModel);
 
         $this->objetos["MapaController"] = new MapaController();
 

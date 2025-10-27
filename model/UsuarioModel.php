@@ -2,6 +2,8 @@
 require_once __DIR__ . '/../helper/MailService.php';
  class UsuarioModel{
 
+    private $conexion; 
+
      public function __construct($conexion)
      {
          $this->conexion = $conexion;
@@ -54,4 +56,43 @@ require_once __DIR__ . '/../helper/MailService.php';
 
          return [];
      }
+
+    public function getUsuarioById($id)
+    {
+        if (!is_numeric($id)) {
+            return null;
+        }
+
+        $sql = "SELECT * FROM usuarios WHERE id = $id";
+        $resultado = $this->conexion->query($sql);
+        //var_dump($resultado);
+        if ($resultado && count($resultado) > 0) {
+            return (array) $resultado[0];
+        }
+
+        return null;
+    }
+
+    /*
+    public function getUsuarioByNombreUsuario($nombre)
+    {
+    if ($nombre === null || $nombre === '') {
+        return null;
+    }
+
+    $sql = "SELECT * FROM usuarios WHERE usuario = '$nombre' LIMIT 1";
+    $resultado = $this->conexion->query($sql);
+
+    if (is_array($resultado) && count($resultado) > 0) {
+        return $resultado[0];
+    }
+
+    if (is_object($resultado) && property_exists($resultado, 'num_rows')) {
+        if ($resultado->num_rows > 0) {
+            return $resultado->fetch_assoc();
+        }
+    }
+
+    return null;
+    } */
  }

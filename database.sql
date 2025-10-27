@@ -3,6 +3,12 @@ CREATE DATABASE IF NOT EXISTS tppreguntados;
 USE TpPreguntados;
 
 DROP TABLE IF EXISTS usuarios;
+DROP TABLE IF EXISTS reporte;
+DROP TABLE IF EXISTS pregunta_sugerencia; 
+DROP TABLE IF EXISTS respuesta_sugerida; 
+DROP TABLE IF EXISTS respuesta;
+DROP TABLE IF EXISTS pregunta;
+DROP TABLE IF EXISTS partidas;
 
 CREATE TABLE usuarios (
     id INT AUTO_INCREMENT PRIMARY KEY,
@@ -61,7 +67,17 @@ CREATE TABLE respuesta_sugerida (
     FOREIGN KEY (id_sugerencia) REFERENCES sugerencia(id_sugerencia) ON DELETE CASCADE
 );
 
--- Aca dejo un par de datos para hacer pruebas!!!
+CREATE TABLE partidas (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    id_usuario INT NOT NULL,
+    id_oponente INT DEFAULT NULL,
+    fecha_inicio DATETIME DEFAULT CURRENT_TIMESTAMP,
+    fecha_fin DATETIME DEFAULT NULL,
+    puntaje INT DEFAULT 0,
+    estado ENUM('en curso', 'finalizada', 'cancelada') DEFAULT 'en curso',
+    FOREIGN KEY (id_usuario) REFERENCES usuarios(id),
+    FOREIGN KEY (id_oponente) REFERENCES usuarios(id)
+);
 
 -- Las contrasenias son 123!
 INSERT INTO usuarios (usuario, mail, password, nombre_completo, anio_nacimiento, sexo, pais, ciudad)
@@ -74,13 +90,41 @@ VALUES
 INSERT INTO usuarios (usuario, mail, password, anio_nacimiento, nombre_completo, pais, rol)
 VALUES ('admin', 'admin@preguntados.com', '$2y$10$VUtlqJI6Ycv1f/LCecC1le2CcmHXnJHJalGOH12qhsIZMtC9FL3NK', 2025,'Administrador del Sistema', 'Brasil' , 'Administrador');
 
+-- Estos datos son temporales, con el objetivo de ver la funcionalidad de la pagina en todo su esplendor!
 
-CREATE TABLE partidas (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    id_usuario INT NOT NULL,
-    fecha_inicio DATETIME DEFAULT CURRENT_TIMESTAMP,
-    fecha_fin DATETIME DEFAULT NULL,
-    puntaje INT DEFAULT 0,
-    estado ENUM('en curso', 'finalizada', 'cancelada') DEFAULT 'en curso',
-    FOREIGN KEY (id_usuario) REFERENCES usuarios(id)
-);
+INSERT INTO pregunta (descripcion, id_categoria) VALUES
+('¿Cuál es la capital de Francia?', 1),
+('¿Cuánto es 5 + 7?', 2),
+('¿Quién pintó la Mona Lisa?', 3);
+
+INSERT INTO respuesta (descripcion, es_correcta, id_pregunta) VALUES
+('París', 1, 1),
+('Londres', 0, 1),
+('Madrid', 0, 1),
+('Berlín', 0, 1),
+('12', 1, 2),
+('10', 0, 2),
+('11', 0, 2),
+('13', 0, 2),
+('Leonardo da Vinci', 1, 3),
+('Pablo Picasso', 0, 3),
+('Vincent van Gogh', 0, 3),
+('Claude Monet', 0, 3);
+
+INSERT INTO reporte (id_pregunta, id_usuario, descripcion) VALUES
+(2, 2, 'La pregunta es demasiado fácil'),
+(2, 2, 'Debería tener más opciones incorrectas');
+
+INSERT INTO sugerencia (descripcion, id_categoria, id_usuario, estado) VALUES
+('¿Cuál es el planeta más grande del sistema solar?', 4, 2, 'pendiente'),
+('¿En qué año comenzó la Segunda Guerra Mundial?', 5, 3, 'pendiente');
+
+INSERT INTO respuesta_sugerida (descripcion, es_correcta, id_sugerencia) VALUES
+('Júpiter', 1, 1),
+('Saturno', 0, 1),
+('Urano', 0, 1),
+('Neptuno', 0, 1),
+('1939', 1, 2),
+('1945', 0, 2),
+('1914', 0, 2),
+('1940', 0, 2);
