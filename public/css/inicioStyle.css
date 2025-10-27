@@ -6,25 +6,28 @@
             color: #e0e0e0;
         }
 
-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    background-color: #ffffff;
-    padding: 10px 30px;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-}
+        .header {
+            background-color: rgba(31,31,31,0.9);
+            color: #fff;
+            padding: 2rem 3rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            backdrop-filter: blur(6px);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.5);
+            position: relative;
+        }
 
 .titulo {
 
     text-align: center;
     font-size: 24px;
     margin: 0;
-    color: #333;
+    color:  #dcdcdc;
 }
 
 .usuario {
-    color: #333;
+    color:  #dcdcdc;
     display: flex;
     align-items: center;
 }
@@ -58,7 +61,6 @@ header {
         .logout-btn {
             background: linear-gradient(145deg, #2a2a2a, #1a1a1a);
             color: #dcdcdc;
-            text-decoration: none;
             font-weight: 600;
             padding: 10px 30px;
             border-radius: 10px;

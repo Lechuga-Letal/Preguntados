@@ -33,7 +33,7 @@ require_once __DIR__ . '/../helper/MailService.php';
 
      public function getUserWith($user, $password)
      {
-         $sql = "SELECT usuario, password, rol FROM usuarios WHERE usuario = '$user'";
+         $sql = "SELECT id, usuario, password, rol FROM usuarios WHERE usuario = '$user'";
 
          $result = $this->conexion->query($sql);
 
@@ -45,7 +45,11 @@ require_once __DIR__ . '/../helper/MailService.php';
          $userRow = $result[0];
 
          if (password_verify($password, $userRow['password'])) {
-             return [$userRow];
+             return [
+                 'id' => $userRow['id'],
+                 'usuario' => $userRow['usuario'],
+                 'rol' => $userRow['rol']
+             ];
          }
 
          return [];

@@ -23,6 +23,8 @@ include_once("model/PreguntasModel.php");
 include_once("model/RespuestasModel.php");
 include_once("controller/GestionarPreguntaController.php");
 
+include_once("controller/PartidaController.php");
+include_once("model/PartidaModel.php");
 class ConfigFactory
 {
     private $config;
@@ -32,7 +34,7 @@ class ConfigFactory
     private $renderer;
     private $redirectModel;
     private $preguntasModel;
-    private $respuestasModel; 
+    private $respuestasModel;
 
     public function __construct()
     {
@@ -49,11 +51,12 @@ class ConfigFactory
 
         $this->redirectModel = new RedirectModel(); 
 
+        $this->objetos["router"] = new NewRouter($this, "PaginaPrincipalController", "base");
         $this->preguntasModel = new PreguntasModel($this->conexion);
 
         $this->respuestasModel = new RespuestasModel(conexion: $this->conexion);
 
-        $this->objetos["router"] = new NewRouter($this, "LoginController", "base");
+        $this->objetos["router"] = new NewRouter($this, "PaginaPrincipalController", "base");
 
         $this->objetos["LoginController"] = new LoginController(new UsuarioModel($this->conexion), $this->renderer, $this->redirectModel);
     
@@ -65,14 +68,16 @@ class ConfigFactory
 
         $this->objetos["InicioAdminController"] = new InicioAdminController(new InicioAdminModel($this->conexion), $this->renderer);
 
+        $this->objetos["PartidaController"]= new PartidaController(new PartidaModel($this->conexion), $this->renderer, $this->redirectModel);
+
         $this->objetos["MapaController"] = new MapaController();
 
-        $this->objetos["InicioEditorController"] = new InicioEditorController(($this->conexion), $this->renderer); 
-    
+        $this->objetos["InicioEditorController"] = new InicioEditorController(($this->conexion), $this->renderer);
+
         $this->objetos["NuevaPreguntaController"] = new NuevaPreguntaController(($this->conexion), $this->renderer, $this->redirectModel, $this->preguntasModel, $this->respuestasModel);
-    
-        $this->objetos["PreguntasListaController"] = new PreguntasListaController(($this->conexion), $this->renderer, $this->redirectModel, $this->preguntasModel); 
-    
+
+        $this->objetos["PreguntasListaController"] = new PreguntasListaController(($this->conexion), $this->renderer, $this->redirectModel, $this->preguntasModel);
+
         $this->objetos["GestionarPreguntaController"] = new GestionarPreguntaController(($this->conexion), $this->renderer, $this->redirectModel, $this->preguntasModel, $this->respuestasModel);
     }
 

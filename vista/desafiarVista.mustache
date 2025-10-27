@@ -1,0 +1,45 @@
+<title>Oponente</title>
+<link rel="stylesheet" href="/public/css/adminStyle.css">
+<body>
+<header class="header">
+    <img src="/public/imagenes/Logo.png" alt="logo" class="logo">
+    <form method="POST" action="/Preguntados/inicio/logout">
+        <input class="logout-btn" type="submit" value="Cerrar sesión">
+    </form>
+</header>
+<main class="container">
+    <h1>Elegí a que amigo desafiar</h1>
+    <div>
+        <section class="tabla">
+            <table>
+                <thead>
+                <tr>
+                    <th>Foto de perfil</th>
+                    <th>Usuario</th>
+                    <th>Nombre completo</th>
+                    <th>Pais</th>
+                    <th>Desafiar</th>
+
+                </tr>
+                </thead>
+                <tbody>
+                {{#usuarios}}
+                    <tr>
+                        <td>{{foto_perfil}}</td>
+                        <td>{{usuario}}</td>
+                        <td>{{nombre_completo}}</td>
+                        <td>{{pais}}</td>
+                        <td>
+                            <form method="POST" action="/partida/iniciarPartida">
+                            <input type="hidden" name="id_usuario" value="{{id}}">
+                            <button type="submit" class="btn-cambiar">Desafiar</button>
+                        </form>
+                        </td>
+                    </tr> {{/usuarios}}
+                </tbody>
+            </table>
+        </section>
+    </div>
+
+</main>
+</body>

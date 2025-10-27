@@ -2,30 +2,23 @@
 <link rel="stylesheet" href="../public/css/inicioStyle.css">
 </head>
 
-<header>
-    <img src="/public/imagenes/Logo.png" alt="logo" class="logo">
-
-    <h2 class="titulo">Preguntados</h2>
-
-    <div class="usuario">
-    <img src="/public/imagenes/Usuario.png" alt="icono usuario" class="fotoUsuario">
-
-    <div >
-        <span class="nombreUsuario">Usuario: {{usuario}}</span>
-        <form method="POST" action="/Preguntados/inicio/logout">
-            <input class="logout-btn" type="submit" value="Cerrar sesión">
-        </form>
-    </div>
-    <div>
-</header>
-
-
 <body>
+
+        <header class="header">
+            <div>
+            <span class="nombreUsuario">Usuario: {{usuario}}</span>
+            </div>
+            <h2 class="titulo">Preguntados</h2>
+            <form method="POST" action="/Preguntados/inicio/logout">
+                <input class="logout-btn" type="submit" value="Cerrar sesión">
+            </form>
+        </header>
+
 <div class="container">
     <h1>Bienvenido {{usuario}}!</h1>
     
     <div>
-        <a href="/preguntas" class="boton">Jugar Preguntados</a>
+        <a href="/partida/jugar" class="boton">Jugar Preguntados</a>
         <a href="/tablaPuntajes" class="boton">Ver Tabla de Puntajes</a>
     </div>
 
