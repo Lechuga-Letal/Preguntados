@@ -25,28 +25,29 @@ class PartidaModel
 
     public function crearPartida($usuario, $oponente)
     {
-        if (!is_numeric($usuario)) {
-            $idUsuario = $this->obtenerIdUsuarioPorNombre($usuario);
-        } else {
-            $idUsuario = $usuario;
-        }
+        $idUsuario = is_numeric($usuario) ? $usuario : $this->obtenerIdUsuarioPorNombre($usuario);
 
         if ($oponente !== null) {
             $idOponente = is_numeric($oponente) ? $oponente : $this->obtenerIdUsuarioPorNombre($oponente);
         }
 
-        $sql = "INSERT INTO partidas (id_usuario, id_oponente) VALUES ($idUsuario, " . ($idOponente ?? "NULL") . ")";
+        $idOponenteSql = (!empty($idOponente) && $idOponente > 0) ? $idOponente : "NULL";
+
+        $sql = "INSERT INTO partidas (id_usuario, id_oponente) VALUES ($idUsuario, $idOponenteSql)";
         @$this->conexion->query($sql);
 
-        $idPartida = "SELECT MAX(id) as id FROM partidas WHERE id_usuario = $idUsuario";
-        $resultado = @$this->conexion->query($idPartida);
+        $idPartidaQuery = "SELECT MAX(id) as id FROM partidas WHERE id_usuario = $idUsuario";
+        $resultado = $this->conexion->query($idPartidaQuery);
 
-        if ($resultado && count($resultado) > 0) {
+        // Directly check array
+        if (!empty($resultado) && isset($resultado[0]['id'])) {
             return $resultado[0]['id'];
         }
 
         return null;
     }
+
+
 
     public function obtenerListadoDeJugadores($idActual) {
         if (!is_numeric($idActual)) {
