@@ -1,6 +1,6 @@
 <?php
 
-class EditorController
+class InicioEditorController
 {
     private $model;
     private $renderer;
@@ -18,7 +18,7 @@ class EditorController
 
     public function editor()
     {
-        $this->renderer->render("editor");
+        $this->renderer->render("inicioEditor");
     }
 
 }

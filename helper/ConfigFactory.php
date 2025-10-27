@@ -15,7 +15,7 @@ include_once("controller/MapaController.php");
 include_once("controller/InicioAdminController.php");
 include_once("model/InicioAdminModel.php");
 
-include_once("controller/EditorController.php");
+include_once("controller/InicioEditorController.php");
 include_once("model/PreguntasModel.php");
 include_once("controller/NuevaPreguntaController.php");
 include_once("controller/PreguntasListaController.php");
@@ -67,8 +67,7 @@ class ConfigFactory
 
         $this->objetos["MapaController"] = new MapaController();
 
-    
-        $this->objetos["EditorController"] = new EditorController(($this->conexion), $this->renderer); 
+        $this->objetos["InicioEditorController"] = new InicioEditorController(($this->conexion), $this->renderer); 
     
         $this->objetos["NuevaPreguntaController"] = new NuevaPreguntaController(($this->conexion), $this->renderer, $this->redirectModel, $this->preguntasModel, $this->respuestasModel);
     

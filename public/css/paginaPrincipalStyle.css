@@ -83,6 +83,15 @@ background: #222;
 border-color: #777;
 }
 
+.custom-outline-warning {
+  color: #ffc107;
+  border-color: #ffc107;
+}
+
+.custom-outline-warning:hover {
+  background-color: #ffc107;
+  color: white;
+}
 
 @media (max-width: 768px) {
 .logo {
@@ -138,3 +147,4 @@ h1 {
 }
 
 }
+
