@@ -3,6 +3,7 @@
 <body>
 <header class="header">
     <img src="/public/imagenes/Logo.png" alt="logo" class="logo">
+    <link rel="stylesheet" href="/public/css/partidaStyle.css">
     <form method="POST" action="/Preguntados/inicio/logout">
         <input class="logout-btn" type="submit" value="Cerrar sesión">
     </form>
@@ -11,6 +12,43 @@
     <h1>Partida iniciada</h1>
     <p>Tu oponente es: <strong>{{nombreOponente}}</strong></p>
     <!--<p>Tu oponente es: <strong>{{idOponente}}</strong></p>-->
+
+    <div id="pregunta-container">
+                <h2 id="descripcionPregunta">hola</h2>
+                <div id="opciones">
+                    <!-- Las opciones de respuesta se generarán aquí -->
+                    
+                
+                </div> 
+    </div>
+
+    <script>
+    fetch('/partida/obtenerPregunta')
+        .then(response => response.json())
+        .then(data => {
+            console.log('Pregunta obtenida:', data);
+            // Aquí puedes actualizar el DOM para mostrar la pregunta y las opciones
+            document.getElementById('descripcionPregunta').textContent = data.pregunta[0].descripcion;
+
+            const contenedorOpciones = document.getElementById('opciones');
+            contenedorOpciones.innerHTML = '';
+            
+
+            data.respuestas.forEach(opcion => {
+                var boton = document.createElement('button');
+                boton.className = 'opcion';
+                boton.textContent = opcion.descripcion; 
+                console.log('Opción:', opcion);
+                contenedorOpciones.appendChild(boton);
+            });
+
+        })
+        .catch(error => {
+            console.error('Error al obtener la pregunta:', error);
+        });
+    
+    </script>
+    
     
 </main>
 <script>

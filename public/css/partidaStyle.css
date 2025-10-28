@@ -1,0 +1,39 @@
+    .contenedor {
+      background: #fff;
+      padding: 30px 40px;
+      border-radius: 12px;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+      width: 400px;
+      text-align: center;
+    }
+    .pregunta {
+      font-size: 1.5em;
+      margin-bottom: 25px;
+      color: #333;
+    }
+
+    #opciones {
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
+    }
+
+    .opcion{
+        display: flex;
+        flex-direction: column;
+        background: #e4e6eb;
+        border: none;
+        padding: 12px 20px;
+        margin: 10px 0;
+        border-radius: 8px;
+        cursor: pointer;
+        font-size: 1em;
+        transition: background 0.2s;
+    }
+    .opcion:hover {
+      background: #d4d6db;
+    }
+
+    body{
+        background-color: #ffffff;
+    }

@@ -74,4 +74,12 @@ class PartidaController{
         $jugadores = $this->model->obtenerListadoDeJugadores($idUsuario);
         $this->renderer->render("desafiar", ["usuarios" => $jugadores]);
     }
+
+    public function obtenerPregunta(){
+        header('Content-Type: application/json');
+
+        $pregunta = $this->model->obtenerPregunta();
+
+        echo json_encode($pregunta);
+    }
 }

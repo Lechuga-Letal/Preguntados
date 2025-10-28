@@ -86,6 +86,20 @@ class PartidaModel
 
         @$this->conexion->query($sql);
     }
+
+    public function obtenerPregunta()
+    {//Por ahora devuelve siempre la misma pregunta y respuestas
+        $sql = "SELECT * FROM pregunta where id_categoria = 2";
+        $obtencionPregunta = $this->conexion->query($sql);
+
+        $sql_respuestas = "SELECT * FROM respuesta WHERE id_pregunta = 2";
+        $obtencionRespuestas = $this->conexion->query($sql_respuestas);
+
+        return [
+            'pregunta' => $obtencionPregunta,
+            'respuestas' => $obtencionRespuestas
+        ];
+    }
 }
 
 
