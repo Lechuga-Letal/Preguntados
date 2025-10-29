@@ -21,7 +21,7 @@ CREATE TABLE usuarios (
     pais VARCHAR(100) NOT NULL,
     ciudad VARCHAR(100) NOT NULL,
     foto_perfil VARCHAR(255) DEFAULT NULL,
-    rol ENUM('Administrador', 'Editor', 'Jugador') NOT NULL DEFAULT 'Jugador',
+    rol ENUM('Administrador', 'Editor', 'Jugador') NOT NULL DEFAULT 'Jugador', -- pasarlo a una tabla Roles
     creacion DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
@@ -30,7 +30,7 @@ CREATE TABLE pregunta (
     descripcion VARCHAR(255) NOT NULL,
     cant_de_veces_respondidas INT DEFAULT 0,
     cant_de_veces_respondidas_correctamente INT DEFAULT 0,
-    id_categoria INT NOT NULL
+    id_categoria INT NOT NULL -- pasarlo a una tabla categorias
 );
 
 CREATE TABLE respuesta (
@@ -44,12 +44,13 @@ CREATE TABLE respuesta (
 CREATE TABLE reporte (
     id_reporte INT AUTO_INCREMENT PRIMARY KEY,
     id_pregunta INT NOT NULL,
-    id_usuario INT NOT NULL,
+    id_usuario INT NOT NULL, -- es necesario el ID usuario? si esto no se ve reflejado en ningun lado
     descripcion TEXT NOT NULL,
     FOREIGN KEY (id_pregunta) REFERENCES pregunta(id_pregunta) ON DELETE CASCADE,
     FOREIGN KEY (id_usuario) REFERENCES usuarios(id) ON DELETE CASCADE
 );
 
+-- Preguntas Sugeridas
 CREATE TABLE sugerencia (
     id_sugerencia INT AUTO_INCREMENT PRIMARY KEY,
     descripcion VARCHAR(255) NOT NULL,
@@ -89,6 +90,7 @@ VALUES
 -- admin123
 INSERT INTO usuarios (usuario, mail, password, anio_nacimiento, nombre_completo, pais, rol)
 VALUES ('admin', 'admin@preguntados.com', '$2y$10$VUtlqJI6Ycv1f/LCecC1le2CcmHXnJHJalGOH12qhsIZMtC9FL3NK', 2025,'Administrador del Sistema', 'Brasil' , 'Administrador');
+VALUES ('diego', 'diego@preguntados.com', '$2y$10$VUtlqJI6Ycv1f/LCecC1le2CcmHXnJHJalGOH12qhsIZMtC9FL3NK', 2025,'diego oliva', 'Argentina' , 'Editor');
 
 -- Estos datos son temporales, con el objetivo de ver la funcionalidad de la pagina en todo su esplendor!
 
