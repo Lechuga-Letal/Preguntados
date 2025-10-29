@@ -60,6 +60,7 @@ class ConfigFactory
 
         $this->objetos["router"] = new NewRouter($this, "PaginaPrincipalController", "base");
 
+//Hay 2 instancias de modelo, este se tiene que crear previamente e inyectarlo en los controladores que se necesita
         $this->objetos["LoginController"] = new LoginController(new UsuarioModel($this->conexion), $this->renderer, $this->redirectModel);
     
         $this->objetos["RegisterController"] = new RegisterController(new UsuarioModel($this->conexion), $this->renderer, $this->redirectModel);

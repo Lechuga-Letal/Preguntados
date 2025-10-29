@@ -35,6 +35,13 @@ class NewRouter
         return $controller;
     }
 
+    public function getControllerName($controllerName)
+    {
+        return $controllerName ?
+            ucfirst($controllerName) . 'Controller' :
+            $this->defaultController;
+    }
+
     private function executeMethodFromController($controller, $methodName)
     {
         call_user_func(
@@ -43,13 +50,6 @@ class NewRouter
                 $this->getMethodName($controller, $methodName)
             )
         );
-    }
-
-    public function getControllerName($controllerName)
-    {
-        return $controllerName ?
-            ucfirst($controllerName) . 'Controller' :
-            $this->defaultController;
     }
 
     public function getMethodName($controller, $methodName)

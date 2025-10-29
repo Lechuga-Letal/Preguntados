@@ -76,6 +76,8 @@ class RegisterController
 
             $ciudad_db = !empty($ciudad) ? $ciudad : "Lat: $latitud, Lon: $longitud";
 
+//            TODO: si todos los campos del formulario estan dentro del HTML con REQUIERED, es necesario hacer estas validaciones? porque el mensaje de error no se mostraria
+
             if(!$this->model->userExists($usuario, $mail)) {
                 $this->model->createUser($nombre_completo, $anio_nacimiento, $sexo, $pais, $ciudad_db, $usuario, $mail, $pass1, $foto_perfil);
 

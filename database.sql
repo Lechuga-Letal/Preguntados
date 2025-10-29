@@ -44,7 +44,7 @@ CREATE TABLE respuesta (
 CREATE TABLE reporte (
     id_reporte INT AUTO_INCREMENT PRIMARY KEY,
     id_pregunta INT NOT NULL,
-    id_usuario INT NOT NULL, -- es necesario el ID usuario? si esto no se ve reflejado en ningun lado
+    id_usuario INT NOT NULL,
     descripcion TEXT NOT NULL,
     FOREIGN KEY (id_pregunta) REFERENCES pregunta(id_pregunta) ON DELETE CASCADE,
     FOREIGN KEY (id_usuario) REFERENCES usuarios(id) ON DELETE CASCADE

@@ -30,7 +30,8 @@ class InicioController
 
         if ($rol === 'Administrador') {
             $this->renderer->render("InicioAdmin", ["usuario" => $usuario, "rol" => $rol]);
-        } 
+        }
+        //TODO: corregir esto que rompe la vista adminInicio
 
         $isEditor = ($rol === "Editor");
 
@@ -44,7 +45,8 @@ class InicioController
     public function logout()
     {
         $this->model->logout();
-        $this->redirectModel->redirect("login/loginForm"); 
+        $this->redirectModel->redirect("login/loginForm");
+        //todo: borrar datos de la sesion
     }
 
     public function ingresoPorMail(){
