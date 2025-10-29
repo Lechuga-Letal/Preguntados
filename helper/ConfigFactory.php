@@ -25,6 +25,9 @@ include_once("controller/GestionarPreguntaController.php");
 
 include_once("controller/PartidaController.php");
 include_once("model/PartidaModel.php");
+
+include_once("controller/RankingController.php");
+include_once("controller/perfilController.php");
 class ConfigFactory
 {
     private $config;
@@ -82,6 +85,10 @@ class ConfigFactory
         $this->objetos["PreguntasListaController"] = new PreguntasListaController(($this->conexion), $this->renderer, $this->redirectModel, $this->preguntasModel);
 
         $this->objetos["GestionarPreguntaController"] = new GestionarPreguntaController(($this->conexion), $this->renderer, $this->redirectModel, $this->preguntasModel, $this->respuestasModel);
+    
+        $this->objetos["RankingController"] = new RankingController(($this->conexion), $this->renderer, $this->redirectModel, $this->usuarioModel);
+    
+        $this->objetos["PerfilController"] = new PerfilController(($this->conexion), $this->renderer, $this->redirectModel, $this->usuarioModel);
     }
 
     public function get($objectName)

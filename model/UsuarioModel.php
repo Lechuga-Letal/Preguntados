@@ -73,6 +73,17 @@ require_once __DIR__ . '/../helper/MailService.php';
         return null;
     }
 
+    public function getAllUsuarios()
+    {
+        $sql = "SELECT * FROM usuarios";
+        $resultado = $this->conexion->query($sql);
+
+        if ($resultado && count($resultado) > 0) {
+            return $resultado;
+        }
+        return [];
+    }
+
     /*
     public function getUsuarioByNombreUsuario($nombre)
     {
