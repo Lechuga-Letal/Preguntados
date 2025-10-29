@@ -31,8 +31,9 @@
                 <label><input type="radio" name="sexo" value="Prefiero no cargarlo"> Prefiero no cargarlo</label>
             </p>
 
-            <p><input type="text" name="pais" placeholder="País" id="pais" required></p>
-            <p><input type="text" name="ciudad" id="ciudad" placeholder="Ciudad" required></p>
+            <!--Yo hasta sacaria estos inputs para que el usuario vaya directo al mapa, que dicen?-->
+            <p><input type="text" name="pais" placeholder="País" id="pais" required readonly></p>
+            <p><input type="text" name="ciudad" id="ciudad" placeholder="Ciudad" required readonly></p>
             <p><input type="text" name="usuario" placeholder="Nombre de usuario" required></p>
             <p><input type="email" name="mail" placeholder="Email" required></p>
             <p><input type="password" name="password1" placeholder="Contraseña" required></p>
@@ -43,15 +44,17 @@
                 <input type="file" name="foto_perfil" accept="image/*">
             </p>
 
+            <input hidden name="coordenadas" id="coordenadas" required>
+
             <input type="submit" value="Registrarse">
         </form>
     </div>
 
     <div class="mapaS">
-        <h3>Si querés, podés seleccionar tu ubicación en el mapa</h3>
+        <h3>Selecciona tu ubicación en el mapa: </h3>
         <div id="mapa"></div>
-        <input type="hidden" name="latitud" id="latitud">
-        <input type="hidden" name="longitud" id="longitud">
+        <input type="hidden" name="latitud" id="latitud" required>
+        <input type="hidden" name="longitud" id="longitud" required>
     </div>
 </main>
 
@@ -67,10 +70,15 @@
             var lng = e.latlng.lng.toFixed(3);
             if (marcador) mapa.removeLayer(marcador);
             marcador = L.marker([lat, lng]).addTo(mapa);
-            /*
-            document.getElementById('latitud').value = lat;
-            document.getElementById('longitud').value = lng;
-            document.getElementById('ciudad').value = `Lat: ${lat}, Lng: ${lng}`;//})*/
+
+            var latInput = document.getElementById('latitud');
+            var lngInput = document.getElementById('longitud');
+            var ubicacionInput = document.getElementById('coordenadas');
+
+            if (latInput) latInput.value = lat;
+            if (lngInput) lngInput.value = lng;
+            if (ubicacionInput) ubicacionInput.value = `${lat}, ${lng}`;
+
 
             fetch('/mapa', {  
                 method: 'POST',

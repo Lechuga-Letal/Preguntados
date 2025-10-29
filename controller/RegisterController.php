@@ -45,8 +45,7 @@ class RegisterController
             $mail= $_POST['mail'] ?? '';
             $pass1= $_POST['password1'] ?? '';
             $pass2= $_POST['password2'] ?? '';
-            $latitud = $_POST['latitud'] ?? '';
-            $longitud = $_POST['longitud'] ?? '';
+            $coordenadas= $_POST['coordenadas'] ?? ''; 
             
             $foto_perfil = null;
             if (!empty($_FILES['foto_perfil']['name'])) {
@@ -55,7 +54,7 @@ class RegisterController
                 move_uploaded_file($_FILES['foto_perfil']['tmp_name'], $foto_perfil);
             }
 
-            $required = [$nombre_completo, $anio_nacimiento, $pais, $usuario, $mail, $pass1, $pass2];
+            $required = [$nombre_completo, $anio_nacimiento, $ciudad, $pais, $usuario, $mail, $pass1, $pass2];
             
             foreach ($required as $field) {
                 if (empty($field)) {
@@ -69,15 +68,8 @@ class RegisterController
                 $sexo = "Prefiero no cargarlo";
             }
 
-            if (empty($ciudad) && (empty($latitud) || empty($longitud))) { //El usuario usa el mapa o una ciudad
-                $this->renderer->render('register', ['error' => 'Debes completar ciudad o latitud/longitud']);
-                return;
-            }
-
-            $ciudad_db = !empty($ciudad) ? $ciudad : "Lat: $latitud, Lon: $longitud";
-
             if(!$this->model->userExists($usuario, $mail)) {
-                $this->model->createUser($nombre_completo, $anio_nacimiento, $sexo, $pais, $ciudad_db, $usuario, $mail, $pass1, $foto_perfil);
+                $this->model->createUser($nombre_completo, $anio_nacimiento, $sexo, $pais, $ciudad, $coordenadas, $usuario, $mail, $pass1, $foto_perfil);
 
                 $this->redirectModel->redirect("login/loginForm");
             } else {

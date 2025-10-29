@@ -11,6 +11,12 @@ justify-content: center;
 overflow-x: hidden;
 }
 
+#mapa {
+    width: 100% !important; 
+    height: 400px !important; 
+    margin-top: 20px !important;
+}
+
 .container {
 text-align: center;
 padding: 0 20px;
@@ -94,57 +100,56 @@ border-color: #777;
 }
 
 @media (max-width: 768px) {
-.logo {
-    width: 150px;
-    height: 150px;
-}
+    .logo {
+        width: 150px;
+        height: 150px;
+    }
 
-h1 {
-    font-size: 2.3rem;
-}
+    h1 {
+        font-size: 2.3rem;
+    }
 
-.subtitle {
-    font-size: 1rem;
-    margin-bottom: 25px;
-}
+    .subtitle {
+        font-size: 1rem;
+        margin-bottom: 25px;
+    }
 
-.btn {
-    padding: 12px 45px;
-    font-size: 0.95rem;
-}
+    .btn {
+        padding: 12px 45px;
+        font-size: 0.95rem;
+    }
 }
 
 @media (max-width: 480px) {
-body {
-    justify-content: flex-start;
-    padding-top: 80px;
-}
+    body {
+        justify-content: flex-start;
+        padding-top: 80px;
+    }
 
-.logo {
-    width: 120px;
-    height: 120px;
-    margin-bottom: 15px;
-}
+    .logo {
+        width: 120px;
+        height: 120px;
+        margin-bottom: 15px;
+    }
 
-h1 {
-    font-size: 1.9rem;
-    margin-bottom: 25px;
-}
+    h1 {
+        font-size: 1.9rem;
+        margin-bottom: 25px;
+    }
 
-.subtitle {
-    font-size: 0.95rem;
-    margin-bottom: 20px;
-}
+    .subtitle {
+        font-size: 0.95rem;
+        margin-bottom: 20px;
+    }
 
-.button-container {
-    gap: 15px;
-}
+    .button-container {
+        gap: 15px;
+    }
 
-.btn {
-    width: 80%;
-    padding: 12px 0;
-    font-size: 0.9rem;
-}
+    .btn {
+        width: 80%;
+        padding: 12px 0;
+        font-size: 0.9rem;
+    }
 
 }
-
