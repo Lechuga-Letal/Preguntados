@@ -1,0 +1,97 @@
+<title>Inicio</title>
+<link rel="stylesheet" href="/public/css/inicioStyle.css">
+</head>
+
+<body>
+
+    <header class="header">
+        <div>
+        <span class="nombreUsuario">Usuario: {{usuario}}</span>
+        </div>
+        <h2 class="titulo">Preguntados</h2>
+        <form method="POST" action="/Preguntados/inicio/logout">
+            <input class="logout-btn" type="submit" value="Cerrar sesión">
+        </form>
+    </header>
+
+    <div class="container">
+        <h1>Tus desafios: </h1>
+        
+        <!--Los condicionales de mustache no estan perfectos. Las tablas se muestran incluso si no hay data.-->
+        
+    <div>
+        <section class="tabla mb-4">
+            <h3 class="text-light">Partidas finalizadas:</h3>
+            <table class="table table-dark table-striped table-hover">
+                <thead>
+                    <tr>
+                        <th></th> <!--Foto de perfil-->
+                        <th>Usuario</th>
+                        <th>Pais</th>
+                        <th>Puntaje</th>
+                        <th>Ganador</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {{#partidas_finalizadas}}
+                        <tr>
+                            <td>{{foto_perfil}}</td>
+                            <td>{{usuario}}</td>
+                            <td>{{pais}}</td>
+                            <td>—</td><!--Miren que en la tabla de partida hay una sola columna para puntajes!-->
+                            <td>—</td>
+                        </tr>
+                    {{/partidas_finalizadas}}
+                    
+                    {{^partidas_finalizadas}}
+                        <tr>
+                            <td colspan="5" class="text-center text-muted">
+                                No has terminado ninguna partida aún.
+                            </td>
+                        </tr>
+                    {{/partidas_finalizadas}}
+                </tbody>
+            </table>
+        </section>
+
+        <section class="tabla mb-4">
+            <h3 class="text-light">Partidas en espera:</h3> <!--De momento trae las partidas "en curso", porque no programamos un "en espera"-->
+            <table class="table table-dark table-striped table-hover">
+                <thead>
+                    <tr>
+                        <th></th> <!--Foto de perfil-->
+                        <th>Usuario</th>
+                        <th>Pais</th>
+                        <th>Puntaje</th>
+                        <th>Ganador</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {{#partidas_enCurso}}
+                        <tr>
+                            <td>{{foto_perfil}}</td>
+                            <td>{{usuario}}</td>
+                            <td>{{pais}}</td>
+                            <td>—</td> <!--Miren que en la tabla de partida hay una sola columna para puntajes!-->
+                            <td>—</td>
+                        </tr>
+                    {{/partidas_enCurso}}
+                    
+                    {{^partidas_enCurso}}
+                        <tr>
+                            <td colspan="5" class="text-center text-muted">
+                                No has sido desafiado.
+                            </td>
+                        </tr>
+                    {{/partidas_enCurso}}
+                </tbody>
+            </table>
+        </section>
+    </div>
+
+
+    <div class="text-center mt-5">
+        <a href="/inicio" class="btn btn-secondary">Volver</a>
+    </div>
+</div>
+

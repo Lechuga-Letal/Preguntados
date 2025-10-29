@@ -2,14 +2,15 @@
 class PartidaModel
 {
     private $conexion;
-
-    public function __construct($conexion)
+    private $usuarioModel;
+    public function __construct($conexion, $usuarioModel)
     {
         $this->conexion = $conexion;
+        $this->usuarioModel = $usuarioModel;
     }
 
     //Capaz esto lo podemos mover al modelo de usuario... 
-    private function obtenerIdUsuarioPorNombre($nombreUsuario)
+    public function obtenerIdUsuarioPorNombre($nombreUsuario)
     {
         $sql = "SELECT id FROM usuarios WHERE usuario = '$nombreUsuario'";
         //Agrege el @ para que el warning no aparecza. 
@@ -49,7 +50,8 @@ class PartidaModel
 
 
 
-    public function obtenerListadoDeJugadores($idActual) {
+    public function obtenerListadoDeJugadoresMenos($idActual) {
+
         if (!is_numeric($idActual)) {
             $idUsuario = $this->obtenerIdUsuarioPorNombre($idActual);
         } else {
@@ -71,8 +73,54 @@ class PartidaModel
         }
 
         return $usuarios;
+    }
+
+    public function obtenerDesafiosPorEstado($idUsuario, $estado) 
+    {
+        if (!is_numeric($idUsuario) || !in_array($estado, ['finalizada', 'en curso'])) {
+            return [];
         }
 
+        $query = "
+            SELECT 
+                p.*, 
+                CASE 
+                    WHEN p.id_usuario = $idUsuario THEN u_oponente.usuario
+                    ELSE u_usuario.usuario
+                END AS nombre_oponente
+            FROM partidas p
+            JOIN usuarios u_usuario ON u_usuario.id = p.id_usuario
+            JOIN usuarios u_oponente ON u_oponente.id = p.id_oponente
+            WHERE ($idUsuario = p.id_usuario OR $idUsuario = p.id_oponente)
+            AND p.estado = '$estado'
+        ";
+
+        $resultado = $this->conexion->query($query);
+
+        if ($resultado && count($resultado) > 0) {
+            return $resultado;
+        }
+
+        return [];
+    }
+
+    public function obtenerDataDePartidasPorEstado($idUsuario, $estado)
+    {
+        $desafios = $this->obtenerDesafiosPorEstado($idUsuario, $estado);
+        $data = [];
+
+        foreach ($desafios as $desafio) {
+            $idDesafiante = $desafio['id_oponente'] ?? $desafio['id_usuario']; 
+            $desafiador = $this->usuarioModel->getUsuarioById($idDesafiante);
+            
+            if ($desafiador) {
+                $data[] = $desafiador;
+            }
+        }
+
+        return $data;
+    }
+    
     public function finalizarPartida($idPartida, $puntajeFinal)
     {
         //$idPartida = $idPartida;
