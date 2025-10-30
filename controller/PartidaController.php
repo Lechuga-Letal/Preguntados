@@ -60,6 +60,7 @@ class PartidaController{
         $this->renderer->render("desafiar", ["usuarios" => $jugadores]);
     }
 
+
     public function iniciarPartida() 
     {
         if (!isset($_SESSION['usuario'])) {
@@ -76,18 +77,68 @@ class PartidaController{
 
         $oponente = $this->usuarioModel->getUsuarioById($idOponente);
 
-        //Pasar a un  metodo externo despues
-        $idTurno = $this->model->crearTurno($usuarioNomrbe,$idPartida);
+        $URL="partida/crearTurno?nombreUsuario=$usuarioNomrbe&idPartida=$idPartida";
+        $this->redirectModel->redirect($URL);
+    }
 
-        $data = [
-            'idOponente' => $idOponente, 
-            'nombreOponente' => $oponente['usuario'] ?? 'Desconocido',
+    public function crearTurno(){
+        $nombreUsuario= $_GET["nombreUsuario"];
+        $idPartida=$_GET["idPartida"];
+
+        $idTurno = $this->model->crearTurno($nombreUsuario,$idPartida);
+        $this->redirectModel->redirect("partida/mostrarPartida?idTurno=$idTurno");
+        //todo: ver forma de cambiarle la URL
+    }
+
+    public function mostrarPartida(){
+        $idTurno= $_GET["idTurno"];
+
+        $model = [
             'id_turno' => $idTurno,
-            'pregunta'=> $this->model->obtenerPreguntaDelTurno($idTurno)
+            'cantidadCorrectas'=>$this->model->mostrarCantidadCorrectas($idTurno) ?? 0,
+            'nombreOponente' =>$this->model->getNombreOponente($idTurno)?? 'Desconocido',
+            'pregunta'=> $this->model->obtenerDescripcionDeLaPreguntaPorTurno($idTurno)
             ,'Respuestas'=> $this->model->obtenerRespuestasDelTurno($idTurno)
         ];
 
-        $this->renderer->render("partida", $data);
+        $this->renderer->render("partida", $model);
+    }
+
+    public function evaluarTurno(){
+        //TODO: Validaciones de Tiempo, si fue respondida antes, si la partida se termino, etc se hacen aca
+            $opcionElegida=$_GET['respuestaElegida'];
+            $turno=$_GET['turno'];
+
+            $lePego=$this->model->evaluarRespuestaDelTurno($opcionElegida,$turno);
+
+            if(!$lePego){
+                //finalizar partida
+                $this->redirectModel->redirect("partida/terminarPartida?idTurno=$turno");
+                //TODO: cambiarle el nombre al metodo
+            }else{
+                $nombreUsuario=$this->model->obtenerNombreUsuarioPorTurno($turno);
+                $idPartida=$this->model->obtenerIdPartidaPorTurno($turno);
+
+                $this->model->acreditarAcierto($turno);
+
+                $URL="partida/crearTurno?nombreUsuario=$nombreUsuario&idPartida=$idPartida";
+                $this->redirectModel->redirect($URL);
+            }
+    }
+
+      public function terminarPartida(){
+            $idTurno=$_GET['idTurno'];
+            $cantidadCorrectas=$this->model->mostrarCantidadCorrectas($idTurno);
+            $idPartida=$this->model->obtenerIdPartidaPorTurno($idTurno);
+
+          $this->model->finalizarPartida($idPartida, $cantidadCorrectas);
+
+        //TODO: cambiarle el nombre al metodo
+            $this->renderer->render("partidaFinalizada",
+                                    ["puntaje"=>$cantidadCorrectas,
+                                        'nombreOponente' =>$this->model->getNombreOponente($idTurno)?? 'Desconocido',
+                                        "pregunta"=>$this->model->obtenerDescripcionDeLaPreguntaPorTurno($idTurno),
+                                        "respuestaCorrecta"=>$this->model->obtenerDescripcionDeLaRepuestaCorrectaDeLaPreguntaPorTurno($idTurno)]);
     }
 
     public function obtenerPregunta(){

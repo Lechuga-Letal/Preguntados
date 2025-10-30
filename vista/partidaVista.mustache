@@ -11,15 +11,15 @@
 <main class="container">
     <h1>Partida iniciada</h1>
     <p>Tu oponente es: <strong>{{nombreOponente}}</strong></p>
-    <!--<p>Tu oponente es: <strong>{{idOponente}}</strong></p>-->
-
+    <p>Preguntas respondidas: <strong>{{cantidadCorrectas}}</strong></p>
     <p>La pregunta es: <strong>{{pregunta}}</strong></p>
     <div id="pregunta-container">
 
+<!--        Podriamos manejar esto con un formulario para no hacer tan extensa la URL-->
         {{#Respuestas}}
             <div class="list-group-item bg-dark text-light border border-secondary mb-3 rounded">
                 <h5 class="mb-2">
-                    <a href="#" class="link-info fw-bold">{{opcion}}</a>
+                    <a href="/partida/evaluarTurno?respuestaElegida={{id}}&turno={{id_turno}}" class="link-info fw-bold">{{opcion}}</a>
                 </h5>
             </div>
         {{/Respuestas}}
@@ -61,9 +61,9 @@
     
     
 </main>
-<script>
-    window.addEventListener("beforeunload", function() {
-        navigator.sendBeacon("/?controller=partida&method=finalizarPartida");
-    });
-</script>
+<!--<script>-->
+<!--    window.addEventListener("beforeunload", function() {-->
+<!--        navigator.sendBeacon("/?controller=partida&method=finalizarPartida");-->
+<!--    });-->
+<!--</script>-->
 </body>

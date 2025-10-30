@@ -1,0 +1,24 @@
+<title>Partida</title>
+<link rel="stylesheet" href="/public/css/inicioStyle.css">
+<body>
+<header class="header">
+    <img src="/public/imagenes/Logo.png" alt="logo" class="logo">
+    <link rel="stylesheet" href="/public/css/partidaStyle.css">
+    <form method="POST" action="/Preguntados/inicio/logout">
+        <input class="logout-btn" type="submit" value="Cerrar sesión">
+    </form>
+</header>
+<main class="container">
+    <h1>Partida Finalizada</h1>
+    <p>Tu oponente es: <strong>{{nombreOponente}}</strong></p>
+    <p>Cantidad de preguntas Respondidas: <strong>{{puntaje}}</strong></p>
+
+    <p>Pregunta: <strong>{{pregunta}}</strong></p>
+    <p>Su respuesta era: <strong>{{respuestaCorrecta}}</strong></p>
+
+    <div>
+        <a href="#" class="boton">Reportar Pregunta</a>
+        <a href="/inicio/" class="boton">Volver</a>
+    </div>
+</main>
+</body>
