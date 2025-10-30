@@ -4,11 +4,12 @@ USE TpPreguntados;
 
 DROP TABLE IF EXISTS usuarios;
 DROP TABLE IF EXISTS reporte;
-DROP TABLE IF EXISTS pregunta_sugerencia; 
-DROP TABLE IF EXISTS respuesta_sugerida; 
+DROP TABLE IF EXISTS pregunta_sugerencia;
+DROP TABLE IF EXISTS respuesta_sugerida;
 DROP TABLE IF EXISTS respuesta;
 DROP TABLE IF EXISTS pregunta;
 DROP TABLE IF EXISTS partidas;
+DROP TABLE IF EXISTS turno;
 
 CREATE TABLE usuarios (
     id INT AUTO_INCREMENT PRIMARY KEY,
@@ -79,6 +80,18 @@ CREATE TABLE partidas (
     estado ENUM('en curso', 'finalizada', 'cancelada') DEFAULT 'en curso',
     FOREIGN KEY (id_usuario) REFERENCES usuarios(id),
     FOREIGN KEY (id_oponente) REFERENCES usuarios(id)
+);
+
+CREATE TABLE turno (
+                         id INT AUTO_INCREMENT,
+                         id_partida INT NOT NULL,
+                         id_usuario INT NOT NULL,
+                         id_pregunta INT NOT NULL,
+                         adivino BOOLEAN DEFAULT NULL,
+                         PRIMARY KEY (id,id_partida,id_usuario,id_pregunta),
+                         FOREIGN KEY (id_partida) REFERENCES partidas(id) ,
+                         FOREIGN KEY (id_usuario) REFERENCES usuarios(id) ,
+                         FOREIGN KEY (id_pregunta) REFERENCES pregunta(id_pregunta)
 );
 
 -- Las contrasenias son 123!

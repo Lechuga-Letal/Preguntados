@@ -148,6 +148,46 @@ class PartidaModel
             'respuestas' => $obtencionRespuestas
         ];
     }
+
+    public function crearTurno($usuario,$idPartida){
+
+        $idUsuario = $this->obtenerIdUsuarioPorNombre($usuario);
+
+        $sql = "INSERT INTO turno (id_partida, id_usuario,id_pregunta) 
+                VALUES ($idPartida, $idUsuario,1)";
+        $this->conexion->query($sql);
+
+        $idPartidaQuery = "SELECT MAX(id) as id FROM turno WHERE id_usuario = $idUsuario";
+        $resultado = $this->conexion->query($idPartidaQuery);
+
+        return $resultado[0]['id'];
+    }
+
+    public function obtenerPreguntaDelTurno($idTurno){
+        $sql = "SELECT p.descripcion  FROM pregunta p 
+                join Turno t on p.id_pregunta=t.id_pregunta 
+                WHERE t.id = $idTurno";
+
+        $resultado = $this->conexion->query($sql);
+
+//        echo "<br>";
+//        var_dump($resultado);
+//        die(); // detiene la ejecución para ver el resultado
+
+        return $resultado[0]['descripcion'];
+    }
+
+    public function obtenerRespuestasDelTurno($idTurno){
+        $sql = "SELECT r.id_respuesta as id,r.descripcion as opcion FROM respuesta r 
+                join Turno t on r.id_pregunta=t.id_pregunta 
+                WHERE t.id = $idTurno";
+
+        $resultado = $this->conexion->query($sql);
+
+//        die(); // detiene la ejecución para ver el resultado
+
+        return $resultado;
+    }
 }
 
 

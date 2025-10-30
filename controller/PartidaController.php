@@ -76,9 +76,15 @@ class PartidaController{
 
         $oponente = $this->usuarioModel->getUsuarioById($idOponente);
 
+        //Pasar a un  metodo externo despues
+        $idTurno = $this->model->crearTurno($usuarioNomrbe,$idPartida);
+
         $data = [
             'idOponente' => $idOponente, 
-            'nombreOponente' => $oponente['usuario'] ?? 'Desconocido'        
+            'nombreOponente' => $oponente['usuario'] ?? 'Desconocido',
+            'id_turno' => $idTurno,
+            'pregunta'=> $this->model->obtenerPreguntaDelTurno($idTurno)
+            ,'Respuestas'=> $this->model->obtenerRespuestasDelTurno($idTurno)
         ];
 
         $this->renderer->render("partida", $data);
