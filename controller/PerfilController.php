@@ -17,10 +17,15 @@ class PerfilController
 
     public function base()
     {
-        $this->renderer->render("perfil");
+        $this->getPerfil();
     }
 
-
-
-
+    public function getPerfil()
+    {
+        $usuario = $this->usuarioModel->getUsuarioById($_GET["id"]);
+        $data = [
+            "usuario" => $usuario
+        ];
+        $this->renderer->render("perfil", $data);
+    }
 }

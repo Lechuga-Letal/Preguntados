@@ -1,16 +1,41 @@
 <title>Perfil</title>
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+<link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
 <link rel="stylesheet" href="/public/css/paginaPrincipalStyle.css">
 </head>
 
 <body class="bg-dark">
 
   <main class="container py-5">
-    <div class="text-center mb-5">
-        <h1 class="fw-bold">Perfil</h1>
-        <p class="text-muted">
-            Bienvenido al perfil de: !
-        </p>
+    <div class="container my-5">
+        <div class="card bg-dark text-light p-4 rounded-3 shadow-sm">
+            <div class="text-center">
+                {{#usuario.foto_perfil}}
+                    <img src="{{usuario.foto_perfil}}" alt="{{usuario.usuario}}" class="img-fluid rounded-circle mb-3" width="100" height="100">
+                {{/usuario.foto_perfil}}
+
+                {{^usuario.foto_perfil}}
+                    <img src="/public/imagenes/usuarioImagenDefault.png" alt="{{usuario.usuario}}" class="img-fluid rounded-circle mb-3" width="100" height="100">
+                {{/usuario.foto_perfil}}
+
+                <h2 class="fw-bold">{{usuario.nombre_completo}}</h2>
+                <p class="text-muted">@{{usuario.usuario}}</p>
+                <p class="text-muted">{{usuario.pais}}, {{usuario.ciudad}}</p>
+            </div>
+
+            <div class="mt-4">
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item bg-dark text-light">Año de nacimiento: {{usuario.anio_nacimiento}}</li>
+                    <li class="list-group-item bg-dark text-light">Sexo: {{usuario.sexo}}</li>
+                    <li class="list-group-item bg-dark text-light">Correo: {{usuario.mail}}</li>
+                    <li class="list-group-item bg-dark text-light">Rol: {{usuario.rol}}</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div id="mapa"></div>
+   
 
     <div class="text-center mt-5">
       <a href="/ranking" class="btn btn-secondary">Volver</a>
@@ -19,4 +44,36 @@
 
 
 </body>
+<!--No tengo ni idea de porque no puedo dejar este estilo en otro lado-->
+<style>
+#mapa {
+    width: 100% !important; 
+    height: 400px !important; 
+    margin-top: 20px !important;
+}
+</style>
+<script>
+    let coordStr = "{{usuario.coordenadas}}"; 
+
+    let defaultLat = -34.6037;
+    let defaultLng = -58.3816;
+
+    let lat, lng;
+
+    if (coordStr && coordStr.includes(",")) {
+        [lat, lng] = coordStr.split(",").map(c => parseFloat(c.trim()));
+    } else {
+        lat = defaultLat;
+        lng = defaultLng;
+    }
+
+    let mapa = L.map('mapa').setView([lat, lng], 5);
+
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '© OpenStreetMap contributors'
+    }).addTo(mapa);
+
+    L.marker([lat, lng]).addTo(mapa).bindPopup("{{usuario.usuario}}");
+</script>
+
 </html>

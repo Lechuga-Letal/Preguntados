@@ -17,13 +17,13 @@ require_once __DIR__ . '/../helper/MailService.php';
          return !empty($result) && count($result) > 0;
      }
 
-     public function createUser($nombre_completo, $anio_nacimiento, $sexo, $pais, $ciudad, $usuario, $mail, $password, $foto_perfil, $rol = 'Jugador')
+     public function createUser($nombre_completo, $anio_nacimiento, $sexo, $pais, $ciudad, $coordenadas, $usuario, $mail, $pass1, $foto_perfil, $rol = 'Jugador')
      {
-         $hashed = password_hash($password, PASSWORD_DEFAULT);
+         $hashed = password_hash($pass1, PASSWORD_DEFAULT);
 
          $sql = "INSERT INTO usuarios 
-        (nombre_completo, anio_nacimiento, sexo, pais, ciudad, usuario, mail, password, foto_perfil, rol) 
-        VALUES ('$nombre_completo', '$anio_nacimiento', '$sexo', '$pais', '$ciudad', '$usuario', '$mail', '$hashed', '$foto_perfil', '$rol')";
+        (nombre_completo, anio_nacimiento, sexo, pais, ciudad, coordenadas, usuario, mail, password, foto_perfil, rol) 
+        VALUES ('$nombre_completo', '$anio_nacimiento', '$sexo', '$pais', '$ciudad', '$coordenadas', '$usuario', '$mail', '$hashed', '$foto_perfil', '$rol')";
 
          $success = $this->conexion->query($sql);
 
