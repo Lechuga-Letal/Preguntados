@@ -314,7 +314,7 @@ class PartidaModel
     }
 
     public function verificarTiempoDelTurno($idTurno){
-        $tiempoLimiteSegundos = 10; //desde aca modificamos el tiempo limite
+        $tiempoLimiteSegundos = 15; //desde aca modificamos el tiempo limite en el backend
         $tiempoRespuesta = $this->calcularTiempoDeRespuesta($idTurno);
 
         if ($tiempoRespuesta !== null) {

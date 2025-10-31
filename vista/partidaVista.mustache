@@ -13,14 +13,22 @@
     <p>Tu oponente es: <strong>{{nombreOponente}}</strong></p>
     <p>Preguntas respondidas: <strong>{{cantidadCorrectas}}</strong></p>
     <p id="cronometro"></p>
+    <div id="barraTiempo">
+        <div id="tiempo"> </div>
+    </div>
     <script>
-        var tiempoRestante = 10; // aca podemos setear el tiempo por pregunta
+        const tiempoTotal = 15; // aca podemos setear el tiempo por pregunta
+        var tiempoRestante = tiempoTotal; 
         var cronometroElemento = document.getElementById('cronometro');
+        var relleno = document.getElementById('tiempo');
 
         function actualizarCronometro() { //puramente visual no tiene consecuencias, tendriamos que unirlo al backend despues
             cronometroElemento.textContent = 'Tiempo restante: ' + tiempoRestante + ' segundos';
             if (tiempoRestante > 0) {
                 tiempoRestante--;
+                var porcentajeRestante = (tiempoRestante / tiempoTotal) * 100;
+                relleno.style.width = porcentajeRestante + '%';
+                
             }
         }
         actualizarCronometro(); // Mostrar inmediatamente
