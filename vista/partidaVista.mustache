@@ -12,6 +12,20 @@
     <h1>Partida iniciada</h1>
     <p>Tu oponente es: <strong>{{nombreOponente}}</strong></p>
     <p>Preguntas respondidas: <strong>{{cantidadCorrectas}}</strong></p>
+    <p id="cronometro"></p>
+    <script>
+        var tiempoRestante = 10; // aca podemos setear el tiempo por pregunta
+        var cronometroElemento = document.getElementById('cronometro');
+
+        function actualizarCronometro() { //puramente visual no tiene consecuencias, tendriamos que unirlo al backend despues
+            cronometroElemento.textContent = 'Tiempo restante: ' + tiempoRestante + ' segundos';
+            if (tiempoRestante > 0) {
+                tiempoRestante--;
+            }
+        }
+        actualizarCronometro(); // Mostrar inmediatamente
+        setInterval(actualizarCronometro, 1000); // x segundo
+    </script>
     <p>La pregunta es: <strong>{{pregunta}}</strong></p>
     <div id="pregunta-container">
 
@@ -23,41 +37,7 @@
                 </h5>
             </div>
         {{/Respuestas}}
-
-
-<!--                <h2 id="descripcionPregunta">hola</h2>-->
-<!--                <div id="opciones">-->
-<!--                    &lt;!&ndash; Las opciones de respuesta se generarán aquí &ndash;&gt;-->
-<!--                    -->
-<!--                -->
-<!--                </div> -->
     </div>
-
-<!--    <script>-->
-<!--    fetch('/partida/obtenerPregunta')-->
-<!--        .then(response => response.json())-->
-<!--        .then(data => {-->
-<!--            console.log('Pregunta obtenida:', data);-->
-<!--            // Aquí puedes actualizar el DOM para mostrar la pregunta y las opciones-->
-<!--            document.getElementById('descripcionPregunta').textContent = data.pregunta[0].descripcion;-->
-
-<!--            const contenedorOpciones = document.getElementById('opciones');-->
-<!--            contenedorOpciones.innerHTML = '';-->
-<!--            -->
-
-<!--            data.respuestas.forEach(opcion => {-->
-<!--                var boton = document.createElement('button');-->
-<!--                boton.className = 'opcion';-->
-<!--                boton.textContent = opcion.descripcion; -->
-<!--                console.log('Opción:', opcion);-->
-<!--                contenedorOpciones.appendChild(boton);-->
-<!--            });-->
-
-<!--        })-->
-<!--        .catch(error => {-->
-<!--            console.error('Error al obtener la pregunta:', error);-->
-<!--        });-->
-<!--    </script>-->
     
     
 </main>

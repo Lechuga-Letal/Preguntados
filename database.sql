@@ -87,6 +87,8 @@ CREATE TABLE turno (
                          id_partida INT NOT NULL,
                          id_usuario INT NOT NULL,
                          id_pregunta INT NOT NULL,
+                         inicio_turno DATETIME DEFAULT CURRENT_TIMESTAMP, --toma el tiempo al iniciar el turno
+                         fin_turno DATETIME DEFAULT NULL, --lo iniciamos en null y se setea al finalizar el turno
                          adivino BOOLEAN DEFAULT NULL,
                          PRIMARY KEY (id,id_partida,id_usuario,id_pregunta),
                          FOREIGN KEY (id_partida) REFERENCES partidas(id) ,

@@ -136,21 +136,6 @@ class PartidaModel
         @$this->conexion->query($sql);
     }
 
-    public function obtenerPregunta()
-    {//Por ahora devuelve siempre la misma pregunta y respuestas
-        $sql = "SELECT * FROM pregunta where id_categoria = 2";
-        $obtencionPregunta = $this->conexion->query($sql);
-
-        $sql_respuestas = "SELECT * FROM respuesta WHERE id_pregunta = 2";
-        $obtencionRespuestas = $this->conexion->query($sql_respuestas);
-
-        return [
-            'pregunta' => $obtencionPregunta,
-            'respuestas' => $obtencionRespuestas
-        ];
-    }
-
-
     //TODO: Probablemente estos metodos lo tengamos que distribuir en varios modelos
     public function crearTurno($nombreUsuario, $idPartida){
         $idUsuario = $this->obtenerIdUsuarioPorNombre($nombreUsuario);
@@ -193,6 +178,9 @@ class PartidaModel
 
     public function evaluarRespuestaDelTurno($opcionElegida,$idTurno){
         $idDeRespuestaCorrecta=$this->obtenerIdDeLaRepuestaCorrectaDeLaPreguntaPorTurno($idTurno);
+      
+        // no se si seria lo mejor ponerlo aca
+        $this->finalizarTurno($idTurno);
 
         return ($idDeRespuestaCorrecta==$opcionElegida);
     }
@@ -302,6 +290,38 @@ class PartidaModel
             return $resultado[0]["nombreOponente"];
         }
         return null;
+    }
+    
+    public function finalizarTurno($idTurno){
+        $sql = "UPDATE turno
+                    SET fin_turno= NOW()
+                    WHERE id = $idTurno";
+
+        $this->conexion->query($sql);
+    }
+
+    public function calcularTiempoDeRespuesta($idTurno){
+        $sql = "SELECT TIMESTAMPDIFF(SECOND, inicio_turno, fin_turno) as tiempoSegundos
+                FROM turno
+                WHERE id = $idTurno";
+
+        $resultado = $this->conexion->query($sql);
+
+        if ($resultado && count($resultado) > 0) {
+            return $resultado[0]["tiempoSegundos"];
+        }
+        return null;
+    }
+
+    public function verificarTiempoDelTurno($idTurno){
+        $tiempoLimiteSegundos = 10; //desde aca modificamos el tiempo limite
+        $tiempoRespuesta = $this->calcularTiempoDeRespuesta($idTurno);
+
+        if ($tiempoRespuesta !== null) {
+            return $tiempoRespuesta <= $tiempoLimiteSegundos;
+        }
+
+        return false; // Si no se pudo calcular el tiempo, consideramos que no está dentro del límite
     }
 }
 
