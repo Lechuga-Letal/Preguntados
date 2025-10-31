@@ -111,7 +111,10 @@ class PartidaController{
 
             $lePego=$this->model->evaluarRespuestaDelTurno($opcionElegida,$turno);
 
-            if(!$lePego){
+            /*verificar tiempo*/
+            $dentroDelTiempo=$this->model->verificarTiempoDelTurno($turno);
+
+            if(!$lePego || !$dentroDelTiempo){
                 //finalizar partida
                 $this->redirectModel->redirect("partida/terminarPartida?idTurno=$turno");
                 //TODO: cambiarle el nombre al metodo
