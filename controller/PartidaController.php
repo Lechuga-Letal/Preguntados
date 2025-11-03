@@ -50,9 +50,6 @@ class PartidaController{
         $this->renderer->render("misDesafios", $data);
     }
 
-//Según mi logica se terminan de completar los datos en la tabla de la bd cuando el usuario responde mal
-// y de ahí se llamaria a este metodo para hacer el update. Pero como no estoy segura de como hacerlo
-// por ahora solo finaliza cuando sale de la vista partida
 
     public function desafiar() {
         $idUsuario = $_SESSION['usuario']['id'] ?? $_SESSION['usuario'];
