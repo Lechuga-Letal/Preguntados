@@ -35,7 +35,7 @@ class PartidaController{
         }
 
         $usuario = $_SESSION['usuario'];
-        $idUsuario = $this->model->obtenerIdUsuarioPorNombre($usuario); 
+        $idUsuario = $this->usuarioModel->obtenerIdUsuarioPorNombre($usuario); 
 
         $dataDePartidasFinalizadas = $this->model->obtenerDataDePartidasPorEstado($idUsuario, "finalizada");
         $dataDePartidasEnEspera = $this->model->obtenerDataDePartidasPorEstado($idUsuario, "en curso");
@@ -53,7 +53,7 @@ class PartidaController{
 
     public function desafiar() {
         $idUsuario = $_SESSION['usuario']['id'] ?? $_SESSION['usuario'];
-        $jugadores = $this->model->obtenerListadoDeJugadoresMenos($idUsuario);
+        $jugadores = $this->usuarioModel->obtenerListadoDeJugadoresMenos($idUsuario);
         $this->renderer->render("desafiar", ["usuarios" => $jugadores]);
     }
 

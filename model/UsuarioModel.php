@@ -84,6 +84,46 @@ require_once __DIR__ . '/../helper/MailService.php';
         return [];
     }
 
+        public function obtenerIdUsuarioPorNombre($nombreUsuario)
+    {
+        $sql = "SELECT id FROM usuarios WHERE usuario = '$nombreUsuario'";
+        //Agrege el @ para que el warning no aparecza. 
+        //Pero deberiamos preguntar por el foro porque a veces nos sale y a veces no!
+        $resultado = @$this->conexion->query($sql);
+
+        if ($resultado && count($resultado) > 0) {
+            return $resultado[0]['id'];
+        }
+
+        return null;
+    }
+
+    public function obtenerListadoDeJugadoresMenos($idActual)
+    {
+
+        if (!is_numeric($idActual)) {
+            $idUsuario = $this->obtenerIdUsuarioPorNombre($idActual);
+        } else {
+            $idUsuario = $idActual;
+        }
+
+        $query = "SELECT foto_perfil, id, usuario, nombre_completo, pais FROM usuarios 
+        WHERE id != $idUsuario AND usuario != 'admin'";
+
+        $resultado = @$this->conexion->query($query);
+
+        if (is_array($resultado)) {
+            return $resultado;
+        }
+
+        $usuarios = [];
+        while ($fila = $resultado->fetch_assoc()) {
+            $usuarios[] = $fila;
+        }
+
+        return $usuarios;
+    }
+
     /*
     public function getUsuarioByNombreUsuario($nombre)
     {
