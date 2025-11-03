@@ -1,57 +1,57 @@
 <title>Perfil</title>
 <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
 <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
-<link rel="stylesheet" href="/public/css/paginaPrincipalStyle.css">
+<link rel="stylesheet" href="/public/css/partidaStyle.css">
 </head>
 
 <body class="bg-dark">
 
-  <main class="container py-5">
-    <div class="container my-5">
-        <div class="card bg-dark text-light p-4 rounded-3 shadow-sm">
+    <main class="container py-3">
+
+    <div class="row g-3 align-items-start">
+
+        <!-- User Card -->
+        <div class="col-md-6">
+        <div class="card bg-dark text-light p-3 rounded-3 shadow-sm">
             <div class="text-center">
-                {{#usuario.foto_perfil}}
-                    <img src="{{usuario.foto_perfil}}" alt="{{usuario.usuario}}" class="img-fluid rounded-circle mb-3" width="100" height="100">
-                {{/usuario.foto_perfil}}
+            {{#usuario.foto_perfil}}
+            <img src="{{usuario.foto_perfil}}" alt="{{usuario.usuario}}" class="img-fluid rounded-circle mb-2" width="90" height="90">
+            {{/usuario.foto_perfil}}
 
-                {{^usuario.foto_perfil}}
-                    <img src="/public/imagenes/usuarioImagenDefault.png" alt="{{usuario.usuario}}" class="img-fluid rounded-circle mb-3" width="100" height="100">
-                {{/usuario.foto_perfil}}
+            {{^usuario.foto_perfil}}
+            <img src="/public/imagenes/usuarioImagenDefault.png" alt="{{usuario.usuario}}" class="img-fluid rounded-circle mb-2" width="90" height="90">
+            {{/usuario.foto_perfil}}
 
-                <h2 class="fw-bold">{{usuario.nombre_completo}}</h2>
-                <p class="text-muted">@{{usuario.usuario}}</p>
-                <p class="text-muted">{{usuario.pais}}, {{usuario.ciudad}}</p>
+            <h5 class="fw-bold mb-0">{{usuario.nombre_completo}}</h5>
+            <small class="text-muted">@{{usuario.usuario}}</small><br>
+            <small class="text-muted">{{usuario.pais}}, {{usuario.ciudad}}</small>
             </div>
 
-            <div class="mt-4">
-                <ul class="list-group list-group-flush">
-                    <li class="list-group-item bg-dark text-light">Año de nacimiento: {{usuario.anio_nacimiento}}</li>
-                    <li class="list-group-item bg-dark text-light">Sexo: {{usuario.sexo}}</li>
-                    <li class="list-group-item bg-dark text-light">Correo: {{usuario.mail}}</li>
-                    <li class="list-group-item bg-dark text-light">Rol: {{usuario.rol}}</li>
-                </ul>
-            </div>
+            <ul class="list-group list-group-flush mt-3">
+            <li class="list-group-item bg-dark text-light py-1">Nacimiento: {{usuario.anio_nacimiento}}</li>
+            <li class="list-group-item bg-dark text-light py-1">Sexo: {{usuario.sexo}}</li>
+            <li class="list-group-item bg-dark text-light py-1">Correo: {{usuario.mail}}</li>
+            <li class="list-group-item bg-dark text-light py-1">Rol: {{usuario.rol}}</li>
+            </ul>
         </div>
+        </div>
+
+        <!-- Map -->
+        <div class="col-md-6">
+        <div id="mapa" style="height:400px;" class="rounded border border-secondary"></div>
+        </div>
+
     </div>
 
-    <div id="mapa"></div>
-   
-
-    <div class="text-center mt-5">
-      <a href="/ranking" class="btn btn-secondary">Volver</a>
+    <div class="text-center mt-3">
+        <a href="/ranking" class="btn btn-secondary btn-sm px-4">Volver</a>
     </div>
-  </main>
+
+    </main>
+
 
 
 </body>
-<!--No tengo ni idea de porque no puedo dejar este estilo en otro lado-->
-<style>
-#mapa {
-    width: 100% !important; 
-    height: 400px !important; 
-    margin-top: 20px !important;
-}
-</style>
 <script>
     let coordStr = "{{usuario.coordenadas}}"; 
 
