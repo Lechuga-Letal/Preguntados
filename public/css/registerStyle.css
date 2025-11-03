@@ -170,3 +170,13 @@ input[type="submit"]:hover {
         max-width: 400px;
     }
 }
+
+footer {
+    text-align: center;
+    color: #888;
+    font-size: 0.9rem;
+    padding: 15px 0;
+    background-color: rgba(31,31,31,0.7);
+    backdrop-filter: blur(6px);
+    box-shadow: 0 -2px 8px rgba(0,0,0,0.5);
+}
