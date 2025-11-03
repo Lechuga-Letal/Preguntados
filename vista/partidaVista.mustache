@@ -1,5 +1,5 @@
 <title>Partida</title>
-<link rel="stylesheet" href="/public/css/inicioStyle.css">
+<link rel="stylesheet" href="/public/css/partidaStyle.css">
 <body>
 <header class="header">
     <img src="/public/imagenes/Logo.png" alt="logo" class="logo">
@@ -39,11 +39,9 @@
 
 <!--        Podriamos manejar esto con un formulario para no hacer tan extensa la URL-->
         {{#Respuestas}}
-            <div class="list-group-item bg-dark text-light border border-secondary mb-3 rounded">
-                <h5 class="mb-2">
-                    <a href="/partida/evaluarTurno?respuestaElegida={{id}}&turno={{id_turno}}" class="link-info fw-bold">{{opcion}}</a>
-                </h5>
-            </div>
+                <a href="/partida/evaluarTurno?respuestaElegida={{id}}&turno={{id_turno}}" class="list-group-item link-card mb-3 rounded">
+                    <h5 class="mb-0">{{opcion}}</h5>
+                </a>
         {{/Respuestas}}
     </div>
     
