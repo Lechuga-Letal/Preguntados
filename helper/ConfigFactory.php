@@ -2,6 +2,7 @@
 include_once("helper/MyConexion.php");
 include_once("helper/IncludeFileRenderer.php");
 include_once("helper/NewRouter.php");
+include_once("helper/MailService.php");
 include_once("controller/LoginController.php");
 include_once("controller/RegisterController.php");
 include_once("controller/InicioController.php");
@@ -39,6 +40,7 @@ class ConfigFactory
     private $preguntasModel;
     private $respuestasModel;
     private $usuarioModel; 
+    private $mailService;
     public function __construct()
     {
         $this->config = parse_ini_file("config/config.ini");
@@ -49,8 +51,9 @@ class ConfigFactory
             $this->config["pass"],
             $this->config["database"]
         );
-
         $this->renderer = new MustacheRenderer("vista");
+
+        $this->mailService = new MailService(); 
 
         $this->redirectModel = new RedirectModel(); 
 
@@ -66,7 +69,7 @@ class ConfigFactory
 //Hay 2 instancias de modelo, este se tiene que crear previamente e inyectarlo en los controladores que se necesita
         $this->objetos["LoginController"] = new LoginController(new UsuarioModel($this->conexion), $this->renderer, $this->redirectModel);
     
-        $this->objetos["RegisterController"] = new RegisterController(new UsuarioModel($this->conexion), $this->renderer, $this->redirectModel);
+        $this->objetos["RegisterController"] = new RegisterController(new UsuarioModel($this->conexion), $this->renderer, $this->redirectModel, $this->mailService);
         
         $this->objetos["InicioController"] = new InicioController(new InicioModel($this->conexion), $this->renderer, $this->redirectModel);
 

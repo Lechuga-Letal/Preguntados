@@ -35,10 +35,7 @@ class MailService
             $this->mailer->isHTML(true);
             $this->mailer->Subject = 'Bienvenido al Preguntados';
             $this->mailer->AltBody = "Hola .".$usuario."! Gracias por registrarte.";
-            $this->mailer->Body = "<h1>Hola $usuario!</h1><p>Gracias por registrarte.</p>
-                                  <a href='/inicio/ingresoPorMail'>Link para validar la cuenta</a>";
-//            TODO: linkear el ID del usuario
-
+            $this->mailer->Body = "<h1>Hola $usuario!</h1><p>Gracias por registrarte.</p>";
 
             $this->mailer->send();
         } catch (Exception $e) {

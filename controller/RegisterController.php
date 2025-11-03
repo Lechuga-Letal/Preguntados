@@ -5,12 +5,13 @@ class RegisterController
     private $model;
     private $renderer;
     private $redirectModel;
-
-    public function __construct($model, $renderer, $redirectModel)
+    private $mailService; 
+    public function __construct($model, $renderer, $redirectModel, $mailService)
     {
         $this->model = $model;
         $this->renderer = $renderer;
         $this->redirectModel = $redirectModel;
+        $this->mailService = $mailService;
     }
 
     public function base()
@@ -70,7 +71,7 @@ class RegisterController
 
             if(!$this->model->userExists($usuario, $mail)) {
                 $this->model->createUser($nombre_completo, $anio_nacimiento, $sexo, $pais, $ciudad, $coordenadas, $usuario, $mail, $pass1, $foto_perfil);
-
+                $this->mailService->enviarBienvenida($usuario, $mail); 
                 $this->redirectModel->redirect("login/loginForm");
             } else {
                 $this->renderer->render('register', ['error' => 'El usuario o email ya está registrado']);
