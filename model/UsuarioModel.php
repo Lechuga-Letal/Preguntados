@@ -75,7 +75,7 @@ require_once __DIR__ . '/../helper/MailService.php';
 
     public function getAllUsuarios()
     {
-        $sql = "SELECT * FROM usuarios";
+        $sql = "SELECT * FROM usuarios WHERE rol <> 'Administrador'";
         $resultado = $this->conexion->query($sql);
 
         if ($resultado && count($resultado) > 0) {
