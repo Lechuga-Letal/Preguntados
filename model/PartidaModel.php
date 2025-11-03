@@ -10,27 +10,12 @@ class PartidaModel
         $this->usuarioModel = $usuarioModel;
     }
 
-    //Capaz esto lo podemos mover al modelo de usuario... 
-    public function obtenerIdUsuarioPorNombre($nombreUsuario)
-    {
-        $sql = "SELECT id FROM usuarios WHERE usuario = '$nombreUsuario'";
-        //Agrege el @ para que el warning no aparecza. 
-        //Pero deberiamos preguntar por el foro porque a veces nos sale y a veces no!
-        $resultado = @$this->conexion->query($sql);
-
-        if ($resultado && count($resultado) > 0) {
-            return $resultado[0]['id'];
-        }
-
-        return null;
-    }
-
     public function crearPartida($usuario, $oponente)
     {
-        $idUsuario = is_numeric($usuario) ? $usuario : $this->obtenerIdUsuarioPorNombre($usuario);
+        $idUsuario = is_numeric($usuario) ? $usuario : $this->usuarioModel->obtenerIdUsuarioPorNombre($usuario);
 
         if ($oponente !== null) {
-            $idOponente = is_numeric($oponente) ? $oponente : $this->obtenerIdUsuarioPorNombre($oponente);
+            $idOponente = is_numeric($oponente) ? $oponente : $this->usuarioModel->obtenerIdUsuarioPorNombre($oponente);
         }
 
         $idOponenteSql = (!empty($idOponente) && $idOponente > 0) ? $idOponente : "NULL";
@@ -47,33 +32,6 @@ class PartidaModel
         }
 
         return null;
-    }
-
-
-    public function obtenerListadoDeJugadoresMenos($idActual)
-    {
-
-        if (!is_numeric($idActual)) {
-            $idUsuario = $this->obtenerIdUsuarioPorNombre($idActual);
-        } else {
-            $idUsuario = $idActual;
-        }
-
-        $query = "SELECT foto_perfil, id, usuario, nombre_completo, pais FROM usuarios 
-        WHERE id != $idUsuario AND usuario != 'admin'";
-
-        $resultado = @$this->conexion->query($query);
-
-        if (is_array($resultado)) {
-            return $resultado;
-        }
-
-        $usuarios = [];
-        while ($fila = $resultado->fetch_assoc()) {
-            $usuarios[] = $fila;
-        }
-
-        return $usuarios;
     }
 
     public function obtenerDesafiosPorEstado($idUsuario, $estado)
@@ -138,7 +96,7 @@ class PartidaModel
 
     //TODO: Probablemente estos metodos lo tengamos que distribuir en varios modelos
     public function crearTurno($nombreUsuario, $idPartida){
-        $idUsuario = $this->obtenerIdUsuarioPorNombre($nombreUsuario);
+        $idUsuario = $this->usuarioModel->obtenerIdUsuarioPorNombre($nombreUsuario);
         $idPregunta=$this->getIdPregunta();
 
         $sql = "INSERT INTO turno (id_partida, id_usuario,id_pregunta) 
@@ -196,7 +154,7 @@ class PartidaModel
     public function mostrarCantidadCorrectas($idTurno){
         $idPartida=$this->obtenerIdPartidaPorTurno($idTurno);
         $nombreUsuario=$this->obtenerNombreUsuarioPorTurno($idTurno);
-        $idJugador=$this->obtenerIdUsuarioPorNombre($nombreUsuario);
+        $idJugador=$this->usuarioModel->obtenerIdUsuarioPorNombre($nombreUsuario);
 
         $sql = "select count(*) as cantidad from turno 
                 where id_usuario=$idJugador 

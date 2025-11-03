@@ -25,7 +25,15 @@
                 <tbody>
                 {{#usuarios}}
                     <tr>
-                        <td>{{foto_perfil}}</td>
+                        <td>
+                            {{#foto_perfil}}
+                                <img src="/{{foto_perfil}}" alt="{{usuario}}" class="img-fluid rounded-circle" width="50" height="50">
+                            {{/foto_perfil}}
+
+                            {{^foto_perfil}}
+                            <img src="/public/imagenes/usuarioImagenDefault.png" alt="{{usuario}}" class="img-fluid rounded-circle" width="50" height="50">
+                            {{/foto_perfil}}  
+                        </td>
                         <td>{{usuario}}</td>
                         <td>{{nombre_completo}}</td>
                         <td>{{pais}}</td>
@@ -39,7 +47,9 @@
                 </tbody>
             </table>
         </section>
+        <div class="text-center mt-5">
+            <a href="/inicio" class="btn btn-secondary">Volver</a>
+        </div>
     </div>
-
 </main>
 </body>
