@@ -94,8 +94,8 @@ class PartidaController{
             'id_turno' => $idTurno,
             'cantidadCorrectas'=>$this->model->mostrarCantidadCorrectas($idTurno) ?? 0,
             'nombreOponente' =>$this->model->getNombreOponente($idTurno)?? 'Desconocido',
-            'pregunta'=> $this->model->obtenerDescripcionDeLaPreguntaPorTurno($idTurno)
-            ,'Respuestas'=> $this->model->obtenerRespuestasDelTurno($idTurno)
+            'pregunta'=> $this->model->obtenerDescripcionDeLaPreguntaPorTurno($idTurno),
+            'Respuestas'=> $this->model->obtenerRespuestasDelTurno($idTurno)
         ];
 
         $this->renderer->render("partida", $model);

@@ -171,7 +171,7 @@ class PartidaModel
 
     public function obtenerDescripcionDeLaPreguntaPorTurno($idTurno){
         $sql = "SELECT p.descripcion FROM pregunta p 
-                join Turno t on p.id_pregunta=t.id_pregunta 
+                join turno t on p.id_pregunta=t.id_pregunta 
                 WHERE t.id = $idTurno";
 
         $resultado = $this->conexion->query($sql);
@@ -182,7 +182,7 @@ class PartidaModel
     public function obtenerRespuestasDelTurno($idTurno){
         $sql = "SELECT r.id_respuesta as id,r.descripcion as opcion 
                 FROM respuesta r 
-                join Turno t on r.id_pregunta=t.id_pregunta 
+                join turno t on r.id_pregunta=t.id_pregunta 
                 WHERE t.id = $idTurno";
 
         $resultado = $this->conexion->query($sql);

@@ -28,7 +28,7 @@ include_once("controller/PartidaController.php");
 include_once("model/PartidaModel.php");
 
 include_once("controller/RankingController.php");
-include_once("controller/perfilController.php");
+include_once("controller/PerfilController.php");
 class ConfigFactory
 {
     private $config;
