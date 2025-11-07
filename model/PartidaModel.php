@@ -138,7 +138,7 @@ class PartidaModel
         $idDeRespuestaCorrecta=$this->obtenerIdDeLaRepuestaCorrectaDeLaPreguntaPorTurno($idTurno);
       
         // no se si seria lo mejor ponerlo aca
-        $this->finalizarTurno($idTurno);
+        //$this->finalizarTurno($idTurno);
 
         return ($idDeRespuestaCorrecta==$opcionElegida);
     }
@@ -250,14 +250,15 @@ class PartidaModel
         return null;
     }
     
-    public function finalizarTurno($idTurno){
+    /*public function finalizarTurno($idTurno){
         $sql = "UPDATE turno
                     SET fin_turno= NOW()
                     WHERE id = $idTurno";
 
         $this->conexion->query($sql);
     }
-
+    
+    todo esto era para calcular tiempo desde la base de datos
     public function calcularTiempoDeRespuesta($idTurno){
         $sql = "SELECT TIMESTAMPDIFF(SECOND, inicio_turno, fin_turno) as tiempoSegundos
                 FROM turno
@@ -280,7 +281,7 @@ class PartidaModel
         }
 
         return false; // Si no se pudo calcular el tiempo, consideramos que no está dentro del límite
-    }
+    }*/
 }
 
 

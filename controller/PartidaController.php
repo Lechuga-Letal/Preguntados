@@ -1,5 +1,4 @@
 <?php
-
 class PartidaController{
 
     private $model;
@@ -81,7 +80,7 @@ class PartidaController{
     public function crearTurno(){
         $nombreUsuario= $_GET["nombreUsuario"];
         $idPartida=$_GET["idPartida"];
-
+        
         $idTurno = $this->model->crearTurno($nombreUsuario,$idPartida);
         $this->redirectModel->redirect("partida/mostrarPartida?idTurno=$idTurno");
         //todo: ver forma de cambiarle la URL
@@ -89,6 +88,7 @@ class PartidaController{
 
     public function mostrarPartida(){
         $idTurno= $_GET["idTurno"];
+        $_SESSION['turno']=$idTurno;
 
         $model = [
             'id_turno' => $idTurno,
@@ -97,7 +97,7 @@ class PartidaController{
             'pregunta'=> $this->model->obtenerDescripcionDeLaPreguntaPorTurno($idTurno)
             ,'Respuestas'=> $this->model->obtenerRespuestasDelTurno($idTurno)
         ];
-
+        $this->inicioCronometro();
         $this->renderer->render("partida", $model);
     }
 
@@ -105,15 +105,16 @@ class PartidaController{
         //TODO: Validaciones de Tiempo, si fue respondida antes, si la partida se termino, etc se hacen aca
             $opcionElegida=$_GET['respuestaElegida'];
             $turno=$_GET['turno'];
+            $_SESSION['turno']=$turno;
 
             $lePego=$this->model->evaluarRespuestaDelTurno($opcionElegida,$turno);
 
-            /*verificar tiempo*/
-            $dentroDelTiempo=$this->model->verificarTiempoDelTurno($turno);
+            /*verificar tiempo
+            $dentroDelTiempo=$this->model->verificarTiempoDelTurno($turno);*/
 
-            if(!$lePego || !$dentroDelTiempo){
+            if(!$lePego){
                 //finalizar partida
-                $this->redirectModel->redirect("partida/terminarPartida?idTurno=$turno");
+                $this->redirectModel->redirect("partida/terminarPartida?idTurno='$turno'");
                 //TODO: cambiarle el nombre al metodo
             }else{
                 $nombreUsuario=$this->model->obtenerNombreUsuarioPorTurno($turno);
@@ -127,7 +128,7 @@ class PartidaController{
     }
 
       public function terminarPartida(){
-            $idTurno=$_GET['idTurno'];
+            $idTurno=$_SESSION['turno'] ?? null;
             $cantidadCorrectas=$this->model->mostrarCantidadCorrectas($idTurno);
             $idPartida=$this->model->obtenerIdPartidaPorTurno($idTurno);
 
@@ -160,4 +161,41 @@ class PartidaController{
         unset($_SESSION['id']);
         unset($_SESSION['puntaje']);
     }
+
+    public function inicioCronometro(){
+        $_SESSION['cronometro'] = time()+3; // tiempo 
+        $cronometro = $_SESSION['cronometro']; 
+        return $cronometro;
+    }
+
+    public function obtenerTiempoTranscurrido(){
+        if (isset($_SESSION['cronometro'])) {
+            $tiempoInicio = $_SESSION['cronometro'];
+            $tiempoActual = time(); 
+            $tiempoTranscurrido = $tiempoInicio-$tiempoActual; 
+            if($tiempoTranscurrido <= 0){
+                $this->terminarPartidaPorTiempoAgotado();
+                $tiempoTranscurrido=0;
+
+            }   
+            return $tiempoTranscurrido;
+        }
+        return null; 
+    }
+
+    public function mostrarTiempo(){
+        header('Content-Type: application/json');
+        $tiempoRestante = $this->obtenerTiempoTranscurrido();
+        echo json_encode(['tiempoRestante' => $tiempoRestante]);
+    }
+
+    public function terminarPartidaPorTiempoAgotado(){
+        $idTurno=$_SESSION['turno'] ?? null;
+        error_log("Terminando partida con idTurno: $idTurno");
+
+        if ($idTurno) {
+            $this->redirectModel->redirect("partida/terminarPartida?idTurno=$idTurno");
+        }
+    }
+    
 }

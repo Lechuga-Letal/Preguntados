@@ -87,8 +87,11 @@ CREATE TABLE turno (
                          id_partida INT NOT NULL,
                          id_usuario INT NOT NULL,
                          id_pregunta INT NOT NULL,
+                         /*
+                         esto ya no va a ser trabajo de la base de datos
                          inicio_turno DATETIME DEFAULT CURRENT_TIMESTAMP,
                          fin_turno DATETIME DEFAULT NULL,
+                         */
                          adivino BOOLEAN DEFAULT NULL,
                          PRIMARY KEY (id,id_partida,id_usuario,id_pregunta),
                          FOREIGN KEY (id_partida) REFERENCES partidas(id) ,
