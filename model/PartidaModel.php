@@ -95,9 +95,9 @@ class PartidaModel
     }
 
     //TODO: Probablemente estos metodos lo tengamos que distribuir en varios modelos
-    public function crearTurno($nombreUsuario, $idPartida){
+    public function crearTurno($nombreUsuario, $idPartida, $idCategoria){
         $idUsuario = $this->usuarioModel->obtenerIdUsuarioPorNombre($nombreUsuario);
-        $idPregunta=$this->getIdPregunta();
+        $idPregunta = $this->getIdPregunta($idUsuario, $idCategoria);
 
         $sql = "INSERT INTO turno (id_partida, id_usuario,id_pregunta) 
                 VALUES ($idPartida, $idUsuario,$idPregunta)";
@@ -114,17 +114,10 @@ class PartidaModel
     }
 
     //Todo: aca con el ID de usuario, partida se aplica el filtro de dificultad y demas
-    public function getIdPregunta(){
-        $cantidadDePreguntas = $this->getTotalDePreguntas();
-        $idPreguntaRandom = rand(1, $cantidadDePreguntas);
-
-        $query= "SELECT id_pregunta as id  
-                 FROM pregunta
-                 where id_pregunta = $idPreguntaRandom";
-
-        $resultado = $this->conexion->query($query);
-
-        return $resultado[0]['id'];
+    //Lo modifique para que la pregunta aleactoria que devuelva sea una no vista
+    public function getIdPregunta($idUsuario, $idCategoria){
+        $pregunta = $this->obtenerPreguntaAleatoriaPorCategoria($idUsuario, $idCategoria);
+        return $pregunta['id_pregunta'];
     }
 
     public function getTotalDePreguntas(){
@@ -282,6 +275,70 @@ class PartidaModel
 
         return false; // Si no se pudo calcular el tiempo, consideramos que no está dentro del límite
     }*/
+
+    public function obtenerPreguntaAleatoriaPorCategoria($idUsuario, $idCategoria) {
+        $totalQuery = $this->conexion->query(" SELECT COUNT(*) AS total  FROM pregunta WHERE id_categoria = $idCategoria");
+        $total = (int)$totalQuery[0]['total'];
+
+        $vistasQuery = $this->conexion->query(" SELECT COUNT(*) AS vistas  FROM preguntasVistas pv 
+        JOIN pregunta p ON pv.id_pregunta = p.id_pregunta
+        WHERE pv.id_usuario = $idUsuario 
+        AND p.id_categoria = $idCategoria
+    ");
+        $vistas = (int)$vistasQuery[0]['vistas'];
+
+        if ($vistas >= $total && $total > 0) {
+            $this->conexion->query("
+            DELETE pv 
+            FROM preguntasVistas pv
+            JOIN pregunta p ON pv.id_pregunta = p.id_pregunta
+            WHERE pv.id_usuario = $idUsuario 
+            AND p.id_categoria = $idCategoria
+        ");
+            $vistas = 0;
+        }
+
+        $sql = " SELECT p.* FROM pregunta p
+        WHERE p.id_categoria = $idCategoria
+        AND p.id_pregunta NOT IN (
+            SELECT pv.id_pregunta 
+            FROM preguntasVistas pv
+            JOIN pregunta p2 ON pv.id_pregunta = p2.id_pregunta
+            WHERE pv.id_usuario = $idUsuario 
+            AND p2.id_categoria = $idCategoria
+        )
+        ORDER BY RAND()
+        LIMIT 1
+    ";
+
+        $resultado = $this->conexion->query($sql);
+
+        if (empty($resultado)) {
+            $this->conexion->query(" DELETE pv
+            FROM preguntasVistas pv
+            JOIN pregunta p ON pv.id_pregunta = p.id_pregunta
+            WHERE pv.id_usuario = $idUsuario
+            AND p.id_categoria = $idCategoria
+        ");
+
+            $resultado = $this->conexion->query($sql);
+        }
+
+        $pregunta = $resultado ? $resultado[0] : null;
+
+        if ($pregunta) {
+            $idPregunta = $pregunta['id_pregunta'];
+            $this->conexion->query("
+            INSERT IGNORE INTO preguntasVistas (id_usuario, id_pregunta)
+            VALUES ($idUsuario, $idPregunta)
+        ");
+        }
+
+        return $pregunta;
+    }
+
+
+
 }
 
 

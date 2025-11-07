@@ -80,8 +80,9 @@ class PartidaController{
     public function crearTurno(){
         $nombreUsuario= $_GET["nombreUsuario"];
         $idPartida=$_GET["idPartida"];
-        
-        $idTurno = $this->model->crearTurno($nombreUsuario,$idPartida);
+        //Lo pruebo con este id hasta que haga la ruleta y lo mando por post
+        $idCategoria = 1;
+        $idTurno = $this->model->crearTurno($nombreUsuario, $idPartida, $idCategoria);
         $this->redirectModel->redirect("partida/mostrarPartida?idTurno=$idTurno");
         //todo: ver forma de cambiarle la URL
     }
