@@ -30,6 +30,8 @@ include_once("model/PartidaModel.php");
 
 include_once("controller/RankingController.php");
 include_once("controller/perfilController.php");
+
+include_once("model/ReportesModel.php");
 class ConfigFactory
 {
     private $config;
@@ -42,6 +44,7 @@ class ConfigFactory
     private $respuestasModel;
     private $usuarioModel; 
     private $mailService;
+    private $reportesModel;
     public function __construct()
     {
         $this->config = parse_ini_file("config/config.ini");
@@ -57,6 +60,8 @@ class ConfigFactory
         $this->mailService = new MailService(); 
 
         $this->redirectModel = new RedirectModel(); 
+
+        $this->reportesModel = new ReportesModel($this->conexion);
 
         $this->objetos["router"] = new NewRouter($this, "PaginaPrincipalController", "base");
         $this->preguntasModel = new PreguntasModel($this->conexion);
@@ -94,7 +99,7 @@ class ConfigFactory
     
         $this->objetos["PerfilController"] = new PerfilController(($this->conexion), $this->renderer, $this->redirectModel, $this->usuarioModel);
     
-        $this->objetos["ReportarPreguntaController"] = new ReportarPreguntaController(($this->conexion), $this->renderer, $this->redirectModel, $this->usuarioModel, $this->preguntasModel, $this->respuestasModel);
+        $this->objetos["ReportarPreguntaController"] = new ReportarPreguntaController(($this->conexion), $this->renderer, $this->redirectModel, $this->usuarioModel, $this->preguntasModel, $this->respuestasModel, $this->reportesModel);
     }
 
     public function get($objectName)

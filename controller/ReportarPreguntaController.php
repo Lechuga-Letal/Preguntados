@@ -25,48 +25,73 @@ class ReportarPreguntaController
         $this->getPregunta();
     }
 
-    public function getPregunta()
+public function getPregunta()
     {
-
         if (!isset($_SESSION['usuario'])) {
             $this->redirectModel->redirect('login/loginForm');
             return;
         }
 
-        $id_pregunta = $_GET['id']; 
+        $id_pregunta = $_GET['id'] ?? null;
+        if (!$id_pregunta || !is_numeric($id_pregunta)) {
+            $this->renderer->render('error', ['mensaje' => 'ID de pregunta inválido.']);
+            return;
+        }
+
         $pregunta = $this->preguntasModel->obtenerPreguntaPorId($id_pregunta);
         $respuestas = $this->respuestasModel->obtenerRespuestasPorPregunta($id_pregunta);
+
+        if (!$pregunta) {
+            $this->renderer->render('error', ['mensaje' => 'La pregunta no existe.']);
+            return;
+        }
+
         $data = [
             'pregunta' => $pregunta,
             'respuestas' => $respuestas
-        ]; 
-        $this->renderer->render("reportarPregunta", $data);
-    }
+        ];
 
-    public function crearReporteDePregunta()
-    {
-        $nombre_usuairo = $_SESSION['usuario'];
-        $id_usuario = $this->usuarioModel->getUsuarioByNombreUsuario($nombre_usuairo);
-        
-        $id_pregunta = $_POST['id_pregunta'] ?? null;
-        $motivo = $_POST['motivo'] ?? '';
-        $usuario = $_SESSION['usuario'] ?? null;
-
-        if (!$id_pregunta || !$motivo || !$usuario) {
-            $this->renderer->render('reportarPregunta', ['error' => 'Datos inválidos o sesión expirada.']);
-            return;
-        }
-    
-        $id_reporte = $this->reporteModel->crearReporte($id_pregunta, $id_usuario, $motivo);
-
-        if ($id_reporte) {
-            $data = ['mensaje' => 'El reporte fue enviado correctamente.'];
-        } else {
-            $data = ['error' => 'No se pudo enviar el reporte.'];
+        // ✅ Show feedback after redirect
+        if (isset($_GET['success'])) {
+            $data['mensaje'] = '✅ El reporte fue enviado correctamente.';
+        } elseif (isset($_GET['error'])) {
+            $data['error'] = '❌ No se pudo enviar el reporte.';
         }
 
         $this->renderer->render('reportarPregunta', $data);
-    
     }
 
+    // ✅ Handles form submission
+    public function crearReporteDePregunta()
+    {
+        if (!isset($_SESSION['usuario'])) {
+            $this->redirectModel->redirect('login/loginForm');
+            return;
+        }
+
+        // 🟦 Fetch user
+        $usuarioData = $this->usuarioModel->getUsuarioByNombreUsuario($_SESSION['usuario']);
+        $id_usuario = $usuarioData['id_usuario'] ?? $usuarioData['id'] ?? null;
+
+        // 🟦 Fetch POST data
+        $id_pregunta = $_POST['id_pregunta'] ?? null;
+        $motivo = trim($_POST['motivo'] ?? '');
+
+        // 🟦 Validate
+        if (!$id_pregunta || !is_numeric($id_pregunta) || empty($motivo) || !$id_usuario) {
+            header("Location: /reportarPregunta?id=$id_pregunta&error=1");
+            exit;
+        }
+
+        // 🟦 Create report
+        $id_reporte = $this->reportesModel->crearReporte($id_pregunta, $id_usuario, $motivo);
+
+        // 🟦 Redirect with status
+        if ($id_reporte) {
+            header("Location: /reportarPregunta?id=$id_pregunta&success=1");
+        } else {
+            header("Location: /reportarPregunta?id=$id_pregunta&error=1");
+        }
+        exit;
+    }
 }
