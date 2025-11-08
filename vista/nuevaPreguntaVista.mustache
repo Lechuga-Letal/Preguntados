@@ -5,27 +5,25 @@
 
 <body class="bg-dark text-light">
 
-  <main class="container my-5">
+{{id}}
 
-    <div class="text-center mb-4">
-      <h1 class="fw-bold">Nueva Pregunta</h1>
-      <p class="text-muted">
-        Acá podés crear una nueva pregunta y sugerirla, o crearla directamente si sos un usuario editor.
-      </p>
-    </div>
-
+<main class="container my-5">
  <div class="bg-dark border border-secondary rounded p-4 mx-auto shadow-lg" style="max-width: 700px;">
+    {{#Editor}}
       <form method="POST" action="/nuevaPregunta/guardarPregunta">
+      <h3 class="text-info mb-3">Crear Nueva Pregunta</h3>
+    {{/Editor}}
+    {{^Editor}}
+      <form method="POST" action="/nuevaPregunta/sugerirPregunta">
+      <h3 class="text-info mb-3">Sugerir una pregunta</h3>
+    {{/Editor}}
+      {{#error}}
+        <div class="alert alert-danger py-2">{{error}}</div>
+      {{/error}}
 
-        <h3 class="text-info mb-3">Crear Nueva Pregunta</h3>
-
-        {{#error}}
-          <div class="alert alert-danger py-2">{{error}}</div>
-        {{/error}}
-
-        {{#mensaje}}
-          <div class="alert alert-success py-2">{{mensaje}}</div>
-        {{/mensaje}}
+      {{#mensaje}}
+        <div class="alert alert-success py-2">{{mensaje}}</div>
+      {{/mensaje}}
 
         <!-- Descripción -->
         <div class="mb-3">
@@ -93,13 +91,23 @@
 
         <!-- Buttons -->
         <div class="d-flex justify-content-between mt-4">
-          <a href="/inicioEditor/" class="btn btn-secondary">
-            Volver
-          </a>
+          {{#Editor}}
+            <button type="submit" class="btn btn-outline-warning custom-outline-warning">
+              Guardar pregunta
+            </button>
+            <a href="/inicioEditor/" class="btn btn-secondary">
+              Volver
+            </a>
+          {{/Editor}}
+          {{^Editor}}
+            <button type="submit" class="btn btn-outline-warning custom-outline-warning">
+              Sugerir pregunta
+            </button>
+            <a href="/inicio/" class="btn btn-secondary">
+              Volver
+            </a>
+          {{/Editor}}
 
-          <button type="submit" class="btn btn-outline-warning custom-outline-warning">
-            Guardar Pregunta
-          </button>
         </div>
 
       </form>

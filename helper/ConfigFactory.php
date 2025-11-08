@@ -83,7 +83,7 @@ class ConfigFactory
 
         $this->objetos["InicioEditorController"] = new InicioEditorController(($this->conexion), $this->renderer);
 
-        $this->objetos["NuevaPreguntaController"] = new NuevaPreguntaController(($this->conexion), $this->renderer, $this->redirectModel, $this->preguntasModel, $this->respuestasModel);
+        $this->objetos["NuevaPreguntaController"] = new NuevaPreguntaController(($this->conexion), $this->renderer, $this->redirectModel, $this->preguntasModel, $this->respuestasModel, $this->usuarioModel);
 
         $this->objetos["PreguntasListaController"] = new PreguntasListaController(($this->conexion), $this->renderer, $this->redirectModel, $this->preguntasModel);
 
