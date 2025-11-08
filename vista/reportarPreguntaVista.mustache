@@ -1,0 +1,65 @@
+<title>Reportar</title>
+<link rel="stylesheet" href="../public/css/partidaStyle.css">
+<body>
+<header class="header">
+<!--    <img src="/public/imagenes/Logo.png" alt="logo" class="logo">-->
+    <form method="POST" action="/Preguntados/inicio/logout">
+        <input class="logout-btn" type="submit" value="Cerrar sesión">
+    </form>
+</header>
+<main class="container">
+    <div class="card p-3 shadow-sm bg-dark text-light border border-secondary mt-4">
+        <h2 class="mb-3">Reportar pregunta</h2>
+
+        <div class="mb-4 bg-dark text-light border border-secondary p-3 rounded">
+            <p><strong>Descripción:</strong> {{pregunta.descripcion}}</p>
+            <p><strong>Categoría:</strong> {{pregunta.id_categoria}}</p>
+        </div>
+
+        <div class="mb-3">
+            <h5 class="mb-2">Respuestas:</h5>
+            {{#respuestas}}
+            <div class="d-flex justify-content-between align-items-center border-bottom border-secondary py-1">
+                <span>• {{descripcion}}</span>
+                <span class="text-muted small">
+                {{#es_correcta}}✅ Correcta{{/es_correcta}}
+                {{^es_correcta}}❌ Incorrecta{{/es_correcta}}
+                </span>
+            </div>
+            {{/respuestas}}
+
+            {{^respuestas}}
+            <p class="text-warning">No hay respuestas registradas para esta pregunta.</p>
+            {{/respuestas}}
+        </div>
+
+        <hr class="border-secondary">
+
+        {{#mensaje}}
+        <div class="alert alert-success mt-3" role="alert">
+        {{mensaje}}
+        </div>
+        {{/mensaje}}
+
+        {{#error}}
+        <div class="alert alert-danger mt-3" role="alert">
+        {{error}}
+        </div>
+        {{/error}}
+
+        <form action="/reportarPregunta/crearReporteDePregunta" method="post">
+            <input type="hidden" name="id_pregunta" value="{{pregunta.id_pregunta}}">
+
+            <div class="mb-3">
+            <label for="motivo" class="form-label">Motivo del reporte:</label>
+            <textarea id="motivo" name="motivo" class="form-control bg-dark text-light border-secondary"
+                rows="3" placeholder="Explicá por qué estás reportando esta pregunta..." required></textarea>
+            </div>
+
+            <div class="text-end">
+            <button type="submit" class="btn btn-danger">Enviar reporte</button>
+            </div>
+        </form>
+        </div>
+</main>
+</body>

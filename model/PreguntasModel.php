@@ -60,6 +60,7 @@ class PreguntasModel
     }
 
     //Devuelve preguntas con al menos un reporte, y su cantidad
+    //a cambiar a reportes model
     public function obtenerPreguntasReportadas()
     {
         $sql = "
@@ -96,38 +97,6 @@ class PreguntasModel
             ORDER BY s.id_sugerencia;
         ";
         return $this->conexion->query($sql);
-    }
-
-    public function obtenerReportesPorPregunta($id_pregunta)
-    {
-        $id_pregunta = (int)$id_pregunta;
-
-        $sql = "
-            SELECT u.usuario, r.descripcion
-            FROM reporte r
-            JOIN usuarios u ON r.id_usuario = u.id
-            WHERE r.id_pregunta = $id_pregunta
-        ";
-
-        $reportes = $this->conexion->query($sql);
-
-        if (empty($reportes)) {
-            return null; // no reports
-        }
-
-        return [
-            'cantidad' => count($reportes),
-            'reportes' => $reportes
-        ];
-    }
-
-    public function rechazarReportes($id_pregunta) 
-    {
-        $id_pregunta = (int)$id_pregunta;
-        if ($id_pregunta > 0) {
-            $sql = "DELETE FROM reporte WHERE id_pregunta = $id_pregunta";
-            $this->conexion->query($sql);
-        }
     }
 
     public function eliminarPregunta($id_pregunta)
