@@ -25,6 +25,7 @@ include_once("model/RespuestasModel.php");
 include_once("controller/GestionarPreguntaController.php");
 
 include_once("controller/PartidaController.php");
+include_once("controller/ReportarPreguntaController.php");
 include_once("model/PartidaModel.php");
 
 include_once("controller/RankingController.php");
@@ -92,6 +93,8 @@ class ConfigFactory
         $this->objetos["RankingController"] = new RankingController(($this->conexion), $this->renderer, $this->redirectModel, $this->usuarioModel);
     
         $this->objetos["PerfilController"] = new PerfilController(($this->conexion), $this->renderer, $this->redirectModel, $this->usuarioModel);
+    
+        $this->objetos["ReportarPreguntaController"] = new ReportarPreguntaController(($this->conexion), $this->renderer, $this->redirectModel, $this->usuarioModel, $this->preguntasModel, $this->respuestasModel);
     }
 
     public function get($objectName)

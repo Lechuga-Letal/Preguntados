@@ -60,6 +60,7 @@ class PreguntasModel
     }
 
     //Devuelve preguntas con al menos un reporte, y su cantidad
+    //a cambiar a reportes model
     public function obtenerPreguntasReportadas()
     {
         $sql = "
@@ -81,23 +82,7 @@ class PreguntasModel
         return $this->conexion->query($sql);
     } 
 
-    public function obtenerPreguntasSugeridas()
-    {
-        $sql = "
-            SELECT 
-                s.id_sugerencia AS pregunta_id,
-                s.descripcion AS pregunta,
-                rs.descripcion AS respuesta,
-                rs.es_correcta,
-                u.usuario AS usuario_sugirio
-            FROM sugerencia s
-            LEFT JOIN respuesta_sugerida rs ON s.id_sugerencia = rs.id_sugerencia
-            INNER JOIN usuarios u ON s.id_usuario = u.id
-            ORDER BY s.id_sugerencia;
-        ";
-        return $this->conexion->query($sql);
-    }
-
+    //Estaria bueno mover esto despues
     public function obtenerReportesPorPregunta($id_pregunta)
     {
         $id_pregunta = (int)$id_pregunta;
@@ -121,13 +106,30 @@ class PreguntasModel
         ];
     }
 
-    public function rechazarReportes($id_pregunta) 
+        public function rechazarReportes($id_pregunta) 
     {
         $id_pregunta = (int)$id_pregunta;
         if ($id_pregunta > 0) {
             $sql = "DELETE FROM reporte WHERE id_pregunta = $id_pregunta";
             $this->conexion->query($sql);
         }
+    }
+
+    public function obtenerPreguntasSugeridas()
+    {
+        $sql = "
+            SELECT 
+                s.id_sugerencia AS pregunta_id,
+                s.descripcion AS pregunta,
+                rs.descripcion AS respuesta,
+                rs.es_correcta,
+                u.usuario AS usuario_sugirio
+            FROM sugerencia s
+            LEFT JOIN respuesta_sugerida rs ON s.id_sugerencia = rs.id_sugerencia
+            INNER JOIN usuarios u ON s.id_usuario = u.id
+            ORDER BY s.id_sugerencia;
+        ";
+        return $this->conexion->query($sql);
     }
 
     public function eliminarPregunta($id_pregunta)
