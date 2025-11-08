@@ -16,16 +16,45 @@ class ReportesModel
 
         $result = $this->conexion->query($sql);
 
-        // If $result is true, the insert succeeded
         if ($result === true) {
-            // get last inserted id safely
             $lastId = mysqli_insert_id($this->conexion);
-            return $lastId ?: true; // return true even if insert_id = 0
+            return $lastId ?: true; 
         }
 
-        // Log or debug to see what happened
         error_log("Error creating report: " . $this->conexion->error);
         return null;
+    }
+
+    public function obtenerReportesPorPregunta($id_pregunta)
+    {
+        $id_pregunta = (int)$id_pregunta;
+
+        $sql = "
+            SELECT u.usuario, r.descripcion
+            FROM reporte r
+            JOIN usuarios u ON r.id_usuario = u.id
+            WHERE r.id_pregunta = $id_pregunta
+        ";
+
+        $reportes = $this->conexion->query($sql);
+
+        if (empty($reportes)) {
+            return null;
+        }
+
+        return [
+            'cantidad' => count($reportes),
+            'reportes' => $reportes
+        ];
+    }
+
+    public function rechazarReportes($id_pregunta) 
+    {
+        $id_pregunta = (int)$id_pregunta;
+        if ($id_pregunta > 0) {
+            $sql = "DELETE FROM reporte WHERE id_pregunta = $id_pregunta";
+            $this->conexion->query($sql);
+        }
     }
 
 }
