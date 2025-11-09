@@ -7,13 +7,15 @@ class GestionarPreguntaController
     private $redirectModel; 
     private $preguntasModel;
     private $respuestasModel; 
-    public function __construct($model, $renderer, $redirectModel, $preguntasModel, $respuestasModel)
+    private $reportesModel; 
+    public function __construct($model, $renderer, $redirectModel, $preguntasModel, $respuestasModel, $reportesModel)
     {
         $this->model = $model;     
         $this->renderer = $renderer; 
         $this->redirectModel = $redirectModel;
         $this->preguntasModel = $preguntasModel;
         $this->respuestasModel = $respuestasModel;
+        $this->reportesModel = $reportesModel;
     }
 
     public function base()
@@ -52,7 +54,7 @@ class GestionarPreguntaController
                 $this->redirectModel->redirect('preguntasLista?tipo=sugeridas');
                 break;
             case 'rechazar_reportes':
-                $this->preguntasModel->rechazarReportes($id);
+                $this->reportesModel->rechazarReportes($id);
                 $this->redirectModel->redirect("gestionarPregunta?id=$id");
                 break;
             case 'eliminar': //pregunta activa
@@ -75,7 +77,7 @@ class GestionarPreguntaController
         } else {
             $pregunta = $this->preguntasModel->obtenerPreguntaPorId($id);
             $respuestas = $this->respuestasModel->obtenerRespuestasPorPregunta($id);
-            $reportes = $this->preguntasModel->obtenerReportesPorPregunta($id);
+            $reportes = $this->reportesModel->obtenerReportesPorPregunta($id);
         }
 
         $data = [ //Ttodo lo necesario para que mustache presente la pregunta 

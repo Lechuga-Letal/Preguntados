@@ -124,7 +124,6 @@ require_once __DIR__ . '/../helper/MailService.php';
         return $usuarios;
     }
 
-    /*
     public function getUsuarioByNombreUsuario($nombre)
     {
     if ($nombre === null || $nombre === '') {
@@ -145,5 +144,5 @@ require_once __DIR__ . '/../helper/MailService.php';
     }
 
     return null;
-    } */
+    } 
  }
