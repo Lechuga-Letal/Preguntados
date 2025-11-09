@@ -19,29 +19,42 @@
     <script>
     
     
-        const tiempoTotal = 15;  //aca podemos setear el tiempo por pregunta
-        var tiempoRestante = tiempoTotal; 
+        /*const tiempoTotal = 15;  //aca podemos setear el tiempo por pregunta
+        var tiempoRestante = tiempoTotal; */
         var cronometroElemento = document.getElementById('cronometro');
         var relleno = document.getElementById('tiempo');
+        let tiempo; 
 
-        setInterval(() => {
-        fetch('/partida/mostrarTiempo')
+        fetch('/partida/inicioCronometroAPI')
             .then(res => res.json())
             .then(data => {
-            console.log("Tiempo restante:", data);
-            document.getElementById("cronometro").innerText = data.tiempoRestante;
-            })    
+                console.log("Tiempo máximo:", data);
 
-
-
-            /*efecto visual de la barra de tiempo
-            if (tiempoRestante > 0) {
-                tiempoRestante--;
-                var porcentajeRestante = (tiempoRestante / tiempoTotal) * 100;
-                relleno.style.width = porcentajeRestante + '%';
+                tiempo=data.tiempoMaximoPorTurno;
+                cronometroElemento.innerText = tiempo;
                 
-            }*/
-        }, 1000);
+                // no me convence porque no usamos los tiempos desde el backend, es todo desde el front y lo pueden tocar desde inspeccionar
+                const intervalo = setInterval(() => {
+                    tiempo--;
+                    cronometroElemento.innerText = tiempo;
+                    if(tiempo <= 0){
+                        clearInterval(intervalo);//corta el cronometro
+                        console.log("llego al maximo");
+                        fetch('/partida/terminarPartidaPorTiempoMaximo');
+                    }
+
+                    fetch('/partida/controlarTiempo')
+                    .then(res => res.text())
+                    .then(data => {
+                        console.log("res:", data);
+                    });
+                    
+                    //efecto visual de la barra de tiempo
+                    var porcentajeRestante = (tiempo / data.tiempoMaximoPorTurno) * 100;
+                    relleno.style.width = porcentajeRestante + '%';
+
+                 },1000)//cada un segundo
+            });
     </script>
     <p>La pregunta es: <strong>{{pregunta}}</strong></p>
     <div id="pregunta-container">
