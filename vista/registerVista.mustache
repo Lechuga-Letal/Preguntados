@@ -1,63 +1,63 @@
-
-    <title>Registro</title>
-    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
-    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
-    <link rel="stylesheet" href="/public/css/registerStyle.css">
+<title>Registro</title>
+<link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+<link rel="stylesheet" href="/public/css/vistas/registerSyle.css">
 </head>
 <body>
-<header>
+    <header>
     <a href="/paginaPrincipal" class="link"><h2>PREGUNTADOS</h2></a>
     <nav>
         <a href="/paginaPrincipal">Pagina principal</a>
         <a href="/login/loginForm">Iniciar sesion</a>
         <a href="#">Soporte</a>
     </nav>
-</header> 
+    </header> 
 
-<main>
-    <div class="form-container">
-        {{#error}}
-            <div class="error-message">{{error}}</div>
-        {{/error}}
-        <h1>Crear cuenta</h1>
-        <form method="POST" action="/register/register" enctype="multipart/form-data">
+    <main>
+        <div class="form-container">
+            {{#error}}
+                <div class="error-message">{{error}}</div>
+            {{/error}}
+            
+            <h1>Crear cuenta</h1>
+            <form method="POST" action="/register/register" enctype="multipart/form-data">
+                <p><input type="text" name="nombre_completo" placeholder="Nombre completo" required></p>
+                <p> <input type="date" name="anio_nacimiento" required min="{{minDate}}" max="{{maxDate}}"></p>
+                <p>
+                    <label>Sexo:</label><br>
+                    <label><input type="radio" name="sexo" value="Masculino" > Masculino</label>
+                    <label><input type="radio" name="sexo" value="Femenino"> Femenino</label>
+                    <label><input type="radio" name="sexo" value="Prefiero no cargarlo"> Prefiero no cargarlo</label>
+                </p>
 
-            <p><input type="text" name="nombre_completo" placeholder="Nombre completo" required></p>
-            <p> <input type="date" name="anio_nacimiento" required min="{{minDate}}" max="{{maxDate}}"></p>
-            <p>
-                <label>Sexo:</label><br>
-                <label><input type="radio" name="sexo" value="Masculino" > Masculino</label>
-                <label><input type="radio" name="sexo" value="Femenino"> Femenino</label>
-                <label><input type="radio" name="sexo" value="Prefiero no cargarlo"> Prefiero no cargarlo</label>
-            </p>
+                <p><input type="text" name="pais" placeholder="País" id="pais" required readonly></p>
+                <p><input type="text" name="ciudad" id="ciudad" placeholder="Ciudad" required readonly></p>
+                <p><input type="text" name="usuario" placeholder="Nombre de usuario" required></p>
+                <p><input type="email" name="mail" placeholder="Email" required></p>
+                <p><input type="password" name="password1" placeholder="Contraseña" required></p>
+                <p><input type="password" name="password2" placeholder="Confirmar contraseña" required></p>
 
-            <!--Yo hasta sacaria estos inputs para que el usuario vaya directo al mapa, que dicen?-->
-            <p><input type="text" name="pais" placeholder="País" id="pais" required readonly></p>
-            <p><input type="text" name="ciudad" id="ciudad" placeholder="Ciudad" required readonly></p>
-            <p><input type="text" name="usuario" placeholder="Nombre de usuario" required></p>
-            <p><input type="email" name="mail" placeholder="Email" required></p>
-            <p><input type="password" name="password1" placeholder="Contraseña" required></p>
-            <p><input type="password" name="password2" placeholder="Confirmar contraseña" required></p>
+                <p>
+                    <label>Foto de perfil:</label><br>
+                    <input type="file" name="foto_perfil" accept="image/*">
+                </p>
 
-            <p>
-                <label>Foto de perfil:</label><br>
-                <input type="file" name="foto_perfil" accept="image/*">
-            </p>
+                <input hidden name="coordenadas" id="coordenadas" required>
 
-            <input hidden name="coordenadas" id="coordenadas" required>
+                <input type="submit" value="Registrarse">
+                </form>
+            </div>
 
-            <input type="submit" value="Registrarse">
-        </form>
-    </div>
+            <div class="mapaS">
+                <h3>Selecciona tu ubicación en el mapa: </h3>
+                <div id="mapa">
+            </div>
+            
+            <input type="hidden" name="latitud" id="latitud" required>
+            <input type="hidden" name="longitud" id="longitud" required>
+        </div>
+    </main>
 
-    <div class="mapaS">
-        <h3>Selecciona tu ubicación en el mapa: </h3>
-        <div id="mapa"></div>
-        <input type="hidden" name="latitud" id="latitud" required>
-        <input type="hidden" name="longitud" id="longitud" required>
-    </div>
-</main>
-
-<script src="/public/js/mapaRegister.js"></script>
+    <script src="/public/js/mapaRegister.js"></script>
 
 
