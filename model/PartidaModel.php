@@ -36,10 +36,9 @@ class PartidaModel {
             JOIN usuarios u_usuario ON u_usuario.id = p.id_usuario 
             JOIN usuarios u_oponente ON u_oponente.id = p.id_oponente 
             WHERE ($idUsuario = p.id_usuario OR $idUsuario = p.id_oponente) 
-            AND p.estado = '$estado' 
-        ";
+            AND p.estado = '$estado'";
         $resultado = $this->conexion->query($query);
-        if ($resultado && count($resultado) > 0) {
+        if ($resultado && $resultado->num_rows > 0) {
             return $resultado;
         }
         return [];
