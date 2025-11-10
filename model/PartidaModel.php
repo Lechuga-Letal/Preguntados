@@ -36,10 +36,9 @@ class PartidaModel {
             JOIN usuarios u_usuario ON u_usuario.id = p.id_usuario 
             JOIN usuarios u_oponente ON u_oponente.id = p.id_oponente 
             WHERE ($idUsuario = p.id_usuario OR $idUsuario = p.id_oponente) 
-            AND p.estado = '$estado' 
-        ";
+            AND p.estado = '$estado'";
         $resultado = $this->conexion->query($query);
-        if ($resultado && count($resultado) > 0) {
+        if ($resultado && $resultado->num_rows > 0) {
             return $resultado;
         }
         return [];
@@ -85,7 +84,7 @@ class PartidaModel {
             $sqlTurnoPregunta = "INSERT INTO turno_pregunta (id_turno, id_pregunta, respondida, acierto) VALUES ($idTurno, $idPregunta, FALSE, FALSE)";
             $this->conexion->query($sqlTurnoPregunta);
 
-            $_SESSION['pregunta_turno'] = $pregunta;
+            $_SESSION['pregunta_turno'] = $pregunta; //todo Las cosas de peticiones HTTP y session no van en el servicio/modelo
         }
 
         return $idTurno;
@@ -207,7 +206,7 @@ class PartidaModel {
     public function getNombreOponente($idTurno){
         $sql = "SELECT u.usuario as nombreOponente FROM turno t join partidas p on t.id_partida=p.id join usuarios u on p.id_oponente=u.id WHERE t.id = $idTurno";
         $resultado = $this->conexion->query($sql);
-        if ($resultado && count($resultado) > 0) {
+        if ($resultado && $resultado->num_rows > 0) {
             return $resultado[0]["nombreOponente"] ?? null;
         }
         return null;
@@ -305,5 +304,8 @@ class PartidaModel {
     }*/
 
 
-
+    public function mensajeDeRevisionDeErrores(){
+        var_dump("llegue");
+        die();
+    }
 }
