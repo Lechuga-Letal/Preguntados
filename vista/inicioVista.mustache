@@ -5,15 +5,15 @@
 
 <body>
 
-    <header class="header">
-    <h2 class="titulo">Preguntados</h2>
-    <div class="user-info">
-        <form method="POST" action="/Preguntados/inicio/logout">
-        <input class="logout-btn" type="submit" value="Cerrar sesión">
-        </form>
-        <p class="username">{{usuario}}</p>
-        <img src="/{{foto_perfil}}" alt="{{usuario}}">
-    </div>
+    <header class="header"> <!--El header toma la info del usuairo que se selecciono je-->
+        <h2 class="titulo">Preguntados</h2>
+        <div class="user-info">
+            <form method="POST" action="/Preguntados/inicio/logout">
+            <input class="logout-btn" type="submit" value="Cerrar sesión">
+            </form>
+            <p class="username">{{usuario}}</p>
+            <img src="/{{foto_perfil}}" alt="{{usuario}}">
+        </div>
     </header>
 
 <div class="container">

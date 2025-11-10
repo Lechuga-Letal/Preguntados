@@ -1,10 +1,22 @@
 <title>Perfil</title>
 <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
 <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
-<link rel="stylesheet" href="/public/css/partidaStyle.css">
+<link rel="stylesheet" href="/public/css/vistas/perfilStyle.css">
+<link rel="stylesheet" href="/public/css/componentes/headerComponente.css">
 </head>
+<body>
 
-<body class="bg-dark">
+    <header class="header">
+        <h2 class="titulo">Preguntados</h2>
+        <div class="user-info">
+            <form method="POST" action="/Preguntados/inicio/logout">
+            <input class="logout-btn" type="submit" value="Cerrar sesión">
+            </form>
+            <p class="username">{{usuario.nombre_completo}}</p>
+            <img src="/{{usuario.foto_perfil}}" alt="{{usuario.nombre_completo}}">
+        </div>
+    </header>
+
     <main class="container py-3">
         <div class="row g-3 align-items-start">
             <!-- User Card -->

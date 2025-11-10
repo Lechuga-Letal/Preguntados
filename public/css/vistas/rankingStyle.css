@@ -1,0 +1,110 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html, body {
+  height: 100%;
+  width: 100%;
+  background: var(--color-bg-dark);
+  color: #e0e0e0;
+  font-family: 'Poppins', sans-serif;
+}
+
+main.container {
+  padding: 60px 20px;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+main h1 {
+  font-size: 2.5rem;
+  color: #ffc107;
+  text-shadow: 0 3px 6px rgba(0, 0, 0, 0.6);
+  margin-bottom: 10px;
+}
+
+main p.text-muted {
+  color: #aaa;
+  font-size: 1.05rem;
+}
+
+h3.text-light {
+  color: #e8e8e8;
+  margin-bottom: 20px;
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.4);
+}
+
+.card {
+  background: rgba(31, 31, 31, 0.9);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 14px;
+  padding: 16px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  transition: all 0.3s ease;
+}
+
+.card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 18px rgba(255, 193, 7, 0.2);
+  background: rgba(36, 36, 36, 0.95);
+}
+
+.card a {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  text-decoration: none;
+  color: inherit;
+}
+
+.card img {
+  width: 55px;
+  height: 55px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid rgba(255, 193, 7, 0.4);
+  margin-right: 15px;
+}
+
+.card .col-md-3,
+.card .col-md-4 {
+  flex: 1;
+  text-align: left;
+  font-size: 1rem;
+}
+
+.card .text-muted {
+  color: #aaa;
+}
+
+.alert {
+  background: rgba(40, 40, 40, 0.8);
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 20px;
+  font-size: 1.1rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+}
+
+.btn.btn-secondary {
+  padding: 12px 30px;
+  border-radius: 8px;
+  border: 2px solid rgba(255, 193, 7, 0.4);
+  background: transparent;
+  color: #ffc107;
+  font-weight: 600;
+  text-transform: uppercase;
+  transition: all 0.3s ease;
+  text-decoration: none;
+}
+
+.btn.btn-secondary:hover {
+  background: rgba(255, 193, 7, 0.15);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 10px rgba(255, 193, 7, 0.4);
+}

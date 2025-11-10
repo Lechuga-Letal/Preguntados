@@ -1,9 +1,21 @@
 <title>Ranking</title>
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
-<link rel="stylesheet" href="/public/css/paginaPrincipalStyle.css">
+<link rel="stylesheet" href="/public/css/vistas/rankingStyle.css">
+<link rel="stylesheet" href="/public/css/componentes/headerComponente.css">
 </head>
 
-<body class="bg-dark">
+<body>
+
+  <header class="header"> 
+      <h2 class="titulo">Preguntados</h2>
+      <div class="user-info">
+          <form method="POST" action="/Preguntados/inicio/logout">
+          <input class="logout-btn" type="submit" value="Cerrar sesión">
+          </form>
+          <p class="username">{{usuario}}</p>
+          <img src="/{{foto_perfil}}" alt="{{usuario}}">
+      </div>
+  </header>
 
   <main class="container py-5">
     <div class="text-center mb-5">
@@ -16,7 +28,7 @@
     <div class="container mt-4">
     <h3 class="text-light mb-3">Ranking de usuarios</h3>
     {{#usuarios}}
-    <div class="card bg-dark text-light mb-2 p-3 rounded-3 shadow-sm">
+    <div class="card text-light mb-2 p-3 rounded-3 shadow-sm">
         <!--De momento dse pasa por $_GET-->
         <a href="/perfil?id={{id}}" class="row align-items-center">
             <div class="col-md-3">
@@ -46,7 +58,4 @@
       <a href="/inicio" class="btn btn-secondary">Volver</a>
     </div>
   </main>
-
-
-</body>
 </html>
