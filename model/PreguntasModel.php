@@ -18,6 +18,16 @@ class PreguntasModel
         return $res[0]['id'] ?? null;
     }
 
+    public function insertarPreguntaSugerida($descripcion, $id_categoria, $id_usuario)
+    {
+        $sql = "INSERT INTO sugerencia (descripcion, id_categoria, id_usuario, estado)
+                VALUES ('$descripcion', $id_categoria, $id_usuario, 'pendiente')";
+        @$this->conexion->query($sql);
+
+        $res = $this->conexion->query("SELECT LAST_INSERT_ID() AS id_sugerencia");
+        return $res[0]['id_sugerencia'] ?? null;
+    }
+
     public function obtenerPreguntaPorId($id)
     {
         $sql = "SELECT * FROM pregunta WHERE id_pregunta = $id";
@@ -50,6 +60,7 @@ class PreguntasModel
     }
 
     //Devuelve preguntas con al menos un reporte, y su cantidad
+    //a cambiar a reportes model
     public function obtenerPreguntasReportadas()
     {
         $sql = "
@@ -86,38 +97,6 @@ class PreguntasModel
             ORDER BY s.id_sugerencia;
         ";
         return $this->conexion->query($sql);
-    }
-
-    public function obtenerReportesPorPregunta($id_pregunta)
-    {
-        $id_pregunta = (int)$id_pregunta;
-
-        $sql = "
-            SELECT u.usuario, r.descripcion
-            FROM reporte r
-            JOIN usuarios u ON r.id_usuario = u.id
-            WHERE r.id_pregunta = $id_pregunta
-        ";
-
-        $reportes = $this->conexion->query($sql);
-
-        if (empty($reportes)) {
-            return null; // no reports
-        }
-
-        return [
-            'cantidad' => count($reportes),
-            'reportes' => $reportes
-        ];
-    }
-
-    public function rechazarReportes($id_pregunta) 
-    {
-        $id_pregunta = (int)$id_pregunta;
-        if ($id_pregunta > 0) {
-            $sql = "DELETE FROM reporte WHERE id_pregunta = $id_pregunta";
-            $this->conexion->query($sql);
-        }
     }
 
     public function eliminarPregunta($id_pregunta)

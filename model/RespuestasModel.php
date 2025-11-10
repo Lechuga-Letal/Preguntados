@@ -16,6 +16,13 @@ class RespuestasModel
         @$this->conexion->query($sql);
     }
 
+    public function insertarRespuestaSugerida($descripcion, $es_correcta, $id_pregunta)
+    {
+        $sql = "INSERT INTO respuesta_sugerida (descripcion, es_correcta, id_sugerencia) 
+            VALUES ('$descripcion', $es_correcta, $id_pregunta)";
+        @$this->conexion->query($sql);
+    }
+
     public function obtenerRespuestasPorPregunta($id_pregunta)
     {
         $sql = "SELECT * FROM respuesta WHERE id_pregunta = $id_pregunta";

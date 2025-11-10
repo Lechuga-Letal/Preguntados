@@ -1,9 +1,8 @@
 <title>Partida</title>
-<link rel="stylesheet" href="/public/css/partidaStyle.css">
+<link rel="stylesheet" href="../public/css/partidaStyle.css">
 <body>
 <header class="header">
     <img src="/public/imagenes/Logo.png" alt="logo" class="logo">
-    <link rel="stylesheet" href="/public/css/partidaStyle.css">
     <form method="POST" action="/Preguntados/inicio/logout">
         <input class="logout-btn" type="submit" value="Cerrar sesión">
     </form>
@@ -17,39 +16,54 @@
         <div id="tiempo"> </div>
     </div>
     <script>
-        const tiempoTotal = 15; // aca podemos setear el tiempo por pregunta
-        var tiempoRestante = tiempoTotal; 
+    
+    
+        /*const tiempoTotal = 15;  //aca podemos setear el tiempo por pregunta
+        var tiempoRestante = tiempoTotal; */
+        const tiempoTotal = 15;
+        var tiempoRestante = tiempoTotal;
         var cronometroElemento = document.getElementById('cronometro');
         var relleno = document.getElementById('tiempo');
+        let tiempo;
 
-        function actualizarCronometro() { //puramente visual no tiene consecuencias, tendriamos que unirlo al backend despues
-            cronometroElemento.textContent = 'Tiempo restante: ' + tiempoRestante + ' segundos';
-            if (tiempoRestante > 0) {
-                tiempoRestante--;
-                var porcentajeRestante = (tiempoRestante / tiempoTotal) * 100;
-                relleno.style.width = porcentajeRestante + '%';
-                
-            }
-        }
-        actualizarCronometro(); // Mostrar inmediatamente
-        setInterval(actualizarCronometro, 1000); // x segundo
+        fetch('/partida/inicioCronometroAPI')
+            .then(res => res.json())
+            .then(data => {
+                console.log("Tiempo máximo:", data);
+
+                tiempo=data.tiempoMaximoPorTurno;
+                cronometroElemento.innerText = tiempo;
+
+                // no me convence porque no usamos los tiempos desde el backend, es todo desde el front y lo pueden tocar desde inspeccionar
+                const intervalo = setInterval(() => {
+                    tiempo--;
+                    cronometroElemento.innerText = tiempo;
+                    if(tiempo <= 0){
+                        clearInterval(intervalo);//corta el cronometro
+                        console.log("llego al maximo");
+                        fetch('/partida/terminarPartidaPorTiempoMaximo');
+                    }
+
+                    fetch('/partida/controlarTiempo')
+                    .then(res => res.text())
+                    .then(data => {
+                        console.log("res:", data);
+                    });
+
+                    //efecto visual de la barra de tiempo
+                    var porcentajeRestante = (tiempo / data.tiempoMaximoPorTurno) * 100;
+                    relleno.style.width = porcentajeRestante + '%';
+
+                 },1000)//cada un segundo
+            });
     </script>
     <p>La pregunta es: <strong>{{pregunta}}</strong></p>
-    <div id="pregunta-container">
-
-<!--        Podriamos manejar esto con un formulario para no hacer tan extensa la URL-->
-        {{#Respuestas}}
-                <a href="/partida/evaluarTurno?respuestaElegida={{id}}&turno={{id_turno}}" class="list-group-item link-card mb-3 rounded">
-                    <h5 class="mb-0">{{opcion}}</h5>
-                </a>
-        {{/Respuestas}}
-    </div>
-    
-    
+   <div id="pregunta-container">
+    {{#Respuestas}}
+        <a href="/partida/evaluarTurno?respuestaElegida={{id_respuesta}}&turno={{id_turno}}&idPregunta={{idPregunta}}" class="list-group-item link-card mb-3 rounded">
+        <h5 class="mb-0">{{descripcion}}</h5>
+        </a>
+    {{/Respuestas}}
+   </div>
 </main>
-<!--<script>-->
-<!--    window.addEventListener("beforeunload", function() {-->
-<!--        navigator.sendBeacon("/?controller=partida&method=finalizarPartida");-->
-<!--    });-->
-<!--</script>-->
 </body>

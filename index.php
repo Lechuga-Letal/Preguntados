@@ -2,7 +2,7 @@
 session_start();
 
 include("helper/ConfigFactory.php");
-
+error_reporting(E_ERROR | E_PARSE);
 $configFactory = new ConfigFactory();
 $router = $configFactory->get("router");
 
