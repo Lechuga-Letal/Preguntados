@@ -1,12 +1,17 @@
 <title>Oponente</title>
-<link rel="stylesheet" href="/public/css/inicioStyle.css">
+<link rel="stylesheet" href="/public/css/vistas/inicioStyle.css">
+<link rel="stylesheet" href="/public/css/componentes/headerComponente.css">
 <body>
-<header class="header">
-    <img src="/public/imagenes/Logo.png" alt="logo" class="logo">
-    <form method="POST" action="/Preguntados/inicio/logout">
-        <input class="logout-btn" type="submit" value="Cerrar sesión">
-    </form>
-</header>
+    <header class="header"> 
+        <h2 class="titulo">Preguntados</h2>
+        <div class="user-info">
+            <form method="POST" action="/Preguntados/inicio/logout">
+            <input class="logout-btn" type="submit" value="Cerrar sesión">
+            </form>
+            <p class="username">{{usuario}}</p>
+            <img src="/{{foto_perfil}}" alt="{{usuario}}">
+        </div>
+    </header>
 <main class="container">
     <h1>Elegí un oponente</h1>
     <div>
