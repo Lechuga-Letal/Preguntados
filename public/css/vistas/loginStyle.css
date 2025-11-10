@@ -78,6 +78,7 @@ input[type="submit"] {
 
 input[type="submit"]:hover {
   background: #e0ad06;
+  color: var(--color-text-main);
   transform: translateY(-2px);
   box-shadow: 0 4px 10px rgba(255, 193, 7, 0.4);
 }
