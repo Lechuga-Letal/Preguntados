@@ -1,0 +1,21 @@
+:root {
+    /*Variables a charlar*/
+
+  --color-bg-dark: #181818;
+  --color-bg-light: #1f1f1f;
+  --color-primary: #ffc107;
+  --color-accent: #00bcd4;
+  --color-text-main: #e0e0e0;
+  --color-text-secondary: #aaaaaa;
+
+  --font-main: 'Poppins', sans-serif;
+  --font-size-base: 16px;
+  --font-size-lg: 1.25rem;
+  --font-size-sm: 0.875rem;
+
+  --radius-base: 10px;
+  --shadow-base: 3px 3px 6px #0f0f0f, -3px -3px 6px #2d2d2d;
+
+  --transition-fast: 0.2s ease;
+  --transition-medium: 0.4s ease;
+}

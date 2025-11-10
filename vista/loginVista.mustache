@@ -1,5 +1,5 @@
-    <title>Login</title>
-    <link rel="stylesheet" href="/public/css/loginStyle.css">
+<title>Login</title>
+<link rel="stylesheet" href="/public/css/vistas/loginStyle.css">
 </head>
 
 <body>
@@ -7,26 +7,26 @@
 <h1>PREGUNTADOS</h1>
 <p class="subtitle">¿Estas listo para comenzar?</p>
 <div>
-    <form method="POST" action="/login/login">
-        {{#error}}
-            <div class="error-message">{{error}}</div>
-        {{/error}}
-        <p>
-            <input type="text" name="usuario" placeholder="Usuario" required>
-        </p>
-
-        <p>
-            <input type="password" name="password" placeholder="Contraseña" required>
-        </p>
-
-        <p>
-            <input type="submit" value="Ingresar">
-        </p>
-    </form>
-
-    <p class="central">
-        <a href="/register/registerForm" class="registrarse">Registrarse</a>
+<form method="POST" action="/login/login">
+    {{#error}}
+        <div class="error-message">{{error}}</div>
+    {{/error}}
+    <p>
+        <input type="text" name="usuario" placeholder="Usuario" required>
     </p>
+
+    <p>
+        <input type="password" name="password" placeholder="Contraseña" required>
+    </p>
+
+    <p>
+        <input type="submit" value="Ingresar">
+    </p>
+</form>
+
+<p class="central">
+    <a href="/register/registerForm" class="registrarse">Registrarse</a>
+</p>
 
 </div>
 
