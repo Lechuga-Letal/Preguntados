@@ -1,65 +1,67 @@
 <title>Reportar</title>
-<link rel="stylesheet" href="../public/css/partidaStyle.css">
+<link rel="stylesheet" href="../public/css/vistas/reportarPreguntaStyle.css">
+<link rel="stylesheet" href="../public/css/componentes/headerComponente.css">
 <body>
-<header class="header">
-<!--    <img src="/public/imagenes/Logo.png" alt="logo" class="logo">-->
-    <form method="POST" action="/Preguntados/inicio/logout">
-        <input class="logout-btn" type="submit" value="Cerrar sesión">
-    </form>
-</header>
+
+    <header class="header"> 
+        <h2 class="titulo">Preguntados</h2>
+        <div class="user-info">
+            <form method="POST" action="/Preguntados/inicio/logout">
+            <input class="logout-btn" type="submit" value="Cerrar sesión">
+            </form>
+            <p class="username">{{usuario}}</p>
+            <img src="/{{foto_perfil}}" alt="{{usuario}}">
+        </div>
+    </header>
+
 <main class="container">
-    <div class="card p-3 shadow-sm bg-dark text-light border border-secondary mt-4">
-        <h2 class="mb-3">Reportar pregunta</h2>
+  <h1>Reportar Pregunta</h1>
 
-        <div class="mb-4 bg-dark text-light border border-secondary p-3 rounded">
-            <p><strong>Descripción:</strong> {{pregunta.descripcion}}</p>
-            <p><strong>Categoría:</strong> {{pregunta.id_categoria}}</p>
-        </div>
+  <section class="pregunta-card">
+    <h2 class="pregunta-titulo">Detalle de la pregunta</h2>
 
-        <div class="mb-3">
-            <h5 class="mb-2">Respuestas:</h5>
-            {{#respuestas}}
-            <div class="d-flex justify-content-between align-items-center border-bottom border-secondary py-1">
-                <span>• {{descripcion}}</span>
-                <span class="text-muted small">
-                {{#es_correcta}}✅ Correcta{{/es_correcta}}
-                {{^es_correcta}}❌ Incorrecta{{/es_correcta}}
-                </span>
-            </div>
-            {{/respuestas}}
+    <div class="pregunta-info">
+      <p><strong>Descripción:</strong> {{pregunta.descripcion}}</p>
+      <p><strong>Categoría:</strong> {{pregunta.id_categoria}}</p>
+    </div>
 
-            {{^respuestas}}
-            <p class="text-warning">No hay respuestas registradas para esta pregunta.</p>
-            {{/respuestas}}
-        </div>
+    <div class="respuestas">
+      <h3>Respuestas:</h3>
+      {{#respuestas}}
+      <div class="respuesta-item">
+        <span>• {{descripcion}}</span>
+        <span class="estado">
+          {{#es_correcta}}✅ Correcta{{/es_correcta}}
+          {{^es_correcta}}❌ Incorrecta{{/es_correcta}}
+        </span>
+      </div>
+      {{/respuestas}}
 
-        <hr class="border-secondary">
+      {{^respuestas}}
+      <p class="meta-info warning">No hay respuestas registradas para esta pregunta.</p>
+      {{/respuestas}}
+    </div>
 
-        {{#mensaje}}
-        <div class="alert alert-success mt-3" role="alert">
-        {{mensaje}}
-        </div>
-        {{/mensaje}}
+    {{#mensaje}}
+    <div class="alerta success">{{mensaje}}</div>
+    {{/mensaje}}
 
-        {{#error}}
-        <div class="alert alert-danger mt-3" role="alert">
-        {{error}}
-        </div>
-        {{/error}}
+    {{#error}}
+    <div class="alerta danger">{{error}}</div>
+    {{/error}}
 
-        <form action="/reportarPregunta/crearReporteDePregunta" method="post">
-            <input type="hidden" name="id_pregunta" value="{{pregunta.id_pregunta}}">
+    <form action="/reportarPregunta/crearReporteDePregunta" method="post">
+      <input type="hidden" name="id_pregunta" value="{{pregunta.id_pregunta}}">
 
-            <div class="mb-3">
-            <label for="motivo" class="form-label">Motivo del reporte:</label>
-            <textarea id="motivo" name="motivo" class="form-control bg-dark text-light border-secondary"
-                rows="3" placeholder="Explicá por qué estás reportando esta pregunta..." required></textarea>
-            </div>
+      <div class="mb-3">
+        <label for="motivo" class="form-label">Motivo del reporte:</label>
+        <textarea id="motivo" name="motivo" class="motivo-textarea" rows="3" placeholder="Explicá por qué estás reportando esta pregunta..." required></textarea>
+      </div>
 
-            <div class="text-end">
-            <button type="submit" class="btn btn-danger">Enviar reporte</button>
-            </div>
-        </form>
-        </div>
+      <div class="acciones">
+        <button type="submit" class="btn btn-danger">Enviar reporte</button>
+        <a href="/inicio" class="btn btn-volver">Volver</a>
+      </div>
+    </form>
+  </section>
 </main>
-</body>

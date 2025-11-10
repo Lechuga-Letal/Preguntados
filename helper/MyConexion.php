@@ -18,7 +18,6 @@ class MyConexion
         if ($result->num_rows > 0) {
             return $result->fetch_all(MYSQLI_ASSOC);
         }
-        return $result;
-//        return null;
+        return null;
     }
 }
