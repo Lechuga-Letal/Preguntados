@@ -1,14 +1,24 @@
-    <title>Nueva pregunta</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
-    <link rel="stylesheet" href="/public/css/paginaPrincipalStyle.css">
+<title>Nueva pregunta</title>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+<link rel="stylesheet" href="/public/css/vistas/nuevaPreguntaStyle.css">
+<link rel="stylesheet" href="/public/css/componentes/headerComponente.css">
 </head>
 
-<body class="bg-dark text-light">
+<body>
 
-{{id}}
+  <header class="header">
+      <h2 class="titulo">Preguntados</h2>
+      <div class="user-info">
+          <form method="POST" action="/Preguntados/inicio/logout">
+          <input class="logout-btn" type="submit" value="Cerrar sesión">
+          </form>
+          <p class="username">{{usuario.nombre_completo}}</p>
+          <img src="/{{usuario.foto_perfil}}" alt="{{usuario.nombre_completo}}">
+      </div>
+  </header>
 
 <main class="container my-5">
- <div class="bg-dark border border-secondary rounded p-4 mx-auto shadow-lg" style="max-width: 700px;">
+ <div class="border border-secondary rounded p-4 mx-auto shadow-lg" style="max-width: 700px;">
     {{#Editor}}
       <form method="POST" action="/nuevaPregunta/guardarPregunta">
       <h3 class="text-info mb-3">Crear Nueva Pregunta</h3>
@@ -28,13 +38,13 @@
         <!-- Descripción -->
         <div class="mb-3">
           <label for="descripcion" class="form-label fw-bold">Interrogante:</label>
-          <input type="text" name="descripcion" id="descripcion" class="form-control bg-secondary text-light border-0" placeholder="Escribí la pregunta..." required>
+          <input type="text" name="descripcion" id="descripcion" class="form-control bg-dark text-light border-0" placeholder="Escribí la pregunta..." required>
         </div>
 
         <!-- Categoría Disabled, En el controlador no se verifixa-->
         <div class="mb-4">
         <label for="categoria" class="form-label fw-bold text-muted">Categoría</label>
-        <select name="id_categoria" id="categoria" class="form-select bg-secondary text-light border-0 opacity-50" disabled>
+        <select name="id_categoria" id="categoria" class="form-select bg-dark text-light border-0 opacity-50" disabled>
             <option value="" disabled selected>Deshabilitado</option>
         </select>
         <div class="form-text text-muted fst-italic">
@@ -43,7 +53,7 @@
         </div>
 
         <!-- Respuestas -->
-        <div class="border border-secondary rounded p-3 bg-secondary bg-opacity-25">
+        <div class="border border-secondary rounded p-3">
           <h4 class="text-warning mb-3 text-center">Respuestas</h4>
 
           <div class="row g-3">
