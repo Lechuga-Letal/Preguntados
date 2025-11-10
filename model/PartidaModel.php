@@ -59,27 +59,45 @@ class PartidaModel {
     }
 
     public function finalizarPartida($idPartida, $puntajeFinal) {
-        $puntajeFinal = intval($puntajeFinal);
-        $sql = "UPDATE partidas SET fecha_fin = NOW(), puntaje = $puntajeFinal, estado = 'finalizada' WHERE id = $idPartida";
+        $puntajeFinal1 = intval($puntajeFinal);
+        $sql = "UPDATE partidas SET fecha_fin = NOW(), puntaje = $puntajeFinal1, estado = 'finalizada' WHERE id = $idPartida";
         @$this->conexion->query($sql);
     }
+    public function obtenerTotalAciertosPorPartida($idPartida) {
+        $idPartida = intval($idPartida);
 
-    //TODO: Probablemente estos metodos lo tengamos que distribuir en varios modelos
-    public function crearTurno($idUsuario, $idPartida, $idCategoria){
-        $idPregunta = $this->getIdPregunta($idUsuario, $idCategoria);
-        $sql = "INSERT INTO turno (id_partida, id_usuario,id_pregunta) VALUES ($idPartida, $idUsuario,$idPregunta)";
-        $this->conexion->query($sql);
-        return $this->obtenerTurnoReciente($idUsuario);
+        $sql = "SELECT SUM(t.aciertos) AS total
+                FROM turno t
+                WHERE t.id_partida = $idPartida";
+        $resultado = $this->conexion->query($sql);
+
+        return $resultado[0]['total'] ?? 0;
     }
 
-    public function obtenerTurnoReciente($idusuario){
-        $idPartidaQuery = "SELECT MAX(id) as id FROM turno WHERE id_usuario = $idusuario";
-        $resultado = $this->conexion->query($idPartidaQuery);
+    public function crearTurno($idUsuario, $idPartida, $idCategoria) {
+        $sqlTurno = "INSERT INTO turno (id_usuario, id_partida, id_categoria) VALUES ($idUsuario, $idPartida, $idCategoria)";
+        $this->conexion->query($sqlTurno);
+        $idTurno = $this->obtenerTurnoReciente($idUsuario, $idPartida);
+
+        $pregunta = $this->obtenerPreguntaAleatoriaPorCategoria($idUsuario, $idCategoria);
+        if ($pregunta) {
+            $idPregunta = $pregunta['id_pregunta'];
+            $sqlTurnoPregunta = "INSERT INTO turno_pregunta (id_turno, id_pregunta, respondida, acierto) VALUES ($idTurno, $idPregunta, FALSE, FALSE)";
+            $this->conexion->query($sqlTurnoPregunta);
+
+            $_SESSION['pregunta_turno'] = $pregunta;
+        }
+
+        return $idTurno;
+    }
+
+    public function obtenerTurnoReciente($idUsuario, $idPartida) {
+        $sql = "SELECT MAX(id) AS id FROM turno WHERE id_usuario = $idUsuario AND id_partida = $idPartida";
+        $resultado = $this->conexion->query($sql);
         return $resultado[0]['id'] ?? null;
     }
 
     //Todo: aca con el ID de usuario, partida se aplica el filtro de dificultad y demas
-    //Lo modifique para que la pregunta aleactoria que devuelva sea una no vista
     public function getIdPregunta($idUsuario, $idCategoria){
         $pregunta = $this->obtenerPreguntaAleatoriaPorCategoria($idUsuario, $idCategoria);
         return $pregunta['id_pregunta'];
@@ -91,63 +109,84 @@ class PartidaModel {
         return $resultado[0]['preguntasTotales'] ?? null;
     }
 
-    public function evaluarRespuestaDelTurno($opcionElegida,$idTurno){
-        $idDeRespuestaCorrecta=$this->obtenerIdDeLaRepuestaCorrectaDeLaPreguntaPorTurno($idTurno);
-        // no se si seria lo mejor ponerlo aca
-        //$this->finalizarTurno($idTurno);
-        return ($idDeRespuestaCorrecta==$opcionElegida);
-    }
-
-    public function acreditarAcierto($idTurno){
-        $sql = "UPDATE turno SET adivino=true WHERE id = $idTurno";
-        $this->conexion->query($sql);
-    }
-
-//    public function mostrarCantidadCorrectas($idTurno){
-//        $idPartida=$this->obtenerIdPartidaPorTurno($idTurno);
-//        $nombreUsuario=$this->obtenerNombreUsuarioPorTurno($idTurno);
-//        $idJugador=$this->usuarioModel->obtenerIdUsuarioPorNombre($nombreUsuario);
-//        $sql = "select count(*) as cantidad from turno where id_usuario=$idJugador and id_partida=$idPartida and adivino=true;";
-//        $resultado = $this->conexion->query($sql);
-//        if ($resultado && count($resultado) > 0) {
-//            return $resultado[0]["cantidad"] ?? null;
-//        }
-//        return null;
-//    }
-    public function mostrarCantidadCorrectasPorPartida($idTurno, $idPartida, $idUsuario) {
-        $idPartida=$this->obtenerIdPartidaPorTurno($idTurno);
-        $nombreUsuario=$this->obtenerNombreUsuarioPorTurno($idTurno);
-        $idJugador=$this->usuarioModel->obtenerIdUsuarioPorNombre($nombreUsuario);
-        $sql = "select count(*) as cantidad from turno where id_usuario=$idJugador and id_partida=$idPartida and adivino=true;";
-        $resultado = $this->conexion->query($sql);
-        if ($resultado && count($resultado) > 0) {
-            return $resultado[0]["cantidad"] ?? null;
-        }
-        return null;
-    }
-
-    public function obtenerDescripcionDeLaPreguntaPorTurno($idTurno){
-        $sql = "SELECT p.descripcion FROM pregunta p join Turno t on p.id_pregunta=t.id_pregunta WHERE t.id = $idTurno";
-        $resultado = $this->conexion->query($sql);
-        return $resultado[0]['descripcion'] ?? null;
-    }
-
-    public function obtenerRespuestasDelTurno($idTurno){
-        $sql = "SELECT r.id_respuesta as id,r.descripcion as opcion FROM respuesta r join Turno t on r.id_pregunta=t.id_pregunta WHERE t.id = $idTurno";
-        $resultado = $this->conexion->query($sql);
-        return $resultado;
+    public function evaluarRespuesta($opcionElegida, $idTurno) {
+        $idCorrecta = $this->obtenerIdDeLaRepuestaCorrectaDeLaPreguntaPorTurno($idTurno);
+        return ($idCorrecta == $opcionElegida);
     }
 
     public function obtenerIdDeLaRepuestaCorrectaDeLaPreguntaPorTurno($idTurno){
-        $sql = "SELECT r.id_respuesta as id, r.descripcion as respuestaCorrecta FROM turno t join respuesta r on t.id_pregunta=r.id_pregunta WHERE t.id = $idTurno and es_correcta=true";
+        $idTurno = intval($idTurno);
+        $sql = "SELECT r.id_respuesta as id
+            FROM turno_pregunta tp
+            JOIN respuesta r ON tp.id_pregunta = r.id_pregunta
+            WHERE tp.id_turno = $idTurno AND r.es_correcta = TRUE
+            LIMIT 1";
         $resultado = $this->conexion->query($sql);
         return $resultado[0]["id"] ?? null;
     }
 
-    public function obtenerDescripcionDeLaRepuestaCorrectaDeLaPreguntaPorTurno($idTurno){
-        $sql = "SELECT r.id_respuesta as id, r.descripcion as respuestaCorrecta FROM turno t join respuesta r on t.id_pregunta=r.id_pregunta WHERE t.id = $idTurno and es_correcta=true";
+    public function acreditarAcierto($idTurno, $idPregunta) {
+        $sql = "UPDATE turno_pregunta
+            SET respondida = TRUE, acierto = TRUE
+            WHERE id_turno = $idTurno AND id_pregunta = $idPregunta";
+        $this->conexion->query($sql);
+
+        $sqlUpdateAciertos = "UPDATE turno SET aciertos = aciertos + 1  WHERE id = $idTurno";
+        $this->conexion->query($sqlUpdateAciertos);
+    }
+
+    public function mostrarCantidadCorrectasPorPartida($idTurno, $idPartida, $idUsuario) {
+        $sql = "SELECT COUNT(*) AS cantidad
+        FROM turno_pregunta tp
+        JOIN turno t ON tp.id_turno = t.id
+        WHERE tp.acierto = TRUE
+          AND t.id_partida = $idPartida
+          AND t.id_usuario = $idUsuario";
         $resultado = $this->conexion->query($sql);
-        return $resultado[0]["respuestaCorrecta"] ?? null;
+        return $resultado[0]['cantidad'] ?? 0;
+    }
+
+    public function obtenerDescripcionDeLaPreguntaPorTurno($idTurno) {
+        $idTurno = intval($idTurno);
+
+        $sql = "SELECT p.descripcion
+            FROM turno_pregunta tp
+            JOIN pregunta p ON tp.id_pregunta = p.id_pregunta
+            WHERE tp.id_turno = $idTurno
+              AND tp.respondida = FALSE
+            ORDER BY tp.id_pregunta
+            LIMIT 1";
+
+        $resultado = $this->conexion->query($sql);
+        return $resultado[0]['descripcion'] ?? null;
+    }
+
+    public function obtenerRespuestasDelTurno($idTurno) {
+        $idTurno = intval($idTurno);
+
+        $sql = "SELECT r.id_respuesta, r.descripcion
+            FROM turno_pregunta tp
+            JOIN respuesta r ON tp.id_pregunta = r.id_pregunta
+            WHERE tp.id_turno = $idTurno
+            ORDER BY RAND()
+            LIMIT 4";
+
+        $resultado = $this->conexion->query($sql);
+        return $resultado ?? [];
+    }
+
+    public function obtenerDescripcionDeLaRepuestaCorrectaDeLaPreguntaPorTurno($idTurno){
+        $idTurno = intval($idTurno);
+        $sql = "
+        SELECT r.descripcion AS respuestaCorrecta
+        FROM turno_pregunta tp
+        JOIN respuesta r ON tp.id_pregunta = r.id_pregunta
+        WHERE tp.id_turno = $idTurno
+          AND r.es_correcta = TRUE
+        LIMIT 1
+    ";
+        $resultado = $this->conexion->query($sql);
+        return $resultado[0]['respuestaCorrecta'] ?? null;
     }
 
     public function obtenerNombreUsuarioPorTurno($idTurno){
@@ -157,6 +196,9 @@ class PartidaModel {
     }
 
     public function obtenerIdPartidaPorTurno($idTurno){
+        $idTurno = intval($idTurno);
+        if ($idTurno <= 0) return null;
+
         $sql = "SELECT p.id as id FROM turno t join partidas p on t.id_partida=p.id WHERE t.id = $idTurno";
         $resultado = $this->conexion->query($sql);
         return $resultado[0]["id"] ?? null;
@@ -169,6 +211,73 @@ class PartidaModel {
             return $resultado[0]["nombreOponente"] ?? null;
         }
         return null;
+    }
+
+    public function obtenerPreguntaAleatoriaPorCategoria($idUsuario, $idCategoria) {
+
+        $sql1 = "SELECT COUNT(*) AS total FROM pregunta WHERE id_categoria = $idCategoria";
+        $totalQuery = $this->conexion->query($sql1);
+        $total = (int)($totalQuery[0]['total'] ?? 0);
+
+        $vistasQuery = $this->conexion->query("
+        SELECT COUNT(*) AS vistas 
+        FROM preguntasVistas pv
+        JOIN pregunta p ON pv.id_pregunta = p.id_pregunta
+        WHERE pv.id_usuario = $idUsuario AND p.id_categoria = $idCategoria
+    ");
+        $vistas = (int)($vistasQuery[0]['vistas'] ?? 0);
+
+        if ($vistas >= $total && $total > 0) {
+            $this->conexion->query("
+            DELETE FROM preguntasVistas 
+            WHERE id_usuario = $idUsuario
+              AND id_pregunta IN (
+                  SELECT id_pregunta FROM pregunta WHERE id_categoria = $idCategoria
+              )
+        ");
+            $vistas = 0;
+        }
+
+        $sql = "
+        SELECT p.*
+        FROM pregunta p
+        WHERE p.id_categoria = $idCategoria
+          AND p.id_pregunta NOT IN (
+              SELECT pv.id_pregunta
+              FROM preguntasVistas pv
+              JOIN pregunta p2 ON pv.id_pregunta = p2.id_pregunta
+              WHERE pv.id_usuario = $idUsuario AND p2.id_categoria = $idCategoria
+          )
+        ORDER BY RAND()
+        LIMIT 1
+    ";
+
+        $resultado = $this->conexion->query($sql);
+
+        if (empty($resultado)) {
+            $this->conexion->query("
+            DELETE FROM preguntasVistas 
+            WHERE id_usuario = $idUsuario
+              AND id_pregunta IN (
+                  SELECT id_pregunta FROM pregunta WHERE id_categoria = $idCategoria
+              )
+        ");
+            $resultado = $this->conexion->query($sql);
+        }
+
+        if (empty($resultado)) {
+            return null;
+        }
+
+        $pregunta = $resultado[0];
+        $idPregunta = (int)$pregunta['id_pregunta'];
+
+        $this->conexion->query("
+        INSERT IGNORE INTO preguntasVistas (id_usuario, id_pregunta)
+        VALUES ($idUsuario, $idPregunta)
+    ");
+
+        return $pregunta;
     }
 
     /*public function finalizarTurno($idTurno){
@@ -195,56 +304,6 @@ class PartidaModel {
         return false; // Si no se pudo calcular el tiempo, consideramos que no está dentro del límite
     }*/
 
-    public function obtenerPreguntaAleatoriaPorCategoria($idUsuario, $idCategoria) {
-        $sql1 = "SELECT COUNT(*) AS total FROM pregunta WHERE id_categoria = $idCategoria";
-        $totalQuery = $this->conexion->query($sql1);
-
-        $vistasQuery = $this->conexion->query(" 
-        SELECT COUNT(*) AS vistas FROM preguntasVistas pv 
-        JOIN pregunta p ON pv.id_pregunta = p.id_pregunta 
-        WHERE pv.id_usuario = $idUsuario AND p.id_categoria = $idCategoria 
-    ");
-        if (empty($vistasQuery)) {
-            return null;
-        }
-        $vistas = (int)$vistasQuery[0]['vistas'];
-
-        if ($vistas >= $total && $total > 0) {
-            $this->conexion->query("DELETE pv FROM preguntasVistas pv JOIN pregunta p ON pv.id_pregunta = p.id_pregunta WHERE pv.id_usuario = $idUsuario AND p.id_categoria = $idCategoria");
-            $vistas = 0;
-        }
-
-        $sql = " 
-        SELECT p.* FROM pregunta p 
-        WHERE p.id_categoria = $idCategoria 
-        AND p.id_pregunta NOT IN ( 
-            SELECT pv.id_pregunta 
-            FROM preguntasVistas pv 
-            JOIN pregunta p2 ON pv.id_pregunta = p2.id_pregunta 
-            WHERE pv.id_usuario = $idUsuario AND p2.id_categoria = $idCategoria 
-        ) 
-        ORDER BY RAND() 
-        LIMIT 1
-    ";
-        $resultado = $this->conexion->query($sql);
-
-        if (empty($resultado)) {
-            $this->conexion->query("DELETE pv FROM preguntasVistas pv JOIN pregunta p ON pv.id_pregunta = p.id_pregunta WHERE pv.id_usuario = $idUsuario AND p.id_categoria = $idCategoria");
-            $resultado = $this->conexion->query($sql);
-        }
-
-        if (empty($resultado)) {
-            return null;
-        }
-
-        $pregunta = $resultado[0];
-        $idPregunta = $pregunta['id_pregunta'] ?? null;
-        if ($idPregunta) {
-            $this->conexion->query("INSERT IGNORE INTO preguntasVistas (id_usuario, id_pregunta) VALUES ($idUsuario, $idPregunta)");
-        }
-
-        return $pregunta;
-    }
 
 
 }

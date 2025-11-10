@@ -2,31 +2,47 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>Ruleta</title>
+    <title>Ruleta de Categorías</title>
     <link rel="stylesheet" href="../public/css/ruletaStyle.css">
 </head>
 <body>
 <div class="main-wrapper">
+
     <aside class="trofeos">
         <h3>Mis Trofeos</h3>
-        <div id="muñeco-1" class="muñeco"><img src="/public/imagenes/DeportesColor.png" alt="Pelota"></div>
-        <div id="muñeco-2" class="muñeco"><img src="/public/imagenes/EntretenimientoColor.png" alt="Joystick"></div>
-        <div id="muñeco-3" class="muñeco"><img src="/public/imagenes/InformaticaColor.png" alt="Computadora"></div>
-        <div id="muñeco-4" class="muñeco"><img src="/public/imagenes/MatematicasColor.png" alt="Calculadora"></div>
-        <div id="muñeco-5" class="muñeco"><img src="/public/imagenes/HistoriaColor.png" alt="Libro"></div>
+        <div class="muñeco">
+            <img src="/public/imagenes/DeportesColor.png" alt="Deportes">
+        </div>
+        <div class="muñeco">
+            <img src="/public/imagenes/EntretenimientoColor.png" alt="Entretenimiento">
+        </div>
+        <div class="muñeco">
+            <img src="/public/imagenes/InformaticaColor.png" alt="Informática">
+        </div>
+        <div class="muñeco">
+            <img src="/public/imagenes/MatematicasColor.png" alt="Matemáticas">
+        </div>
+        <div class="muñeco">
+            <img src="/public/imagenes/HistoriaColor.png" alt="Historia">
+        </div>
     </aside>
 
     <section class="ruleta-container">
         <h2>Girá la Ruleta</h2>
+
         <div class="ruleta-wrapper">
             <div class="flecha"></div>
             <canvas id="ruletaCanvas" width="300" height="300"></canvas>
         </div>
+
         <p id="mensaje"></p>
+
         <form id="formRuleta" action="/partida/crearTurno" method="GET">
+            <input type="hidden" name="idCategoria" id="idCategoria">
             <button id="girarBtn" type="button" class="btn">Girar Ruleta</button>
         </form>
     </section>
 </div>
 <script src="/public/js/ruleta.js"></script>
 </body>
+</html>

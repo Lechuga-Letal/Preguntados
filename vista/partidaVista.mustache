@@ -10,7 +10,6 @@
 <main class="container">
     <h1>Partida iniciada</h1>
     <p>Tu oponente es: <strong>{{nombreOponente}}</strong></p>
-    <!--No se que toque y no anda perdon-->
     <p>Preguntas respondidas: <strong>{{cantidadCorrectas}}</strong></p>
     <p id="cronometro"></p>
     <div id="barraTiempo">
@@ -39,16 +38,12 @@
         }, 1000);
     </script>
     <p>La pregunta es: <strong>{{pregunta}}</strong></p>
-    <div id="pregunta-container">
-
-<!--        Podriamos manejar esto con un formulario para no hacer tan extensa la URL-->
-        {{#Respuestas}}
-                <a href="/partida/evaluarTurno?respuestaElegida={{id}}&turno={{id_turno}}" class="list-group-item link-card mb-3 rounded">
-                    <h5 class="mb-0">{{opcion}}</h5>
-                </a>
-        {{/Respuestas}}
-    </div>
-    
-    
+   <div id="pregunta-container">
+    {{#Respuestas}}
+        <a href="/partida/evaluarTurno?respuestaElegida={{id_respuesta}}&turno={{id_turno}}&idPregunta={{idPregunta}}" class="list-group-item link-card mb-3 rounded">
+        <h5 class="mb-0">{{descripcion}}</h5>
+        </a>
+    {{/Respuestas}}
+   </div>
 </main>
 </body>

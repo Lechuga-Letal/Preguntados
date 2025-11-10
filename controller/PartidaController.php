@@ -30,7 +30,7 @@ class PartidaController{
         header("Location: /login/loginForm");
         exit();
     }
-    $this->renderer->render("ruleta");
+        $this->renderer->render("ruleta");
 }
 
 
@@ -61,14 +61,14 @@ class PartidaController{
         $this->renderer->render("desafiar", ["usuarios" => $jugadores]);
     }
 
-    public function crearTurno()
-    {
+    public function crearTurno() {
         $usuarioNombre = $_SESSION['usuario'];
         $usuarioId = $this->usuarioModel->obtenerIdUsuarioPorNombre($usuarioNombre);
-//        $idOponente = $_POST['id_oponente'] ?? 0;
-        $categoria = $_GET["categoria"] ?? null;
 
-        $idPartida = $this->model->crearPartida($usuarioId);
+        $categoria = $_GET['categoria'] ?? $_SESSION['categoria_actual'] ?? null;
+        if ($categoria) $_SESSION['categoria_actual'] = $categoria;
+
+        $idPartida = $_SESSION['id'] ?? $this->model->crearPartida($usuarioId);
         $_SESSION['id'] = $idPartida;
 
         $mapaCategorias = [
@@ -80,18 +80,18 @@ class PartidaController{
         ];
         $idCategoria = $mapaCategorias[$categoria] ?? null;
 
-        if ($categoria) {
-            $_SESSION['categoria_actual'] = $categoria;
-        }
-
         $idTurno = $this->model->crearTurno($usuarioId, $idPartida, $idCategoria);
-        $pregunta = $this->model->obtenerDescripcionDeLaPreguntaPorTurno($idTurno);
+        $_SESSION['turno'] = $idTurno;
+        $pregunta = $_SESSION['pregunta_turno'] ?? null;
+        $idPregunta = $pregunta['id_pregunta'];
+        $descripcionPregunta = $pregunta['descripcion'];
         $respuestas = $this->model->obtenerRespuestasDelTurno($idTurno);
         $correctas = $this->model->mostrarCantidadCorrectasPorPartida($idTurno, $idPartida, $usuarioId);
 
         $model = [
             'id_turno' => $idTurno,
-            'pregunta' => $pregunta,
+            'pregunta' => $descripcionPregunta,
+            'idPregunta' => $idPregunta,
             'Respuestas' => $respuestas,
             'cantidadCorrectas' => $correctas,
             'nombreOponente' => 'Desconocido'
@@ -100,7 +100,6 @@ class PartidaController{
         $this->renderer->render("partida", $model);
     }
 
-
     public function mostrarPartida() {
         $idTurno = $_GET["idTurno"];
         $_SESSION['turno'] = $idTurno;
@@ -108,7 +107,6 @@ class PartidaController{
         $idPartida = $_SESSION['id'] ?? $this->model->obtenerIdPartidaPorTurno($idTurno);
         $usuarioNombre = $_SESSION['usuario'];
         $idUsuario = $this->usuarioModel->obtenerIdUsuarioPorNombre($usuarioNombre);
-
         $correctas = $this->model->mostrarCantidadCorrectasPorPartida($idTurno, $idPartida, $idUsuario);
 
         $model = [
@@ -126,15 +124,30 @@ class PartidaController{
     public function evaluarTurno() {
         $opcionElegida = $_GET['respuestaElegida'] ?? null;
         $turno = $_GET['turno'] ?? null;
+        $idPregunta = $_GET['idPregunta'] ?? null;
         $_SESSION['turno'] = $turno;
-        $lePego = $this->model->evaluarRespuestaDelTurno($opcionElegida, $turno);
+        $lePego = $this->model->evaluarRespuesta($opcionElegida, $turno);
 
         if (!$lePego) {
             $this->redirectModel->redirect("partida/terminarPartida?idTurno=$turno");
             return;
         }
-        $_SESSION['preguntas_respondidas'] = ($_SESSION['preguntas_respondidas'] ?? 0) + 1;
 
+        $_SESSION['preguntas_respondidas'] = ($_SESSION['preguntas_respondidas'] ?? 0) + 1;
+        $nombreUsuario = $this->model->obtenerNombreUsuarioPorTurno($turno);
+        $categoria = $_SESSION['categoria_actual'] ?? '';
+
+        $mapaCategorias = [
+            'Deportes' => 1,
+            'Entretenimiento' => 2,
+            'Informática' => 3,
+            'Matemáticas' => 4,
+            'Historia' => 5
+        ];
+        $idCategoria = $mapaCategorias[$categoria] ?? null;
+
+        $idUsuario = $this->usuarioModel->obtenerIdUsuarioPorNombre($nombreUsuario);
+        $this->model->acreditarAcierto($turno, $idPregunta);
 
         if ($_SESSION['preguntas_respondidas'] >= 5) {
             unset($_SESSION['preguntas_respondidas']);
@@ -142,32 +155,31 @@ class PartidaController{
             $this->redirectModel->redirect("partida/iniciarPartida");
             return;
         }
+        $idTurno = $_GET["idTurno"];
+        $_SESSION['turno'] = $idTurno;
 
-        $nombreUsuario = $this->model->obtenerNombreUsuarioPorTurno($turno);
-        $idPartida = $this->model->obtenerIdPartidaPorTurno($turno);
-        $categoria = $_SESSION['categoria_actual'] ?? '';
-
-        $this->model->acreditarAcierto($turno);
+        $idPartida = $this->model->obtenerIdPartidaPorTurno($idTurno);
         $URL = "partida/crearTurno?nombreUsuario=$nombreUsuario&idPartida=$idPartida&categoria=$categoria";
         $this->redirectModel->redirect($URL);
     }
 
     public function terminarPartida(){
+        $usuarioNombre = $_SESSION['usuario'];
+        $usuarioId = $this->usuarioModel->obtenerIdUsuarioPorNombre($usuarioNombre);
         $idTurno=$_SESSION['turno'] ?? null;
         $idPartida=$this->model->obtenerIdPartidaPorTurno($idTurno);
-        $cantidadCorrectas=$this->model->mostrarCantidadCorrectasPorPartida($idTurno, $idPartida, $idTurno);
+        $cantidadCorrectas=$this->model->mostrarCantidadCorrectasPorPartida($idTurno, $idPartida, $usuarioId);
 
         $this->model->finalizarPartida($idPartida, $cantidadCorrectas);
 
-        $this->renderer->render("partidaFinalizada", [
-            "puntaje"=>$cantidadCorrectas,
-            'nombreOponente' =>$this->model->getNombreOponente($idTurno)?? 'Desconocido',
-            "pregunta"=>$this->model->obtenerDescripcionDeLaPreguntaPorTurno($idTurno),
-            "cantidadCorrectas" => $cantidadCorrectas,
-            "respuestaCorrecta"=>$this->model->obtenerDescripcionDeLaRepuestaCorrectaDeLaPreguntaPorTurno($idTurno)
-        ]);
+        //TODO: cambiarle el nombre al metodo
+        $this->renderer->render("partidaFinalizada",
+            ["puntaje"=>$cantidadCorrectas,
+                'nombreOponente' =>$this->model->getNombreOponente($idTurno)?? 'Desconocido',
+                "pregunta"=>$this->model->obtenerDescripcionDeLaPreguntaPorTurno($idTurno),
+                "cantidadCorrectas" => $cantidadCorrectas,
+                "respuestaCorrecta"=>$this->model->obtenerDescripcionDeLaRepuestaCorrectaDeLaPreguntaPorTurno($idTurno)]);
     }
-
 
     public function inicioCronometro(){
         $_SESSION['cronometro'] = time()+3;
@@ -202,4 +214,5 @@ class PartidaController{
             $this->redirectModel->redirect("partida/terminarPartida?idTurno=$idTurno");
         }
     }
+
 }

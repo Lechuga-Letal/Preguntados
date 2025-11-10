@@ -1,6 +1,6 @@
 
 CREATE DATABASE IF NOT EXISTS tppreguntados;
-USE TpPreguntados;
+USE tppreguntados;
 
 DROP TABLE IF EXISTS usuarios;
 DROP TABLE IF EXISTS reporte;
@@ -83,22 +83,25 @@ CREATE TABLE partidas (
 );
 
 CREATE TABLE turno (
-                         id INT AUTO_INCREMENT,
-                         id_partida INT NOT NULL,
-                         id_usuario INT NOT NULL,
-                         id_pregunta INT NOT NULL,
-                         /*
-                         esto ya no va a ser trabajo de la base de datos
-                         inicio_turno DATETIME DEFAULT CURRENT_TIMESTAMP,
-                         fin_turno DATETIME DEFAULT NULL,
-                         */
-                         adivino BOOLEAN DEFAULT NULL,
-                         PRIMARY KEY (id,id_partida,id_usuario,id_pregunta),
-                         FOREIGN KEY (id_partida) REFERENCES partidas(id) ,
-                         FOREIGN KEY (id_usuario) REFERENCES usuarios(id) ,
-                         FOREIGN KEY (id_pregunta) REFERENCES pregunta(id_pregunta)
+                       id INT AUTO_INCREMENT PRIMARY KEY,
+                       id_partida INT NOT NULL,
+                       id_usuario INT NOT NULL,
+                       id_categoria INT NOT NULL,
+                       aciertos INT DEFAULT 0,
+                       activo BOOLEAN DEFAULT TRUE,
+                       FOREIGN KEY (id_partida) REFERENCES partidas(id),
+                       FOREIGN KEY (id_usuario) REFERENCES usuarios(id)
 );
 
+CREATE TABLE turno_pregunta (
+                                id_turno INT NOT NULL,
+                                id_pregunta INT NOT NULL,
+                                respondida BOOLEAN DEFAULT FALSE,
+                                acierto BOOLEAN DEFAULT NULL,
+                                PRIMARY KEY (id_turno, id_pregunta),
+                                FOREIGN KEY (id_turno) REFERENCES turno(id),
+                                FOREIGN KEY (id_pregunta) REFERENCES pregunta(id_pregunta)
+);
 -- Las contrasenias son 123!
 INSERT INTO usuarios (usuario, mail, password, nombre_completo, anio_nacimiento, sexo, pais, ciudad, coordenadas)
 VALUES
