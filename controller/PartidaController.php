@@ -33,7 +33,7 @@ class PartidaController{
         exit();
     }
         $this->renderer->render("ruleta");
-}
+    }
 
 
     public function misDesafios() {
@@ -65,12 +65,14 @@ class PartidaController{
         $this->renderer->render("desafiar", ["usuarios" => $jugadores]);
     }
 
+    //TODO anda siempre y cuando no haya una partida previa
     public function crearTurno() {
+        var_dump($_SESSION);
         $usuarioNombre = $_SESSION['usuario'];
         $usuarioId = $this->usuarioModel->obtenerIdUsuarioPorNombre($usuarioNombre);
-
-        $categoria = $_GET['categoria'] ?? $_SESSION['categoria_actual'] ?? null;
+        $categoria = $_POST['categoria']?? $_SESSION['categoria_actual'] ?? null;
         if ($categoria) $_SESSION['categoria_actual'] = $categoria;
+
 
         $idPartida = $_SESSION['id'] ?? $this->model->crearPartida($usuarioId);
         $_SESSION['id'] = $idPartida;
@@ -128,8 +130,11 @@ class PartidaController{
         $turno = $_GET['turno'] ?? null;
         $idPregunta = $_GET['idPregunta'] ?? null;
         $_SESSION['turno'] = $turno;
-        $lePego = $this->model->evaluarRespuesta($opcionElegida, $turno);
+
+        $lePego = $this->model->evaluarRespuesta($opcionElegida, $turno); // aca se rompio
+
         $fueraDelTiempo= $this->controlarTiempo();
+
 
         if (!$lePego) {
             $this->redirectModel->redirect("partida/terminarPartida?idTurno=$turno");
@@ -158,7 +163,8 @@ class PartidaController{
             $this->redirectModel->redirect("partida/iniciarPartida");
             return;
         }
-        $idTurno = $_GET["idTurno"];
+//        $idTurno = $_GET["idTurno"];
+        $idTurno = $_GET["turno"];
         $_SESSION['turno'] = $idTurno;
 
         $idPartida = $this->model->obtenerIdPartidaPorTurno($idTurno);
@@ -175,6 +181,9 @@ class PartidaController{
 
         $this->model->finalizarPartida($idPartida, $cantidadCorrectas);
 
+        $this->borradoDeDatosPartidaEnSession();
+
+        var_dump($_SESSION);
         //TODO: cambiarle el nombre al metodo
         $this->renderer->render("partidaFinalizada",
             ["puntaje"=>$cantidadCorrectas,
@@ -239,4 +248,18 @@ class PartidaController{
         $this->redirectModel->redirect("partida/terminarPartida?idTurno=$turno");
 
     }*/
+
+    public function mensajeDeRevisionDeErrores(){
+        var_dump("llegue");
+        die();
+    }
+
+    public function borradoDeDatosPartidaEnSession(){
+        $valoresPartidaBorradosSession = ["id","cronometro", "pregunta_turno", "turno", "categoria_actual", "preguntas_respondidas"];
+        foreach ($valoresPartidaBorradosSession as $clave) {
+            if (isset($_SESSION[$clave])) {
+                unset($_SESSION[$clave]);
+            }
+        }
+    }
 }
