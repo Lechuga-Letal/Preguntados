@@ -1,23 +1,34 @@
 <title>Inicio</title>
-<link rel="stylesheet" href="../public/css/inicioStyle.css">
+<link rel="stylesheet" href="/public/css/vistas/inicioStyle.css">
+<link rel="stylesheet" href="/public/css/componentes/headerComponente.css">
 </head>
 
 <body>
 
-        <header class="header">
-            <div>
-            <span class="nombreUsuario">Usuario: {{usuario}}</span>
-            </div>
-            <h2 class="titulo">Preguntados</h2>
+    <header class="header"> 
+        <h2 class="titulo">Preguntados</h2>
+        <div class="user-info">
             <form method="POST" action="/Preguntados/inicio/logout">
-                <input class="logout-btn" type="submit" value="Cerrar sesión">
+            <input class="logout-btn" type="submit" value="Cerrar sesión">
             </form>
-        </header>
+            <p class="username">{{usuario}}</p>
+            <img src="/{{foto_perfil}}" alt="{{usuario}}">
+        </div>
+    </header>
 
 <div class="container">
-    <!--Estaria bueno que te dega bienvenida en caso de ser Muje`
-    Y para los que no especifiquen su genero, tiramos un arroba (?-->
-    <h1>Bienvenido {{usuario}}!</h1>
+
+    {{#sexo}}
+    {{#esMasculino}}
+        <h1>¡Bienvenido {{usuario}}!</h1>
+    {{/esMasculino}}
+    {{#esFemenino}}
+        <h1>¡Bienvenida {{usuario}}!</h1>
+    {{/esFemenino}}
+    {{#esNoBinario}}
+        <h1>¡Bienvenide {{usuario}}!</h1>
+    {{/esNoBinario}}
+    {{/sexo}}
     
     <div>
         <a href="/partida/jugar" class="boton">Jugar Preguntados</a>

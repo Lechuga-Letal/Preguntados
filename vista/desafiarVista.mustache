@@ -1,52 +1,50 @@
 <title>Oponente</title>
-<link rel="stylesheet" href="/public/css/adminStyle.css">
+<link rel="stylesheet" href="/public/css/vistas/desafiarStyle.css">
+<link rel="stylesheet" href="/public/css/componentes/headerComponente.css">
 <body>
-<header class="header">
-    <img src="/public/imagenes/Logo.png" alt="logo" class="logo">
-    <form method="POST" action="/Preguntados/inicio/logout">
-        <input class="logout-btn" type="submit" value="Cerrar sesión">
-    </form>
-</header>
+    <header class="header"> 
+        <h2 class="titulo">Preguntados</h2>
+        <div class="user-info">
+            <form method="POST" action="/Preguntados/inicio/logout">
+            <input class="logout-btn" type="submit" value="Cerrar sesión">
+            </form>
+            <p class="username">{{usuario}}</p>
+            <img src="/{{foto_perfil}}" alt="{{usuario}}">
+        </div>
+    </header>
 <main class="container">
     <h1>Elegí a que amigo desafiar</h1>
     <div>
         <section class="tabla">
-            <table>
-                <thead>
-                <tr>
-                    <th>Foto de perfil</th>
-                    <th>Usuario</th>
-                    <th>Nombre completo</th>
-                    <th>Pais</th>
-                    <th>Desafiar</th>
+  <div class="oponentes-lista">
+    {{#usuarios}}
+      <div class="card">
+        <div class="card-left">
+          {{#foto_perfil}}
+            <img src="/{{foto_perfil}}" alt="{{usuario}}">
+          {{/foto_perfil}}
+          {{^foto_perfil}}
+            <img src="/public/imagenes/usuarioImagenDefault.png" alt="{{usuario}}">
+          {{/foto_perfil}}
 
-                </tr>
-                </thead>
-                <tbody>
-                {{#usuarios}}
-                    <tr>
-                        <td>
-                            {{#foto_perfil}}
-                                <img src="/{{foto_perfil}}" alt="{{usuario}}" class="img-fluid rounded-circle" width="50" height="50">
-                            {{/foto_perfil}}
+          <div class="card-info">
+            <span class="usuario">{{usuario}}</span>
+            <span class="nombre">{{nombre_completo}}</span>
+            <span class="pais">{{pais}}</span>
+          </div>
+        </div>
 
-                            {{^foto_perfil}}
-                            <img src="/public/imagenes/usuarioImagenDefault.png" alt="{{usuario}}" class="img-fluid rounded-circle" width="50" height="50">
-                            {{/foto_perfil}}  
-                        </td>
-                        <td>{{usuario}}</td>
-                        <td>{{nombre_completo}}</td>
-                        <td>{{pais}}</td>
-                        <td>
-                            <form method="POST" action="/partida/iniciarPartida">
-                            <input type="hidden" name="id_oponente" value="{{id}}">
-                            <button type="submit" class="btn-cambiar">Desafiar</button>
-                        </form>
-                        </td>
-                    </tr> {{/usuarios}}
-                </tbody>
-            </table>
-        </section>
+        <div class="card-right">
+        <form method="POST" action="/partida/iniciarPartida">
+          <input type="hidden" name="id_oponente" value="{{id}}">
+          <button type="submit" class="btn-cambiar">Desafiar</button>
+        </form>
+        </div>
+      </div>
+    {{/usuarios}}
+  </div>
+</section>
+
         <div class="text-center mt-5">
             <a href="/inicio" class="btn btn-secondary">Volver</a>
         </div>

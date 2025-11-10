@@ -1,59 +1,62 @@
 <title>Lista de Preguntas</title>
-  <link rel="stylesheet" href="/public/css/paginaPrincipalStyle.css">
+  <link rel="stylesheet" href="/public/css/vistas/preguntasListaStyle.css">
+  <link rel="stylesheet" href="/public/css/componentes/headerComponente.css">
 </head>
 
-<body class="bg-dark">
+<body>
 
-  <main class="container">
-    <div class="text-center mb-4">
-      <h1 class="fw-bold">Lista de Preguntas</h1>
-      <p class="text-muted">Acá podés ver, editar, aprobar o eliminar las preguntas.</p>
-      <p class="text-muted">También podés filtrarlas según su tipo: reportadas, sugeridas o activas.</p>
-    </div>
+  <header class="header"> 
+      <h2 class="titulo">Preguntados</h2>
+      <div class="user-info">
+          <form method="POST" action="/Preguntados/inicio/logout">
+          <input class="logout-btn" type="submit" value="Cerrar sesión">
+          </form>
+          <p class="username">{{usuario}}</p>
+          <img src="/{{foto_perfil}}" alt="{{usuario}}">
+      </div>
+  </header>
 
-    <div class="list-group">
+<main class="container">
+  <h1>Lista de Preguntas</h1>
+  <p class="descripcion">
+    Acá podés ver, editar, aprobar o eliminar las preguntas.<br>
+    También podés filtrarlas según su tipo: reportadas, sugeridas o activas.
+  </p>
+
+  <section class="pregunta-card">
     {{#preguntas}}
-    <div class="list-group-item bg-dark text-light border border-secondary mb-3 rounded">
-        <h5 class="mb-2">
-        <a 
-            href="/gestionarPregunta?tipo={{tipo}}&id={{pregunta_id}}" 
-            class="link-info fw-bold"
-        > 
-            {{pregunta}}
+    <div class="pregunta-card">
+      <div class="pregunta-header">
+        <a href="/gestionarPregunta?tipo={{tipo}}&id={{pregunta_id}}" class="pregunta-titulo">
+          {{pregunta}}
         </a>
-        </h5>
+      </div>
 
-        {{#cantidad_reportes}}
-        <p class="mb-1 text-danger"><strong>Reportes:</strong> {{cantidad_reportes}}</p>
-        {{/cantidad_reportes}}
+      {{#cantidad_reportes}}
+      <p class="meta-info danger"><strong>Reportes:</strong> {{cantidad_reportes}}</p>
+      {{/cantidad_reportes}}
 
-        {{#usuario_sugirio}}
-        <p class="mb-1 text-warning"><strong>Sugerida por:</strong> {{usuario_sugirio}}</p>
-        {{/usuario_sugirio}}
+      {{#usuario_sugirio}}
+      <p class="meta-info warning"><strong>Sugerida por:</strong> {{usuario_sugirio}}</p>
+      {{/usuario_sugirio}}
 
-        <ul class="list-group list-group-flush mt-3">
+      <ul class="respuestas">
         {{#respuestas}}
-        <li class="list-group-item bg-secondary text-light border border-dark d-flex justify-content-between align-items-center">
-            <span>{{descripcion}}</span>
-            {{#es_correcta}}
-            <span class="badge bg-success">Correcta</span>
-            {{/es_correcta}}
+        <li class="respuesta {{#es_correcta}}correcta{{/es_correcta}}">
+          <span>{{descripcion}}</span>
+          {{#es_correcta}}<span class="badge">✔</span>{{/es_correcta}}
         </li>
         {{/respuestas}}
-        </ul>
+      </ul>
     </div>
     {{/preguntas}}
 
     {{^preguntas}}
-    <div class="alert alert-warning text-center" role="alert">
-        No hay preguntas.
-    </div>
+    <div class="alerta">No hay preguntas disponibles.</div>
     {{/preguntas}}
-    </div>
+  </section>
 
-    <div class="text-center mt-5">
-      <a href="/inicioEditor/" class="btn btn-secondary">Volver</a>
-    </div>
-  </main>
-</body>
-</html>
+  <div class="volver-contenedor">
+    <a href="/inicioEditor/" class="btn-volver">Volver</a>
+  </div>
+</main>

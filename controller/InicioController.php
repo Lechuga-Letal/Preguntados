@@ -25,8 +25,10 @@ class InicioController
             return;
         }
 
-        $usuario = $_SESSION['usuario'];
+        $usuario = $_SESSION['usuario'] ?? '';
         $rol = $_SESSION['rol'] ?? 'Jugador';
+        $sexo = $_SESSION['sexo'] ?? '';
+        $foto = $_SESSION['foto_perfil'] ?? '/public/imagenes/usuarioImagenDefault.png';
 
         if ($rol === 'Administrador') {
             $this->renderer->render("InicioAdmin", ["usuario" => $usuario, "rol" => $rol]);
@@ -36,8 +38,13 @@ class InicioController
         $isEditor = ($rol === "Editor");
 
         $data = [
-            "usuario" => $usuario,  
-            "isEditor" => $isEditor
+            "usuario" => $usuario,
+            "sexo" => $sexo,
+            "foto_perfil" => $foto,
+            "isEditor" => $isEditor,
+            "esMasculino" => ($sexo === "Masculino"),
+            "esFemenino" => ($sexo === "Femenino"),
+            "esNoBinario" => ($sexo != "Masculino" && $sexo != "Femenino")
         ];
         $this->renderer->render("inicio", $data);
     }

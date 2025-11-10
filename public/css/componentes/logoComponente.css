@@ -1,0 +1,29 @@
+.logo {
+  width: 200px;
+  height: 200px;
+  margin-bottom: 25px;
+  filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.2))
+          drop-shadow(0 0 15px rgba(255, 255, 255, 0.1));
+  transition: transform var(--transition-fast), filter var(--transition-fast);
+}
+
+.logo:hover {
+  transform: scale(1.05);
+  filter: drop-shadow(0 0 20px rgba(255, 255, 255, 0.4))
+          drop-shadow(0 0 30px rgba(255, 255, 255, 0.2));
+}
+
+@media (max-width: 768px) {
+  .logo {
+    width: 150px;
+    height: 150px;
+  }
+}
+
+@media (max-width: 480px) {
+  .logo {
+    width: 120px;
+    height: 120px;
+    margin-bottom: 15px;
+  }
+}

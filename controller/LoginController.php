@@ -42,8 +42,10 @@ class LoginController
         $resultado = $this->model->getUserWith($usuario, $password);
 
         if (!empty($resultado)) {
-            $_SESSION['usuario'] = $usuario;
+            $_SESSION['usuario'] = $resultado['usuario'];                     
             $_SESSION['rol'] = $resultado['rol'];
+            $_SESSION['sexo'] = $resultado['sexo'];               
+            $_SESSION['foto_perfil'] = $resultado['foto_perfil']; 
             $this->vistaSegunRol();
         } else {
             $this->renderer->render('login', ['error' => 'Usuario o contraseña incorrectos']);
