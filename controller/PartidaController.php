@@ -123,6 +123,7 @@ class PartidaController{
             'Respuestas' => $this->model->obtenerRespuestasDelTurno($idTurno),
             'nombreOponente' => $this->model->getNombreOponente($idTurno) ?? 'Desconocido'
         ];
+        $this->inicioCronometroAPI();// inicia el cronometro al cargar la partida asi es solouna vez(?)
         $this->renderer->render("partida", $model);
     }
 
@@ -192,17 +193,17 @@ class PartidaController{
     }
 
     public function inicioCronometro(){
-        $_SESSION['cronometro'] = time(); // HORA DE INICIO tiempo
+        $_SESSION['cronometroInicio'] = time(); // HORA DE INICIO tiempo
     }
 
     public function duracionTiempoMaximoPorTurno(){
-        $tiempoMaximoEnResponder = 5; // segundos
+        $tiempoMaximoEnResponder = 15; // segundos
         return $tiempoMaximoEnResponder;
     }
 
     public function finCronometro(){
         $tiempoMaximo = $this->duracionTiempoMaximoPorTurno();
-        $tiempoFin = $_SESSION['cronometro'] + $tiempoMaximo; //
+        $tiempoFin = $_SESSION['cronometroInicio'] + $tiempoMaximo; //
         return $tiempoFin;
     }
 
@@ -210,7 +211,7 @@ class PartidaController{
         header('Content-Type: application/json');
         $this->inicioCronometro();
         $tiempoMaximoPorTurno = $this->duracionTiempoMaximoPorTurno();
-        $tiempoInicio = $_SESSION['cronometro'];
+        $tiempoInicio = $_SESSION['cronometroInicio'];
         $tiempoFin = $this->finCronometro();
 
         $data = [
@@ -218,6 +219,8 @@ class PartidaController{
             'tiempoInicio' => $tiempoInicio,
             'tiempoFin' => $tiempoFin //no se si es necesario aca, no lo usamos
         ];
+          /*  Estos son los datos que muestra, setea el inicio del cronometro, duracion y fin
+        */
 
         echo json_encode($data);
     }
@@ -229,10 +232,11 @@ class PartidaController{
         $tiempoActual = time();
         if($finCronometro <= $tiempoActual){
             $terminarPartida = true;
-            $this->redirectModel->redirect("partida/terminarPartida?idTurno=$turno");
+            $this->terminarPartida();
 
         }
-        echo $terminarPartida;    }
+        echo $terminarPartida;    
+    }
 
     public function mostrarTiempo(){
         header('Content-Type: application/json');

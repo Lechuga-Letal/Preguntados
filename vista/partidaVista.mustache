@@ -41,14 +41,10 @@
                     if(tiempo <= 0){
                         clearInterval(intervalo);//corta el cronometro
                         console.log("llego al maximo");
-                        fetch('/partida/terminarPartidaPorTiempoMaximo');
+                        window.location.replace('/partida/terminarPartida');
                     }
 
-                    fetch('/partida/controlarTiempo')
-                    .then(res => res.text())
-                    .then(data => {
-                        console.log("res:", data);
-                    });
+                    fetch('/partida/controlarTiempo')   ;
 
                     //efecto visual de la barra de tiempo
                     var porcentajeRestante = (tiempo / data.tiempoMaximoPorTurno) * 100;
