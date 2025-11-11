@@ -31,7 +31,6 @@ require_once __DIR__ . '/../helper/MailService.php';
          $mailService->enviarBienvenida($usuario, $mail);
 
          $idUsuario= $this->obtenerIdUsuarioPorNombre($usuario);
-         var_dump($idUsuario);
          $this->creacionDeNivelDeUsuario($idUsuario);
 
          return $success;
@@ -40,8 +39,6 @@ require_once __DIR__ . '/../helper/MailService.php';
      public function creacionDeNivelDeUsuario($idUsuario){
 
          $categorias=$this->obtenerCategorias();
-
-         var_dump($idUsuario);
          for ($i=0; $i < count($categorias); $i++) {
              $idCategoria = $categorias[$i]['id_categoria'];
              $query = "INSERT INTO nivelJugadorPorCategoria (id_usuario, id_categoria)

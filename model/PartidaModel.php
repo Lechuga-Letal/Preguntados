@@ -89,15 +89,19 @@ class PartidaModel {
         return $resultado[0]['total'] ?? 0;
     }
 
+    //todo: Metodo de mierda
+    // Hacer las validaciones aca
     public function crearTurno($idUsuario, $idPartida, $idCategoria) {
-        $sqlTurno = "INSERT INTO turno (id_usuario, id_partida, id_categoria) VALUES ($idUsuario, $idPartida, $idCategoria)";
+        $sqlTurno = "INSERT INTO turno (id_usuario, id_partida, id_categoria) 
+                    VALUES ($idUsuario, $idPartida, $idCategoria)";
         $this->conexion->query($sqlTurno);
         $idTurno = $this->obtenerTurnoReciente($idUsuario, $idPartida);
 
         $pregunta = $this->obtenerPreguntaAleatoriaPorCategoria($idUsuario, $idCategoria);
         if ($pregunta) {
             $idPregunta = $pregunta['id_pregunta'];
-            $sqlTurnoPregunta = "INSERT INTO turno_pregunta (id_turno, id_pregunta, respondida, acierto) VALUES ($idTurno, $idPregunta, FALSE, FALSE)";
+            $sqlTurnoPregunta = "INSERT INTO turno_pregunta (id_turno, id_pregunta) 
+                                    VALUES ($idTurno, $idPregunta)";
             $this->conexion->query($sqlTurnoPregunta);
 
             $_SESSION['pregunta_turno'] = $pregunta; //todo Las cosas de peticiones HTTP y session no van en el servicio/modelo
@@ -142,11 +146,26 @@ class PartidaModel {
 
     public function acreditarAcierto($idTurno, $idPregunta) {
         $sql = "UPDATE turno_pregunta
-            SET respondida = TRUE, acierto = TRUE
+            SET respondida = TRUE, 
+                acierto = TRUE
             WHERE id_turno = $idTurno AND id_pregunta = $idPregunta";
         $this->conexion->query($sql);
 
-        $sqlUpdateAciertos = "UPDATE turno SET aciertos = aciertos + 1  WHERE id = $idTurno";
+        $sqlUpdateAciertos = "
+            UPDATE turno 
+            SET aciertos =1,
+                activo=1
+             WHERE id = $idTurno";
+        $this->conexion->query($sqlUpdateAciertos);
+    }
+
+    public function acreditarIntentoFallido($idTurno, $idPregunta) {
+        $sql = "UPDATE turno_pregunta
+            SET respondida = true
+            WHERE id_turno = $idTurno AND id_pregunta = $idPregunta";
+        $this->conexion->query($sql);
+
+        $sqlUpdateAciertos = "UPDATE turno SET activo =  1  WHERE id = $idTurno";
         $this->conexion->query($sqlUpdateAciertos);
     }
 
@@ -219,7 +238,6 @@ class PartidaModel {
         return $resultado[0]["id"] ?? null;
     }
 
-    //TODO arreglar metodo
     public function getNombreOponente($idTurno){
         $sql = "SELECT u.usuario as nombreOponente FROM turno t join partidas p on t.id_partida=p.id join usuarios u on p.id_oponente=u.id WHERE t.id = $idTurno";
         $resultado = $this->conexion->query($sql);

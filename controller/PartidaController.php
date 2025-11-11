@@ -132,12 +132,14 @@ class PartidaController{
         $idPregunta = $_GET['idPregunta'] ?? null;
         $_SESSION['turno'] = $turno;
 
-        $lePego = $this->model->evaluarRespuesta($opcionElegida, $turno); // aca se rompio
+        $lePego = $this->model->evaluarRespuesta($opcionElegida, $turno);
 
         $fueraDelTiempo= $this->controlarTiempo();
+        // En caso de que pase el tiempo, no se toma como respondida pero si com falsa
 
 
         if (!$lePego) {
+            $this->model->acreditarIntentoFallido($turno, $idPregunta);
             $this->redirectModel->redirect("partida/terminarPartida?idTurno=$turno");
             return;
         }
