@@ -173,8 +173,6 @@ class PartidaModel {
         return $resultado[0]['total'] ?? 0;
     }
 
-    //todo: Metodo de mierda
-    // Hacer las validaciones aca
     public function crearTurno($idUsuario, $idPartida, $idCategoria) {
         $sqlTurno = "INSERT INTO turno (id_usuario, id_partida, id_categoria) 
                     VALUES ($idUsuario, $idPartida, $idCategoria)";

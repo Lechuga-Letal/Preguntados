@@ -41,7 +41,9 @@
                     if(tiempo <= 0){
                         clearInterval(intervalo);//corta el cronometro
                         console.log("llego al maximo");
-                        window.location.replace('/partida/terminarPartida');
+                        window.location.replace('/partida/evaluarTurno?turno={{id_turno}}&idPregunta={{idPregunta}}');
+                        // window.location.replace('/partida/evaluarTurno?tiempoFinalizado=true');
+                        // window.location.replace('/partida/terminarPartida');
                     }
 
                     fetch('/partida/controlarTiempo')   ;

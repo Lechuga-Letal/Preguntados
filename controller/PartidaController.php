@@ -138,12 +138,11 @@ class PartidaController{
 
         $lePego = $this->model->evaluarRespuesta($opcionElegida, $turno);
 
-        // voy a hacer el calculo de nivel aca y despues lo pego en la parte donde pierde y gana para que se actualice
         $this->model->actualizarNivelJugador($idUsuario,$turno);
         $fueraDelTiempo= $this->controlarTiempo();
-        // En caso de que pase el tiempo, no se toma como respondida pero si com falsa
-
-
+        if($fueraDelTiempo){
+            $this->redirectModel->redirect("partida/terminarPartida?idTurno=$turno");
+        }
 
         if (!$lePego) {
             $this->model->acreditarIntentoFallido($turno, $idPregunta);
@@ -236,16 +235,24 @@ class PartidaController{
     }
 
     public function controlarTiempo(){
+//        $terminarPartida = false;
+//        $turno=$_SESSION['turno'];
+//        $finCronometro = $this->finCronometro();
+//        $tiempoActual = time();
+//        $this->mensajeDeRevisionDeErrores();
+//        if($finCronometro <= $tiempoActual){
+//            $terminarPartida = true;
+//            $this->terminarPartida();
+//
+//        }
+//        echo $terminarPartida;
         $terminarPartida = false;
-        $turno=$_SESSION['turno'];
         $finCronometro = $this->finCronometro();
         $tiempoActual = time();
         if($finCronometro <= $tiempoActual){
             $terminarPartida = true;
-            $this->terminarPartida();
-
         }
-        echo $terminarPartida;    
+        return $terminarPartida;
     }
 
     public function mostrarTiempo(){
