@@ -30,7 +30,29 @@ require_once __DIR__ . '/../helper/MailService.php';
          $mailService = new MailService();
          $mailService->enviarBienvenida($usuario, $mail);
 
+         $idUsuario= $this->obtenerIdUsuarioPorNombre($usuario);
+         $this->creacionDeNivelDeUsuario($idUsuario);
+
          return $success;
+     }
+
+     public function creacionDeNivelDeUsuario($idUsuario){
+
+         $categorias=$this->obtenerCategorias();
+         for ($i=0; $i < count($categorias); $i++) {
+             $idCategoria = $categorias[$i]['id_categoria'];
+             $query = "INSERT INTO nivelJugadorPorCategoria (id_usuario, id_categoria)
+                       VALUES ('$idUsuario', '$idCategoria')";
+             $this->conexion->query($query);
+         }
+
+         $query="INSERT INTO nivelJugadorGeneral (id_usuario)
+                     VALUES ('$idUsuario')";
+         $this->conexion->query($query);
+     }
+     public function obtenerCategorias(){
+         $query = "select id_categoria from categoria";
+         return $this->conexion->query($query);
      }
 
      public function getUserWith($user, $password)
@@ -91,7 +113,7 @@ require_once __DIR__ . '/../helper/MailService.php';
         $sql = "SELECT id FROM usuarios WHERE usuario = '$nombreUsuario'";
         //Agrege el @ para que el warning no aparecza. 
         //Pero deberiamos preguntar por el foro porque a veces nos sale y a veces no!
-        $resultado = @$this->conexion->query($sql);
+        $resultado = $this->conexion->query($sql);
 
         if ($resultado && count($resultado) > 0) {
             return $resultado[0]['id'];
@@ -146,5 +168,11 @@ require_once __DIR__ . '/../helper/MailService.php';
     }
 
     return null;
-    } 
+    }
+
+     public function mensajeDeRevisionDeErrores(){
+         var_dump("llegue");
+         die();
+     }
+
  }

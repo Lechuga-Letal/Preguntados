@@ -8,6 +8,90 @@ class PartidaModel {
         $this->usuarioModel = $usuarioModel;
     }
 
+    public function actualizarNivelJugador($idUsuario,$turno) {
+        $partidasMinimas=$this->elJugadorCumpleConLasPartidasMinimas($idUsuario,$turno);
+        //Despues validar que tengan un min de preguntas hechas
+
+        if($partidasMinimas){
+        //Actualizar por categoria
+        $this->actualizarNivelJugadorPorCategoria($turno, $idUsuario);
+        }
+        //Actualizar general
+        $this->actualizarNivelJugadorGeneral($idUsuario);
+    }
+
+    public function actualizarNivelJugadorGeneral($idUsuario){
+
+        $nivel=$this->obtenerPromedioDeNivelJugador($idUsuario);
+
+        $update=" UPDATE nivelJugadorGeneral 
+                   SET nivel='$nivel'
+                   where id_usuario='$idUsuario'";
+        $this->conexion->query($update);
+    }
+
+    public function obtenerPromedioDeNivelJugador($idUsuario){
+        $querySuma=" select sum(nivel) as sumaTotal from nivelJugadorPorCategoria
+                where id_usuario='$idUsuario'";
+        $resultado=$this->conexion->query($querySuma);
+
+        $nivel=$resultado[0]["sumaTotal"]/5;
+        $redondeado = ceil($nivel * 10) / 10;
+
+        return $redondeado;
+    }
+    public function elJugadorCumpleConLasPartidasMinimas($idUsuario,$turno){
+        $idCategoria = $this->obtenerIdCategoriaPorTurno($turno);
+        $cantidadDePreguntasHechas = $this->obtenerCantidadTotalDeUsuarioPorCategoria($idUsuario, $idCategoria);
+
+        return ($cantidadDePreguntasHechas>=3);
+    }
+    public function actualizarNivelJugadorPorCategoria($turno, $idUsuario){
+        $idCategoria = $this->obtenerIdCategoriaPorTurno($turno);
+
+        $cantidadDePreguntasBien = $this->obtenerCantidadTotalDeRespondidasCorrectamentePorCategoria($idUsuario, $idCategoria);
+        $cantidadDePreguntasHechas = $this->obtenerCantidadTotalDeUsuarioPorCategoria($idUsuario, $idCategoria);
+
+        $ratio = $cantidadDePreguntasBien / $cantidadDePreguntasHechas;
+        $nivelUsuario = ceil($ratio * 10) / 10;
+
+        if ($nivelUsuario < 0.1) {
+            $nivelUsuario = 0.1;
+        }
+
+        $update=" UPDATE nivelJugadorPorCategoria 
+                   SET nivel=$nivelUsuario
+                   where id_usuario='$idUsuario'
+                   and  id_categoria='$idCategoria'";
+        $this->conexion->query($update);
+    }
+    public function obtenerIdCategoriaPorTurno($turno) {
+        $query="select id_Categoria as id from turno 
+                where id='$turno'";
+        $resultado=$this->conexion->query($query);
+        return $resultado[0]["id"];
+    }
+    public function obtenerCantidadTotalDeUsuarioPorCategoria($idUsuario,$idCategoria) {
+        $query="select count(*) as correctasTotales 
+                from turno 
+                where id_usuario='$idUsuario' 
+                  and id_categoria='$idCategoria'";
+        $resultado=$this->conexion->query($query);
+
+        return $resultado[0]["correctasTotales"];
+    }
+
+    public function obtenerCantidadTotalDeRespondidasCorrectamentePorCategoria($idUsuario,$idCategoria) {
+        $query="select count(*) as correctasTotales 
+                from turno 
+                where id_usuario='$idUsuario' 
+                  and id_categoria='$idCategoria'
+                  and aciertos = 1";
+        $resultado=$this->conexion->query($query);
+
+        return $resultado[0]["correctasTotales"];
+    }
+
     public function crearPartida($idUsuario) {
 //        $idUsuario = is_numeric($usuario) ? $usuario : $this->usuarioModel->obtenerIdUsuarioPorNombre($usuario);
 //        if ($oponente !== null) {
@@ -89,15 +173,19 @@ class PartidaModel {
         return $resultado[0]['total'] ?? 0;
     }
 
+    //todo: Metodo de mierda
+    // Hacer las validaciones aca
     public function crearTurno($idUsuario, $idPartida, $idCategoria) {
-        $sqlTurno = "INSERT INTO turno (id_usuario, id_partida, id_categoria) VALUES ($idUsuario, $idPartida, $idCategoria)";
+        $sqlTurno = "INSERT INTO turno (id_usuario, id_partida, id_categoria) 
+                    VALUES ($idUsuario, $idPartida, $idCategoria)";
         $this->conexion->query($sqlTurno);
         $idTurno = $this->obtenerTurnoReciente($idUsuario, $idPartida);
 
         $pregunta = $this->obtenerPreguntaAleatoriaPorCategoria($idUsuario, $idCategoria);
         if ($pregunta) {
             $idPregunta = $pregunta['id_pregunta'];
-            $sqlTurnoPregunta = "INSERT INTO turno_pregunta (id_turno, id_pregunta, respondida, acierto) VALUES ($idTurno, $idPregunta, FALSE, FALSE)";
+            $sqlTurnoPregunta = "INSERT INTO turno_pregunta (id_turno, id_pregunta) 
+                                    VALUES ($idTurno, $idPregunta)";
             $this->conexion->query($sqlTurnoPregunta);
 
             $_SESSION['pregunta_turno'] = $pregunta; //todo Las cosas de peticiones HTTP y session no van en el servicio/modelo
@@ -142,11 +230,26 @@ class PartidaModel {
 
     public function acreditarAcierto($idTurno, $idPregunta) {
         $sql = "UPDATE turno_pregunta
-            SET respondida = TRUE, acierto = TRUE
+            SET respondida = TRUE, 
+                acierto = TRUE
             WHERE id_turno = $idTurno AND id_pregunta = $idPregunta";
         $this->conexion->query($sql);
 
-        $sqlUpdateAciertos = "UPDATE turno SET aciertos = aciertos + 1  WHERE id = $idTurno";
+        $sqlUpdateAciertos = "
+            UPDATE turno 
+            SET aciertos =1,
+                activo=1
+             WHERE id = $idTurno";
+        $this->conexion->query($sqlUpdateAciertos);
+    }
+
+    public function acreditarIntentoFallido($idTurno, $idPregunta) {
+        $sql = "UPDATE turno_pregunta
+            SET respondida = true
+            WHERE id_turno = $idTurno AND id_pregunta = $idPregunta";
+        $this->conexion->query($sql);
+
+        $sqlUpdateAciertos = "UPDATE turno SET activo =  1  WHERE id = $idTurno";
         $this->conexion->query($sqlUpdateAciertos);
     }
 
@@ -219,7 +322,6 @@ class PartidaModel {
         return $resultado[0]["id"] ?? null;
     }
 
-    //TODO arreglar metodo
     public function getNombreOponente($idTurno){
         $sql = "SELECT u.usuario as nombreOponente FROM turno t join partidas p on t.id_partida=p.id join usuarios u on p.id_oponente=u.id WHERE t.id = $idTurno";
         $resultado = $this->conexion->query($sql);
@@ -327,3 +429,4 @@ class PartidaModel {
         die();
     }
 }
+
