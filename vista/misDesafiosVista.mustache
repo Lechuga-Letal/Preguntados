@@ -27,24 +27,23 @@
             <table class="table table-dark table-striped table-hover">
                 <thead>
                     <tr>
-                        <th></th> <!--Foto de perfil-->
                         <th>Usuario</th>
                         <th>Pais</th>
                         <th>Puntaje</th>
-                        <th>Ganador</th>
+                        <th>iD partida</th>
+                        <th>Fecha</th>
                     </tr>
                 </thead>
-                <tbody>
+                <tbody  style="text-align: center">
                     {{#partidas_finalizadas}}
                         <tr>
-                            <td>{{foto_perfil}}</td>
-                            <td>{{usuario}}</td>
-                            <td>{{pais}}</td>
-                            <td>—</td><!--Miren que en la tabla de partida hay una sola columna para puntajes!-->
-                            <td>—</td>
+                            <td>{{nombreUsuario}}</td>
+                            <td>{{paisUsuario}}</td>
+                            <td>{{puntaje}}</td>
+                            <td>{{idPartida}}</td>
+                            <td>{{fecha}}</td>
                         </tr>
                     {{/partidas_finalizadas}}
-                    
                     {{^partidas_finalizadas}}
                         <tr>
                             <td colspan="5" class="text-center text-muted">
@@ -55,42 +54,6 @@
                 </tbody>
             </table>
         </section>
-
-<!--
-        <section class="tabla mb-4">
-            <h3 class="text-light">Partidas en espera:</h3> De momento trae las partidas "en curso", porque no programamos un "en espera"
-            <table class="table table-dark table-striped table-hover">
-                <thead>
-                    <tr>
-                        <th></th> 
-                        <th>Usuario</th>
-                        <th>Pais</th>
-                        <th>Puntaje</th>
-                        <th>Ganador</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {{#partidas_enCurso}}
-                        <tr>
-                            <td>{{foto_perfil}}</td>
-                            <td>{{usuario}}</td>
-                            <td>{{pais}}</td>
-                            <td>—</td>
-                            <td>—</td>
-                        </tr>
-                    {{/partidas_enCurso}}
-                    
-                    {{^partidas_enCurso}}
-                        <tr>
-                            <td colspan="5" class="text-center text-muted">
-                                No has sido desafiado.
-                            </td>
-                        </tr>
-                    {{/partidas_enCurso}}
-                </tbody>
-            </table>
-        </section>
-    -->
     </div>
 
 

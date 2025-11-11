@@ -44,6 +44,22 @@ class PartidaModel {
         return [];
     }
 
+    public function obtenerPartidasFinalizadasPorId($idUsuario) {
+        $query = "SELECT u.usuario as nombreUsuario ,u.pais as paisUsuario ,
+                  p.puntaje as puntaje ,p.id as idPartida,
+                  DATE_FORMAT(p.fecha_fin, '%d/%m/%Y') as fecha
+                  FROM partidas p join usuarios u on p.id_usuario=u.id 
+                  WHERE estado='finalizada'
+                  AND p.id_usuario = $idUsuario;";
+
+        $result= $this->conexion->query($query);
+
+        if($result && count($result) > 0){
+            return $result;
+        }
+
+        return null;
+    }
     public function obtenerDataDePartidasPorEstado($idUsuario, $estado) {
         $desafios = $this->obtenerDesafiosPorEstado($idUsuario, $estado);
         $data = [];
@@ -203,10 +219,12 @@ class PartidaModel {
         return $resultado[0]["id"] ?? null;
     }
 
+    //TODO arreglar metodo
     public function getNombreOponente($idTurno){
         $sql = "SELECT u.usuario as nombreOponente FROM turno t join partidas p on t.id_partida=p.id join usuarios u on p.id_oponente=u.id WHERE t.id = $idTurno";
         $resultado = $this->conexion->query($sql);
-        if ($resultado && $resultado->num_rows > 0) {
+
+        if ($resultado && count($resultado) > 0) {
             return $resultado[0]["nombreOponente"] ?? null;
         }
         return null;

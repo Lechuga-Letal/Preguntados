@@ -44,15 +44,17 @@ class PartidaController{
 
         $usuario = $_SESSION['usuario'];
         $idUsuario = $this->usuarioModel->obtenerIdUsuarioPorNombre($usuario);
-        $dataDePartidasFinalizadas = $this->model->obtenerDataDePartidasPorEstado($idUsuario, "finalizada");
+        $dataDePartidasFinalizadas = $this->model->obtenerPartidasFinalizadasPorId($idUsuario);
+//        $dataDePartidasFinalizadas = $this->model->obtenerDataDePartidasPorEstado($idUsuario, "finalizada");
         $dataDePartidasEnEspera = $this->model->obtenerDataDePartidasPorEstado($idUsuario, "en curso");
         //Falta mover mayoria de codigo al modelo
 
+//        var_dump($dataDePartidasFinalizadas);
         $data = [
             //De momento solo se utiliza la data del oponente, nada de la partida. 
             "usuario" => $usuario,
             "partidas_finalizadas" => $dataDePartidasFinalizadas,
-            "partidas_enCurso" => $dataDePartidasEnEspera
+//            "partidas_enCurso" => $dataDePartidasEnEspera
         ];
 
         $this->renderer->render("misDesafios", $data);
@@ -67,7 +69,6 @@ class PartidaController{
 
     //TODO anda siempre y cuando no haya una partida previa
     public function crearTurno() {
-        var_dump($_SESSION);
         $usuarioNombre = $_SESSION['usuario'];
         $usuarioId = $this->usuarioModel->obtenerIdUsuarioPorNombre($usuarioNombre);
         $categoria = $_POST['categoria']?? $_SESSION['categoria_actual'] ?? null;
@@ -182,9 +183,6 @@ class PartidaController{
         $this->model->finalizarPartida($idPartida, $cantidadCorrectas);
 
         $this->borradoDeDatosPartidaEnSession();
-
-        var_dump($_SESSION);
-        //TODO: cambiarle el nombre al metodo
         $this->renderer->render("partidaFinalizada",
             ["puntaje"=>$cantidadCorrectas,
                 'nombreOponente' =>$this->model->getNombreOponente($idTurno)?? 'Desconocido',
