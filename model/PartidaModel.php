@@ -8,6 +8,90 @@ class PartidaModel {
         $this->usuarioModel = $usuarioModel;
     }
 
+    public function actualizarNivelJugador($idUsuario,$turno) {
+        $partidasMinimas=$this->elJugadorCumpleConLasPartidasMinimas($idUsuario,$turno);
+        //Despues validar que tengan un min de preguntas hechas
+
+        if($partidasMinimas){
+        //Actualizar por categoria
+        $this->actualizarNivelJugadorPorCategoria($turno, $idUsuario);
+        }
+        //Actualizar general
+        $this->actualizarNivelJugadorGeneral($idUsuario);
+    }
+
+    public function actualizarNivelJugadorGeneral($idUsuario){
+
+        $nivel=$this->obtenerPromedioDeNivelJugador($idUsuario);
+
+        $update=" UPDATE nivelJugadorGeneral 
+                   SET nivel='$nivel'
+                   where id_usuario='$idUsuario'";
+        $this->conexion->query($update);
+    }
+
+    public function obtenerPromedioDeNivelJugador($idUsuario){
+        $querySuma=" select sum(nivel) as sumaTotal from nivelJugadorPorCategoria
+                where id_usuario='$idUsuario'";
+        $resultado=$this->conexion->query($querySuma);
+
+        $nivel=$resultado[0]["sumaTotal"]/5;
+        $redondeado = ceil($nivel * 10) / 10;
+
+        return $redondeado;
+    }
+    public function elJugadorCumpleConLasPartidasMinimas($idUsuario,$turno){
+        $idCategoria = $this->obtenerIdCategoriaPorTurno($turno);
+        $cantidadDePreguntasHechas = $this->obtenerCantidadTotalDeUsuarioPorCategoria($idUsuario, $idCategoria);
+
+        return ($cantidadDePreguntasHechas>=3);
+    }
+    public function actualizarNivelJugadorPorCategoria($turno, $idUsuario){
+        $idCategoria = $this->obtenerIdCategoriaPorTurno($turno);
+
+        $cantidadDePreguntasBien = $this->obtenerCantidadTotalDeRespondidasCorrectamentePorCategoria($idUsuario, $idCategoria);
+        $cantidadDePreguntasHechas = $this->obtenerCantidadTotalDeUsuarioPorCategoria($idUsuario, $idCategoria);
+
+        $ratio = $cantidadDePreguntasBien / $cantidadDePreguntasHechas;
+        $nivelUsuario = ceil($ratio * 10) / 10;
+
+        if ($nivelUsuario < 0.1) {
+            $nivelUsuario = 0.1;
+        }
+
+        $update=" UPDATE nivelJugadorPorCategoria 
+                   SET nivel=$nivelUsuario
+                   where id_usuario='$idUsuario'
+                   and  id_categoria='$idCategoria'";
+        $this->conexion->query($update);
+    }
+    public function obtenerIdCategoriaPorTurno($turno) {
+        $query="select id_Categoria as id from turno 
+                where id='$turno'";
+        $resultado=$this->conexion->query($query);
+        return $resultado[0]["id"];
+    }
+    public function obtenerCantidadTotalDeUsuarioPorCategoria($idUsuario,$idCategoria) {
+        $query="select count(*) as correctasTotales 
+                from turno 
+                where id_usuario='$idUsuario' 
+                  and id_categoria='$idCategoria'";
+        $resultado=$this->conexion->query($query);
+
+        return $resultado[0]["correctasTotales"];
+    }
+
+    public function obtenerCantidadTotalDeRespondidasCorrectamentePorCategoria($idUsuario,$idCategoria) {
+        $query="select count(*) as correctasTotales 
+                from turno 
+                where id_usuario='$idUsuario' 
+                  and id_categoria='$idCategoria'
+                  and aciertos = 1";
+        $resultado=$this->conexion->query($query);
+
+        return $resultado[0]["correctasTotales"];
+    }
+
     public function crearPartida($idUsuario) {
 //        $idUsuario = is_numeric($usuario) ? $usuario : $this->usuarioModel->obtenerIdUsuarioPorNombre($usuario);
 //        if ($oponente !== null) {
@@ -345,3 +429,4 @@ class PartidaModel {
         die();
     }
 }
+

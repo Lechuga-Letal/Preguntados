@@ -132,14 +132,21 @@ class PartidaController{
         $idPregunta = $_GET['idPregunta'] ?? null;
         $_SESSION['turno'] = $turno;
 
+        $nombreUsuario = $this->model->obtenerNombreUsuarioPorTurno($turno);
+        $idUsuario = $this->usuarioModel->obtenerIdUsuarioPorNombre($nombreUsuario);
+
         $lePego = $this->model->evaluarRespuesta($opcionElegida, $turno);
 
+        // voy a hacer el calculo de nivel aca y despues lo pego en la parte donde pierde y gana para que se actualice
+        $this->model->actualizarNivelJugador($idUsuario,$turno);
         $fueraDelTiempo= $this->controlarTiempo();
         // En caso de que pase el tiempo, no se toma como respondida pero si com falsa
 
 
+
         if (!$lePego) {
             $this->model->acreditarIntentoFallido($turno, $idPregunta);
+            $this->model->actualizarNivelJugador($idUsuario,$turno);
             $this->redirectModel->redirect("partida/terminarPartida?idTurno=$turno");
             return;
         }
@@ -159,6 +166,7 @@ class PartidaController{
 
         $idUsuario = $this->usuarioModel->obtenerIdUsuarioPorNombre($nombreUsuario);
         $this->model->acreditarAcierto($turno, $idPregunta);
+        $this->model->actualizarNivelJugador($idUsuario,$turno);
 
         if ($_SESSION['preguntas_respondidas'] >= 5) {
             unset($_SESSION['preguntas_respondidas']);
