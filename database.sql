@@ -32,8 +32,8 @@ CREATE TABLE pregunta (
     descripcion VARCHAR(255) NOT NULL,
     cant_de_veces_respondidas INT DEFAULT 0,
     cant_de_veces_respondidas_correctamente INT DEFAULT 0,
-    id_categoria INT NOT NULL -- pasarlo a una tabla categorias
-);
+    id_categoria INT NOT NULL, -- pasarlo a una tabla categorias
+    dificultad DECIMAL(2,1) NOT NULL DEFAULT 0.5);
 
 CREATE TABLE respuesta (
     id_respuesta INT AUTO_INCREMENT PRIMARY KEY,

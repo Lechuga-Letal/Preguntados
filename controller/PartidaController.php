@@ -5,13 +5,15 @@ class PartidaController{
     private $renderer;
     private $redirectModel;
     private $usuarioModel;
+    private $preguntasModel;
 
-    public function __construct($model, $renderer, $redirectModel, $usuarioModel){
+    public function __construct($model, $renderer, $redirectModel, $usuarioModel, $preguntasModel){
 
         $this->model = $model;
         $this->renderer = $renderer;
         $this->redirectModel = $redirectModel;
         $this->usuarioModel = $usuarioModel;
+        $this->preguntasModel = $preguntasModel;
     }
 
     public function base(){
@@ -137,6 +139,8 @@ class PartidaController{
         $idUsuario = $this->usuarioModel->obtenerIdUsuarioPorNombre($nombreUsuario);
 
         $lePego = $this->model->evaluarRespuesta($opcionElegida, $turno);
+        $this->preguntasModel->actualizarCantidades($idPregunta, $lePego);
+        $this->preguntasModel->actualizarNivel($idPregunta);
 
         $this->model->actualizarNivelJugador($idUsuario,$turno);
         $fueraDelTiempo= $this->controlarTiempo();
