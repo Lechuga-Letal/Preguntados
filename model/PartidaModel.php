@@ -331,12 +331,15 @@ class PartidaModel {
         return null;
     }
 
-    //todo Metodo que voy que tocar
+    //todo Metodo que voy que tocar REVISAR
     public function obtenerPreguntaAleatoriaPorCategoria($idUsuario, $idCategoria) {
+        $nivelUsuario= $this->usuarioModel->getNivelUsuarioPorCategoria($idUsuario,$idCategoria);
+        $margen= 0.2;
 
         $sql1 = "SELECT COUNT(*) AS total FROM pregunta WHERE id_categoria = $idCategoria";
         $totalQuery = $this->conexion->query($sql1);
         $total = (int)($totalQuery[0]['total'] ?? 0);
+
 
         $vistasQuery = $this->conexion->query("
         SELECT COUNT(*) AS vistas 
@@ -346,6 +349,8 @@ class PartidaModel {
     ");
         $vistas = (int)($vistasQuery[0]['vistas'] ?? 0);
 
+
+        //Borra las preguntas en caso de que se hayan visto todas
         if ($vistas >= $total && $total > 0) {
             $this->conexion->query("
             DELETE FROM preguntasVistas 
@@ -357,11 +362,13 @@ class PartidaModel {
             $vistas = 0;
         }
 
+//      se obtiene preguntas de la categoria y que no haya hecho el jugador
         $sql = "
         SELECT p.*
         FROM pregunta p
         WHERE p.id_categoria = $idCategoria
-          AND p.id_pregunta NOT IN (
+        AND p.dificultad BETWEEN ($nivelUsuario - $margen) AND ($nivelUsuario + $margen)
+        AND p.id_pregunta NOT IN (
               SELECT pv.id_pregunta
               FROM preguntasVistas pv
               JOIN pregunta p2 ON pv.id_pregunta = p2.id_pregunta
@@ -373,15 +380,18 @@ class PartidaModel {
 
         $resultado = $this->conexion->query($sql);
 
+
+        //En caso de que no encuentre una, borra all y vuelve a cargar el resultado
         if (empty($resultado)) {
-            $this->conexion->query("
-            DELETE FROM preguntasVistas 
-            WHERE id_usuario = $idUsuario
-              AND id_pregunta IN (
-                  SELECT id_pregunta FROM pregunta WHERE id_categoria = $idCategoria
-              )
-        ");
-            $resultado = $this->conexion->query($sql);
+            var_dump("no encontre preguntas");
+            echo "<br>";
+//            $this->conexion->query("
+//            DELETE FROM preguntasVistas
+//            WHERE id_usuario = $idUsuario
+//              AND id_pregunta IN (
+//                  SELECT id_pregunta FROM pregunta WHERE id_categoria = $idCategoria)");
+//            $resultado = $this->conexion->query($sql);
+            $resultado = $this->obtenerPreguntaRandomNoHecha($idUsuario, $idCategoria);
         }
 
         if (empty($resultado)) {
@@ -398,11 +408,29 @@ class PartidaModel {
 
         return $pregunta;
     }
+    public function obtenerPreguntaRandomNoHecha($idUsuario, $idCategoria){
+        $sql = "
+        SELECT p.*
+        FROM pregunta p
+        WHERE p.id_categoria = $idCategoria
+        AND p.id_pregunta NOT IN (
+              SELECT pv.id_pregunta
+              FROM preguntasVistas pv
+              JOIN pregunta p2 ON pv.id_pregunta = p2.id_pregunta
+              WHERE pv.id_usuario = $idUsuario AND p2.id_categoria = $idCategoria
+          )
+        ORDER BY RAND()
+        LIMIT 1
+    ";
+        $resultado = $this->conexion->query($sql);
+        return $resultado;
+    }
 
     /*public function finalizarTurno($idTurno){
         $sql = "UPDATE turno SET fin_turno= NOW() WHERE id = $idTurno";
         $this->conexion->query($sql);
     }
+
 
     todo esto era para calcular tiempo desde la base de datos
     public function calcularTiempoDeRespuesta($idTurno){

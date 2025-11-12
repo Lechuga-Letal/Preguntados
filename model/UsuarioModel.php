@@ -97,6 +97,15 @@ require_once __DIR__ . '/../helper/MailService.php';
         return null;
     }
 
+    public function getNivelUsuarioPorCategoria($idUsuario,$idCategoria){
+        $sql = "SELECT nivel FROM niveljugadorporcategoria
+                WHERE id_usuario = '$idUsuario'
+                and id_categoria = '$idCategoria'";
+        $resultado = $this->conexion->query($sql);
+
+        return $resultado[0]["nivel"];
+    }
+
     public function getAllUsuarios()
     {
         $sql = "SELECT * FROM usuarios WHERE rol <> 'Administrador'";
