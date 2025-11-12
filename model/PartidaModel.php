@@ -199,7 +199,6 @@ class PartidaModel {
         return $resultado[0]['id'] ?? null;
     }
 
-    //Todo: aca con el ID de usuario, partida se aplica el filtro de dificultad y demas
     public function getIdPregunta($idUsuario, $idCategoria){
         $pregunta = $this->obtenerPreguntaAleatoriaPorCategoria($idUsuario, $idCategoria);
         return $pregunta['id_pregunta'];
@@ -331,7 +330,6 @@ class PartidaModel {
         return null;
     }
 
-    //todo Metodo que voy que tocar REVISAR
     public function obtenerPreguntaAleatoriaPorCategoria($idUsuario, $idCategoria) {
         $nivelUsuario= $this->usuarioModel->getNivelUsuarioPorCategoria($idUsuario,$idCategoria);
         $margen= 0.2;

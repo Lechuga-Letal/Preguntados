@@ -69,7 +69,6 @@ class PartidaController{
         $this->renderer->render("desafiar", ["usuarios" => $jugadores]);
     }
 
-    //TODO anda siempre y cuando no haya una partida previa
     public function crearTurno() {
         $usuarioNombre = $_SESSION['usuario'];
         $usuarioId = $this->usuarioModel->obtenerIdUsuarioPorNombre($usuarioNombre);
