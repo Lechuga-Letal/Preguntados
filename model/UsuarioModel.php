@@ -182,12 +182,12 @@ require_once __DIR__ . '/../helper/MailService.php';
         //de usuario sacamos id, nombre completo, pais, foto(?), rol
         //de partida sacamos id_usuario, puntaje, estado(?)
 
-        $sql = "SELECT u.id, u.nombre_completo, u.pais, max(part.puntaje)
+        $sql = "SELECT u.id, u.nombre_completo, u.pais, max(part.puntaje) AS mejor_puntaje
                 FROM partidas part
                 JOIN usuarios u ON part.id_usuario = u.id
                 WHERE part.estado = 'finalizada' 
                 GROUP BY u.id
-                ORDER BY max(part.puntaje) DESC";  
+                ORDER BY mejor_puntaje DESC" ;  
 
         $resultado = $this->conexion->query($sql);
         if ($resultado && count($resultado) > 0) {
