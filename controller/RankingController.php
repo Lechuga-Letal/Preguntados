@@ -17,7 +17,7 @@ class RankingController
 
     public function base()
     {
-        $this->ranking();
+        $this->mejorJugador();
     }
 
     public function ranking()
@@ -27,6 +27,18 @@ class RankingController
             "usuarios" => $usuarios
         ];
         $this->renderer->render("ranking", $data);
+    }
+
+    //en base a los puntos obtenidos en las partidas general
+    public function mejorJugador()
+    {
+        
+        $usuarios = $this->usuarioModel->obtenerListaMejoresJugadores();
+        $data = [
+            "usuarios" => $usuarios
+        ];
+        $this->renderer->render("ranking", $data);
+
     }
 }
 

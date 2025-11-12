@@ -175,4 +175,25 @@ require_once __DIR__ . '/../helper/MailService.php';
          die();
      }
 
+     //aca voy a hacer las consultas sobre lo de ranking pero no se si seria mejor ponerlo en otro modelo
+    public function obtenerListaMejoresJugadores()
+    //generico sin filtros de nada (a mejorar)
+    {
+        //de usuario sacamos id, nombre completo, pais, foto(?), rol
+        //de partida sacamos id_usuario, puntaje, estado(?)
+
+        $sql = "SELECT u.id, u.nombre_completo, u.pais, max(part.puntaje)
+                FROM partidas part
+                JOIN usuarios u ON part.id_usuario = u.id
+                WHERE part.estado = 'finalizada' 
+                GROUP BY u.id
+                ORDER BY max(part.puntaje) DESC";  
+
+        $resultado = $this->conexion->query($sql);
+        if ($resultado && count($resultado) > 0) {
+            return $resultado;
+        }
+        return [];
+     }
+
  }

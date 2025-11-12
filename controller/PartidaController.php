@@ -202,7 +202,7 @@ class PartidaController{
     }
 
     public function inicioCronometro(){
-        $_SESSION['cronometroInicio'] = time(); // HORA DE INICIO tiempo
+        $_SESSION['cronometro'] = time(); // HORA DE INICIO tiempo
     }
 
     public function duracionTiempoMaximoPorTurno(){
@@ -212,7 +212,7 @@ class PartidaController{
 
     public function finCronometro(){
         $tiempoMaximo = $this->duracionTiempoMaximoPorTurno();
-        $tiempoFin = $_SESSION['cronometroInicio'] + $tiempoMaximo; //
+        $tiempoFin = $_SESSION['cronometro'] + $tiempoMaximo; //
         return $tiempoFin;
     }
 
@@ -220,7 +220,7 @@ class PartidaController{
         header('Content-Type: application/json');
         $this->inicioCronometro();
         $tiempoMaximoPorTurno = $this->duracionTiempoMaximoPorTurno();
-        $tiempoInicio = $_SESSION['cronometroInicio'];
+        $tiempoInicio = $_SESSION['cronometro'];
         $tiempoFin = $this->finCronometro();
 
         $data = [
