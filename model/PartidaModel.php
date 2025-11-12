@@ -31,7 +31,8 @@ class PartidaModel {
     }
 
     public function obtenerPromedioDeNivelJugador($idUsuario){
-        $querySuma=" select sum(nivel) as sumaTotal from nivelJugadorPorCategoria
+        $querySuma=" select sum(nivel) as sumaTotal 
+                from nivelJugadorPorCategoria
                 where id_usuario='$idUsuario'";
         $resultado=$this->conexion->query($querySuma);
 
@@ -330,6 +331,7 @@ class PartidaModel {
         return null;
     }
 
+    //todo Metodo que voy que tocar
     public function obtenerPreguntaAleatoriaPorCategoria($idUsuario, $idCategoria) {
 
         $sql1 = "SELECT COUNT(*) AS total FROM pregunta WHERE id_categoria = $idCategoria";

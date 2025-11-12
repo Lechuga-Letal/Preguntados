@@ -18,6 +18,61 @@ class PreguntasModel
         return $res[0]['id'] ?? null;
     }
 
+    public function actualizarNivel($idPregunta){
+        $cantidadDeVecesDada=$this->obtenerCantidadDeVecesDada($idPregunta);
+
+        if($cantidadDeVecesDada>=2){
+            $cantidadDeVecesRespondidasCorrectamente=$this->obtenerCantidadDeRespondidasCorrectamente($idPregunta);
+
+            $ratio = $cantidadDeVecesRespondidasCorrectamente / $cantidadDeVecesDada;
+            $dificultadPregunta = ceil($ratio * 10) / 10;
+
+            if ($dificultadPregunta < 0.1) {
+                $dificultadPregunta = 0.1;
+            }
+
+            $update=" UPDATE pregunta 
+                   SET dificultad=$dificultadPregunta
+                   where id_pregunta='$idPregunta'";
+            $this->conexion->query($update);
+        }
+    }
+    public function obtenerCantidadDeVecesDada($idPregunta){
+        //poner condicion que minino se haya respondido 3 veces
+        $sql="select cant_de_veces_respondidas as dadas from pregunta
+              where id_pregunta=$idPregunta";
+
+        $resultado=$this->conexion->query($sql);
+        return $resultado[0]['dadas'];
+    }
+    public function obtenerCantidadDeRespondidasCorrectamente($idPregunta){
+        //poner condicion que minino se haya respondido 3 veces
+        $sql="select cant_de_veces_respondidas_correctamente as correctas from pregunta
+              where id_pregunta=$idPregunta";
+
+        $resultado=$this->conexion->query($sql);
+        return $resultado[0]['correctas'];
+    }
+    public function actualizarCantidades($idPregunta, $acierto){
+
+        if($acierto){
+            $this->actualizarCantidadRespondidasCorrectamente($idPregunta);
+        }
+        $this->actualizarCantidadRespondidas($idPregunta);
+    }
+   public function actualizarCantidadRespondidasCorrectamente($idPregunta){
+        $sql = "update pregunta 
+                set cant_de_veces_respondidas_correctamente=cant_de_veces_respondidas_correctamente+1
+                where id_pregunta=$idPregunta";
+        $this->conexion->query($sql);
+    }
+    public function actualizarCantidadRespondidas($idPregunta){
+        $sql = "update pregunta 
+                set cant_de_veces_respondidas=cant_de_veces_respondidas+1
+                where id_pregunta=$idPregunta";
+        $this->conexion->query($sql);
+    }
+
     public function insertarPreguntaSugerida($descripcion, $id_categoria, $id_usuario)
     {
         $sql = "INSERT INTO sugerencia (descripcion, id_categoria, id_usuario, estado)
