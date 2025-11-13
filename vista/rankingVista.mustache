@@ -25,17 +25,35 @@
       </p>
     </div>
 
-    <div class="container mt-4">
-    <h3 class="text-light mb-3">Ranking de usuarios</h3>
-    <a href="/ranking/obtenerListaMejoresJugadoresPorRango?rango=pro">
-    <input type="button" class="btn btn-light mb-3" value="rango pro">
-    </a>
-    <a href="/ranking/obtenerListaMejoresJugadoresPorRango?rango=medio">
-    <input type="button" class="btn btn-light mb-3" value="rango medio">
-    </a>
-    <a href="/ranking/obtenerListaMejoresJugadoresPorRango?rango=novato">
-    <input type="button" class="btn btn-light mb-3" value="rango novato">
-    </a>
+  <form id="rankingForm" action="/ranking/obtenerListaMejoresJugadoresPorRango" method="GET">
+
+      <div class="container mt-4">
+        <h3 class="text-light mb-3">Ranking de usuarios</h3>
+        <input type="hidden" name="rango" id="rango" value="pro">
+        <input type="button" class="btn btn-light mb-3" value="rango pro" onclick="cambiarRango('pro')">
+        <input type="button" class="btn btn-light mb-3" value="rango medio" onclick="cambiarRango('medio')">
+        <input type="button" class="btn btn-light mb-3" value="rango novato" onclick="cambiarRango('novato')">
+      </div>
+      
+      <div> <!-- Limite de usuarios a mostrar, abria que ver como actualizar -->
+        <select name="limite" onchange="document.getElementById('rankingForm').submit()">
+          <option value="1">1</option>
+          <option value="5">5</option>
+          <option value="10" selected>10</option>
+          <option value="25">25</option>
+          <option value="50">50</option>
+          <option value="100">100</option>
+        </select>  
+      </div>
+    </form>
+
+    <script>
+    function cambiarRango(rango) {
+      document.getElementById('rango').value = rango;
+      document.getElementById('rankingForm').submit();
+    }
+    </script>
+
     {{#usuarios}}
     <div class="card text-light mb-2 p-3 rounded-3 shadow-sm">
         <!--De momento dse pasa por $_GET-->

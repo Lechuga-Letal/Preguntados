@@ -43,9 +43,10 @@ class RankingController
 
     public function obtenerListaMejoresJugadoresPorRango()
     {     
+        $limite = $_GET['limite'] ?? null;
         $rango = $_GET['rango'] ?? null;
 
-        $usuarios = $this->usuarioModel->obtenerListaMejoresJugadoresPorRango($rango);
+        $usuarios = $this->usuarioModel->obtenerListaMejoresJugadoresPorRango($rango, $limite);
         $data = [
             "usuarios" => $usuarios
         ];

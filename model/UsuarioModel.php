@@ -221,7 +221,7 @@ require_once __DIR__ . '/../helper/MailService.php';
         return [];
      }
 
-    public function obtenerListaMejoresJugadoresPorRango($rango){
+    public function obtenerListaMejoresJugadoresPorRango($rango, $limite){
 
         switch ($rango) {
             case 'pro':
@@ -246,7 +246,7 @@ require_once __DIR__ . '/../helper/MailService.php';
                 AND $nivel
                 GROUP BY u.id
                 ORDER BY mejor_puntaje DESC
-                limit 10"; 
+                LIMIT $limite"; 
                 //limitamos al top diez pero podriamos hacer una variable para filtrar mas como top 5, 50 o 100  
 
         $resultado = $this->conexion->query($sql);
