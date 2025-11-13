@@ -40,5 +40,17 @@ class RankingController
         $this->renderer->render("ranking", $data);
 
     }
+
+    public function obtenerListaMejoresJugadoresPorRango()
+    {     
+        $rango = $_GET['rango'] ?? null;
+
+        $usuarios = $this->usuarioModel->obtenerListaMejoresJugadoresPorRango($rango);
+        $data = [
+            "usuarios" => $usuarios
+        ];
+        $this->renderer->render("ranking", $data);
+
+    }
 }
 

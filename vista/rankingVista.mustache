@@ -27,6 +27,15 @@
 
     <div class="container mt-4">
     <h3 class="text-light mb-3">Ranking de usuarios</h3>
+    <a href="/ranking/obtenerListaMejoresJugadoresPorRango?rango=pro">
+    <input type="button" class="btn btn-light mb-3" value="rango pro">
+    </a>
+    <a href="/ranking/obtenerListaMejoresJugadoresPorRango?rango=medio">
+    <input type="button" class="btn btn-light mb-3" value="rango medio">
+    </a>
+    <a href="/ranking/obtenerListaMejoresJugadoresPorRango?rango=novato">
+    <input type="button" class="btn btn-light mb-3" value="rango novato">
+    </a>
     {{#usuarios}}
     <div class="card text-light mb-2 p-3 rounded-3 shadow-sm">
         <!--De momento dse pasa por $_GET-->

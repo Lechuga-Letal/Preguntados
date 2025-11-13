@@ -75,7 +75,6 @@ class PartidaController{
         $categoria = $_POST['categoria']?? $_SESSION['categoria_actual'] ?? null;
         if ($categoria) $_SESSION['categoria_actual'] = $categoria;
 
-
         $idPartida = $_SESSION['id'] ?? $this->model->crearPartida($usuarioId);
         $_SESSION['id'] = $idPartida;
 
