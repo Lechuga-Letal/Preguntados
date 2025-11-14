@@ -37,6 +37,34 @@
       
       <div> <!-- Limite de usuarios a mostrar, abria que ver como actualizar -->
         <select name="limite" onchange="document.getElementById('rankingForm').submit()">
+          <option value="10">filtro</option>
+          <option value="1">1</option>
+          <option value="5">5</option>
+          <option value="10">10</option>
+          <option value="25">25</option>
+          <option value="50">50</option>
+          <option value="100">100</option>
+        </select>  
+      </div>
+    </form>
+
+
+      <form id="rankingCategoriaForm" action="/ranking/obtenerListaMejoresJugadoresPorCategoria" method="GET">
+
+      <div class="container mt-4">
+        <h3 class="text-light mb-3">Ranking de usuarios categoria</h3>
+        <input type="hidden" name="categoria" id="categoria" value="Historia">
+        <input type="button" class="btn btn-light mb-3" value="Historia" onclick="cambiarCategoria('Historia')">
+        <input type="button" class="btn btn-light mb-3" value="Deportes" onclick="cambiarCategoria('Deportes')">
+        <input type="button" class="btn btn-light mb-3" value="Entretenimiento" onclick="cambiarCategoria('Entretenimiento')">
+        <input type="button" class="btn btn-light mb-3" value="Informática" onclick="cambiarCategoria('Informática')">
+        <input type="button" class="btn btn-light mb-3" value="Matematicas" onclick="cambiarCategoria('Matematicas')">
+
+
+      </div>
+      
+      <div> <!-- Limite de usuarios a mostrar, abria que ver como actualizar -->
+        <select name="limite" onchange="document.getElementById('rankingCategoriaForm').submit()">
           <option value="1">1</option>
           <option value="5">5</option>
           <option value="10" selected>10</option>
@@ -48,11 +76,20 @@
     </form>
 
     <script>
+
     function cambiarRango(rango) {
       document.getElementById('rango').value = rango;
       document.getElementById('rankingForm').submit();
     }
+
+    function cambiarCategoria(categoria) {
+      document.getElementById('categoria').value = categoria;
+      document.getElementById('rankingCategoriaForm').submit();
+    }
     </script>
+
+
+    
 
     {{#usuarios}}
     <div class="card text-light mb-2 p-3 rounded-3 shadow-sm">

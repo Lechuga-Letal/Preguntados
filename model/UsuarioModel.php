@@ -205,21 +205,6 @@ require_once __DIR__ . '/../helper/MailService.php';
         return [];
      }
 
-     public function obtenerListaMejoresJugadoresPorCategoria($idCategoria){
-        $sql = "SELECT u.id, u.nombre_completo, u.pais, max(part.puntaje) AS mejor_puntaje
-                FROM partidas part
-                JOIN usuarios u ON part.id_usuario = u.id
-                WHERE part.estado = 'finalizada' 
-                AND part.id_categoria = '$idCategoria'
-                GROUP BY u.id
-                ORDER BY mejor_puntaje DESC" ;  
-
-        $resultado = $this->conexion->query($sql);
-        if ($resultado && count($resultado) > 0) {
-            return $resultado;
-        }
-        return [];
-     }
 
     public function obtenerListaMejoresJugadoresPorRango($rango, $limite){
 
@@ -247,7 +232,6 @@ require_once __DIR__ . '/../helper/MailService.php';
                 GROUP BY u.id
                 ORDER BY mejor_puntaje DESC
                 LIMIT $limite"; 
-                //limitamos al top diez pero podriamos hacer una variable para filtrar mas como top 5, 50 o 100  
 
         $resultado = $this->conexion->query($sql);
         if ($resultado && count($resultado) > 0) {
@@ -255,5 +239,44 @@ require_once __DIR__ . '/../helper/MailService.php';
         }
         return [];
      }
+
+    public function obtenerListaMejoresJugadoresPorCategoria($categoria, $limite){
+        $categoriaSeleccionada = '';
+        switch($categoria){
+            case 'Deportes':
+                $categoriaSeleccionada = 1;
+                break;
+            case 'Entretenimiento':
+                $categoriaSeleccionada = 2;
+                break;
+            case 'Informática':
+                $categoriaSeleccionada = 3;
+                break;
+            case 'Matematicas':
+                $categoriaSeleccionada = 4;
+                break;
+            case 'Historia':
+                $categoriaSeleccionada = 5;
+                break;
+            default:
+                return [];
+
+        }
+
+
+        $sql = "SELECT u.id, u.nombre_completo, u.pais, nivelCate.nivel AS mejor_puntaje
+                FROM usuarios u
+                JOIN niveljugadorporcategoria nivelCate ON nivelCate.id_usuario = u.id
+                WHERE nivelCate.id_categoria = $categoriaSeleccionada
+                ORDER BY mejor_puntaje DESC
+                LIMIT $limite"; 
+
+        $resultado = $this->conexion->query($sql);
+        if ($resultado && count($resultado) > 0) {
+            return $resultado;
+        }
+        return [];
+     }
+
 
  }
