@@ -16,5 +16,17 @@
   <Directory "D:/xampp/htdocs/Preguntados">
 5. Reiniciar el Xampp
 
+## JpGraph implementacion
+En caso de ser la primera vez en entrar a la vista de admin post la implementacion del JpGraph es muy probable que tengan que realizar un par de cambios para su correcta visualizacion:
+
+1. En caso de encontrarse con el error "Fatal error: Uncaught Error: Undefined constant "IMG_PNG" in...", tienen que: 
+  A. Ir a D:\xampp\php\php.ini y abrir dicho archivo
+  B. Buscar "gd" y encontrar la linea: ;extension=gd
+  C. Descomentar la linea eliminando el ; al comienzo
+  D. Reiniciar Apache
+
+2. Al encontrarse con el error 25107, para solucionarlo solo tienen que permitir que todos los usuarios puedan modificar la carpeta graficos dentro de public. 
+Eso se hace desde explorador de archivos o con el cmd (Vease ultima clase a).
+
 ## Por favor no se olviden de utilizar el trello, muchas gracias 
 1. Esta en el grupo chicuelos

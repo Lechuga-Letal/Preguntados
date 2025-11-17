@@ -103,7 +103,6 @@ main.container {
   min-width: 300px;
 }
 
-/* --- Responsive --- */
 @media (max-width: 900px) {
   main.container {
     padding: 30px 15px;

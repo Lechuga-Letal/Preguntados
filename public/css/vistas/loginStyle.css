@@ -1,9 +1,4 @@
 body {
-  background: linear-gradient(135deg, var(--color-bg-dark), var(--color-bg-light));
-  color: var(--color-text-main);
-  font-family: var(--font-main);
-  display: flex;
-  flex-direction: column;
   align-items: center;
   justify-content: center;
   min-height: 100vh;
