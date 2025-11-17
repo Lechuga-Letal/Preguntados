@@ -1,5 +1,11 @@
-<title>Panel de Administrador</title>
-<link rel="stylesheet" href="/public/css/adminStyle.css">
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Panel de Administrador</title>
+    <link rel="stylesheet" href="/public/css/adminStyle.css">
+</head>
+
 <body>
 <header class="header">
     <img src="/public/imagenes/Logo.png" alt="logo" class="logo">
@@ -7,43 +13,43 @@
         <input class="logout-btn" type="submit" value="Cerrar sesión">
     </form>
 </header>
+
 <main class="container">
+
     <h1>Panel de Administración</h1>
+    <div class="chart-card">
+        <h3>Usuarios por periodo</h3>
+        <img src="{{grafUsuariosPeriodo}}" class="jpgraph-img">
+    </div>
 
     <section class="stats">
-        <div class="chart-card">
-            <h3>Usuarios nuevos</h3>
-            <canvas id="jugadoresPorPeriodoChart"
-                    data-dia="{{usuariosDia}}"
-                    data-semana="{{usuariosSemana}}"
-                    data-mes="{{usuariosMes}}"
-                    data-anio="{{usuariosAnio}}">
-            </canvas>
-        </div>
-
         <div class="mini-cards">
             <div class="card">
                 <p>{{usuariosNuevos}}</p>
                 <h3>Total de jugadores</h3>
             </div>
+
             <div class="card">
-                <p>0{{partidasJugadas}}</p>
+                <p>{{partidasJugadas}}</p>
                 <h3>Partidas jugadas</h3>
             </div>
+
             <div class="card">
-                <p>0{{preguntasTotales}}</p>
+                <p>{{preguntasTotales}}</p>
                 <h3>Preguntas totales</h3>
             </div>
+
             <div class="card">
-                <p>0{{preguntasCreadas}}</p>
-                <h3>Preguntas creadas</h3>
+                <p>{{preguntasReportadas}}</p>
+                <h3>Preguntas reportadas</h3>
             </div>
-<!--            Aca hay que mandar datos por el controlador-->
         </div>
+
     </section>
 
     <section class="tabla">
         <h2>Gestión de Usuarios</h2>
+
         <table>
             <thead>
             <tr>
@@ -57,8 +63,9 @@
                 <th>% Correctas</th>
                 <th>Rol</th>
                 <th>Editar</th>
-           </tr>
+            </tr>
             </thead>
+
             <tbody>
             {{#usuarios}}
                 <tr>
@@ -69,7 +76,7 @@
                     <td>{{anio_nacimiento}}</td>
                     <td>{{sexo}}</td>
                     <td>{{pais}}</td>
-                    <td>{{""}}</td>
+                    <td>{{porcentaje_correctas}}</td>
                     <td>{{rol}}</td>
                     <td>
                         {{#esJugador}}
@@ -78,31 +85,43 @@
                                 <button type="submit" class="btn-cambiar">Hacer editor</button>
                             </form>
                         {{/esJugador}}
+
                         {{^esJugador}}
                             <span class="badge">{{rol}}</span>
                         {{/esJugador}}
                     </td>
-                </tr> {{/usuarios}}
+                </tr>
+            {{/usuarios}}
             </tbody>
         </table>
     </section>
-
+    <h2>Reportes visuales</h2>
     <section class="charts">
-        <h2>Reportes visuales</h2>
-        <div class="chart">
-            <h3>Usuarios por país</h3>
-        </div>
-        <div class="chart">
+        <div class="chart-card">
             <h3>Usuarios por sexo</h3>
+            <img src="{{grafUsuariosSexo}}" class="jpgraph-img">
         </div>
-        <div class="chart">
+
+        <div class="chart-card">
             <h3>Usuarios por grupo de edad</h3>
+            <img src="{{grafUsuariosEdad}}" class="jpgraph-img">
         </div>
+
+        <div class="chart-card">
+            <h3>Usuarios por país</h3>
+            <img src="{{grafUsuariosPais}}" class="jpgraph-img">
+        </div>
+
+        <div class="chart-card">
+            <h3>Usuarios por rol</h3>
+            <img src="{{grafUsuariosRol}}" class="jpgraph-img">
+        </div>
+
     </section>
-<!--    Completar esta parte-->
 
 </main>
+<form method="POST" action="/inicioAdmin/generarPDF">
+    <button type="submit" class="logout-btn">Descargar PDF</button>
+</form>
 </body>
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<script src="/public/js/cantidadJugadores.js"></script>
-
+</html>

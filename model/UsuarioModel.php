@@ -30,12 +30,34 @@ require_once __DIR__ . '/../helper/MailService.php';
          $mailService = new MailService();
          $mailService->enviarBienvenida($usuario, $mail);
 
+         $idUsuario= $this->obtenerIdUsuarioPorNombre($usuario);
+         $this->creacionDeNivelDeUsuario($idUsuario);
+
          return $success;
+     }
+
+     public function creacionDeNivelDeUsuario($idUsuario){
+
+         $categorias=$this->obtenerCategorias();
+         for ($i=0; $i < count($categorias); $i++) {
+             $idCategoria = $categorias[$i]['id_categoria'];
+             $query = "INSERT INTO nivelJugadorPorCategoria (id_usuario, id_categoria)
+                       VALUES ('$idUsuario', '$idCategoria')";
+             $this->conexion->query($query);
+         }
+
+         $query="INSERT INTO nivelJugadorGeneral (id_usuario)
+                     VALUES ('$idUsuario')";
+         $this->conexion->query($query);
+     }
+     public function obtenerCategorias(){
+         $query = "select id_categoria from categoria";
+         return $this->conexion->query($query);
      }
 
      public function getUserWith($user, $password)
      {
-         $sql = "SELECT id, usuario, password, rol FROM usuarios WHERE usuario = '$user'";
+        $sql = "SELECT id, usuario, password, rol, sexo, foto_perfil FROM usuarios WHERE usuario = '$user'";
 
          $result = $this->conexion->query($sql);
 
@@ -50,7 +72,9 @@ require_once __DIR__ . '/../helper/MailService.php';
              return [
                  'id' => $userRow['id'],
                  'usuario' => $userRow['usuario'],
-                 'rol' => $userRow['rol']
+                 'rol' => $userRow['rol'],
+                 'sexo' => $userRow['sexo'],
+                 'foto_perfil' => $userRow['foto_perfil']
              ];
          }
 
@@ -73,6 +97,15 @@ require_once __DIR__ . '/../helper/MailService.php';
         return null;
     }
 
+    public function getNivelUsuarioPorCategoria($idUsuario,$idCategoria){
+        $sql = "SELECT nivel FROM niveljugadorporcategoria
+                WHERE id_usuario = '$idUsuario'
+                and id_categoria = '$idCategoria'";
+        $resultado = $this->conexion->query($sql);
+
+        return $resultado[0]["nivel"];
+    }
+
     public function getAllUsuarios()
     {
         $sql = "SELECT * FROM usuarios WHERE rol <> 'Administrador'";
@@ -89,7 +122,7 @@ require_once __DIR__ . '/../helper/MailService.php';
         $sql = "SELECT id FROM usuarios WHERE usuario = '$nombreUsuario'";
         //Agrege el @ para que el warning no aparecza. 
         //Pero deberiamos preguntar por el foro porque a veces nos sale y a veces no!
-        $resultado = @$this->conexion->query($sql);
+        $resultado = $this->conexion->query($sql);
 
         if ($resultado && count($resultado) > 0) {
             return $resultado[0]['id'];
@@ -144,5 +177,106 @@ require_once __DIR__ . '/../helper/MailService.php';
     }
 
     return null;
-    } 
+    }
+
+     public function mensajeDeRevisionDeErrores(){
+         var_dump("llegue");
+         die();
+     }
+
+     //aca voy a hacer las consultas sobre lo de ranking pero no se si seria mejor ponerlo en otro modelo
+    public function obtenerListaMejoresJugadores()
+    //generico sin filtros de nada (a mejorar)
+    {
+        //de usuario sacamos id, nombre completo, pais, foto(?), rol
+        //de partida sacamos id_usuario, puntaje, estado(?)
+
+        $sql = "SELECT u.id, u.nombre_completo, u.pais, max(part.puntaje) AS mejor_puntaje
+                FROM partidas part
+                JOIN usuarios u ON part.id_usuario = u.id
+                WHERE part.estado = 'finalizada' 
+                GROUP BY u.id
+                ORDER BY mejor_puntaje DESC" ;  
+
+        $resultado = $this->conexion->query($sql);
+        if ($resultado && count($resultado) > 0) {
+            return $resultado;
+        }
+        return [];
+     }
+
+
+    public function obtenerListaMejoresJugadoresPorRango($rango, $limite){
+
+        switch ($rango) {
+            case 'pro':
+                $nivel = "nivelJ.nivel >= 0.7";
+                break;
+            case 'medio':
+                $nivel = "nivelJ.nivel >= 0.4 AND nivelJ.nivel < 0.7";
+                break;
+            case 'novato':
+                $nivel = "nivelJ.nivel < 0.3";
+                break;
+            default:
+                return [];
+        }
+
+
+        $sql = "SELECT u.id, u.nombre_completo, u.pais, max(part.puntaje) AS mejor_puntaje
+                FROM partidas part
+                JOIN usuarios u ON part.id_usuario = u.id
+                JOIN nivelJugadorGeneral nivelJ ON nivelJ.id_usuario = u.id
+                WHERE part.estado = 'finalizada' 
+                AND $nivel
+                GROUP BY u.id
+                ORDER BY mejor_puntaje DESC
+                LIMIT $limite"; 
+
+        $resultado = $this->conexion->query($sql);
+        if ($resultado && count($resultado) > 0) {
+            return $resultado;
+        }
+        return [];
+     }
+
+    public function obtenerListaMejoresJugadoresPorCategoria($categoria, $limite){
+        $categoriaSeleccionada = '';
+        switch($categoria){
+            case 'Deportes':
+                $categoriaSeleccionada = 1;
+                break;
+            case 'Entretenimiento':
+                $categoriaSeleccionada = 2;
+                break;
+            case 'Informática':
+                $categoriaSeleccionada = 3;
+                break;
+            case 'Matematicas':
+                $categoriaSeleccionada = 4;
+                break;
+            case 'Historia':
+                $categoriaSeleccionada = 5;
+                break;
+            default:
+                return [];
+
+        }
+
+
+        $sql = "SELECT u.id, u.nombre_completo, u.pais, nivelCate.nivel AS mejor_puntaje
+                FROM usuarios u
+                JOIN niveljugadorporcategoria nivelCate ON nivelCate.id_usuario = u.id
+                WHERE nivelCate.id_categoria = $categoriaSeleccionada
+                ORDER BY mejor_puntaje DESC
+                LIMIT $limite"; 
+
+        $resultado = $this->conexion->query($sql);
+        if ($resultado && count($resultado) > 0) {
+            return $resultado;
+        }
+        return [];
+     }
+
+
  }

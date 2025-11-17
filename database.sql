@@ -32,8 +32,8 @@ CREATE TABLE pregunta (
     descripcion VARCHAR(255) NOT NULL,
     cant_de_veces_respondidas INT DEFAULT 0,
     cant_de_veces_respondidas_correctamente INT DEFAULT 0,
-    id_categoria INT NOT NULL -- pasarlo a una tabla categorias
-);
+    id_categoria INT NOT NULL, -- pasarlo a una tabla categorias
+    dificultad DECIMAL(2,1) NOT NULL DEFAULT 0.5);
 
 CREATE TABLE respuesta (
     id_respuesta INT AUTO_INCREMENT PRIMARY KEY,
@@ -87,8 +87,8 @@ CREATE TABLE turno (
                        id_partida INT NOT NULL,
                        id_usuario INT NOT NULL,
                        id_categoria INT NOT NULL,
+                       activo INT DEFAULT 0,
                        aciertos INT DEFAULT 0,
-                       activo BOOLEAN DEFAULT TRUE,
                        FOREIGN KEY (id_partida) REFERENCES partidas(id),
                        FOREIGN KEY (id_usuario) REFERENCES usuarios(id)
 );
@@ -97,7 +97,7 @@ CREATE TABLE turno_pregunta (
                                 id_turno INT NOT NULL,
                                 id_pregunta INT NOT NULL,
                                 respondida BOOLEAN DEFAULT FALSE,
-                                acierto BOOLEAN DEFAULT NULL,
+                                acierto BOOLEAN DEFAULT FALSE,
                                 PRIMARY KEY (id_turno, id_pregunta),
                                 FOREIGN KEY (id_turno) REFERENCES turno(id),
                                 FOREIGN KEY (id_pregunta) REFERENCES pregunta(id_pregunta)
@@ -328,3 +328,43 @@ FOREIGN KEY (id_pregunta) REFERENCES pregunta(id_pregunta) ON DELETE CASCADE
 
 ALTER TABLE pregunta
 ADD FOREIGN KEY (id_categoria) REFERENCES categoria(id_categoria) ON DELETE CASCADE;
+
+CREATE TABLE nivelJugadorPorCategoria (
+                                 id INT AUTO_INCREMENT PRIMARY KEY,
+                                 id_usuario INT NOT NULL,
+                                 id_categoria INT NOT NULL,
+                                 nivel DECIMAL(2,1) NOT NULL DEFAULT 0.5,
+                                 UNIQUE KEY unique_vista (id_usuario, id_categoria),
+                                 FOREIGN KEY (id_usuario) REFERENCES usuarios(id) ON DELETE CASCADE,
+                                 FOREIGN KEY (id_categoria) REFERENCES categoria(id_categoria) ON DELETE CASCADE);
+
+CREATE TABLE nivelJugadorGeneral (
+                                  id INT AUTO_INCREMENT PRIMARY KEY,
+                                  id_usuario INT NOT NULL,
+                                  nivel DECIMAL(2,1) NOT NULL DEFAULT 0.5,
+                                  UNIQUE KEY unique_vista (id_usuario),
+                                  FOREIGN KEY (id_usuario) REFERENCES usuarios(id) ON DELETE CASCADE);
+
+INSERT INTO nivelJugadorGeneral (id_usuario)
+VALUES
+    (1),
+    (2),
+    (3);
+
+INSERT INTO nivelJugadorPorCategoria (id_usuario, id_categoria)
+VALUES
+(1, 1),
+(1, 2),
+(1, 3),
+(1, 4),
+(1, 5),
+(2, 1),
+(2, 2),
+(2, 3),
+(2, 4),
+(2, 5),
+(3, 1),
+(3, 2),
+(3, 3),
+(3, 4),
+(3, 5);

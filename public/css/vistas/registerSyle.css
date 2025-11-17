@@ -1,0 +1,144 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html, body {
+  height: 100%;
+  width: 100%;
+  font-family: var(--font-main, 'Poppins', sans-serif);
+  color: var(--color-text-main, #e0e0e0);
+  background-color: var(--color-bg-dark, #141414);
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+header {
+  width: 100%;
+  padding: 20px 40px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: rgba(0, 0, 0, 0.25);
+  backdrop-filter: blur(6px);
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+}
+
+header a.link {
+  text-decoration: none;
+  color: inherit; 
+}
+
+header a.link:hover {
+  text-decoration: none;
+}
+
+header h2 {
+  font-size: 2.5rem;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: #ffc107; 
+  text-shadow: 0 3px 6px rgba(0, 0, 0, 0.6);
+  margin: 0;
+  transition: transform 0.3s ease, color 0.3s ease;
+  cursor: pointer;
+}
+
+header h2:hover {
+  transform: scale(1.05);
+  color: #ffca2c; 
+}
+
+header nav a {
+  color: #ccc;
+  margin-left: 20px;
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.3s ease;
+}
+
+header nav a:hover {
+  color: #fff;
+}
+
+main {
+  flex: 1;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 30px;
+  padding: 100px 20px 60px; 
+  z-index: 1; 
+  position: relative;
+}
+
+.form-container, .mapaS {
+  background: rgba(31, 31, 31, 0.85);
+  border-radius: 16px;
+  padding: 30px;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.6);
+  color: #f0f0f0;
+}
+
+.form-container {
+  width: 350px;
+}
+
+.mapaS {
+  width: 400px;
+}
+
+#mapa {
+  height: 300px;
+  width: 100%;
+  border-radius: 10px;
+  margin-top: 10px;
+}
+
+input[type="text"],
+input[type="email"],
+input[type="password"],
+input[type="date"] {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 15px;
+  border: none;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.08);
+  color: #fff;
+  font-size: 0.95rem;
+}
+
+input[type="submit"] {
+  width: 100%;
+  padding: 12px;
+  background: var(--color-primary);
+  border: none;
+  border-radius: var(--radius-base);
+  color: #000;
+  font-weight: 600;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+input[type="submit"]:hover {
+  background: #e0ad06;
+  color: var(--color-text-main);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 10px rgba(255, 193, 7, 0.4);
+}
+
+body > footer {
+  text-align: center;
+  padding: 15px;
+  color: #888;
+  font-size: 0.85rem;
+  background: rgba(0, 0, 0, 0.25);
+}

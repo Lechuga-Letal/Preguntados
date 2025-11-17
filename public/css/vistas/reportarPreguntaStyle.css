@@ -1,0 +1,149 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html, body {
+  height: 100%;
+  width: 100%;
+  background: #121212;
+  color: #e0e0e0;
+  font-family: 'Poppins', sans-serif;
+}
+
+main.container {
+  padding: 60px 20px;
+  max-width: 900px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+main h1 {
+  font-size: 2.4rem;
+  color: #ffc107;
+  margin-bottom: 20px;
+  text-shadow: 0 3px 6px rgba(0, 0, 0, 0.6);
+}
+
+.pregunta-card {
+  background: rgba(31, 31, 31, 0.95);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 14px;
+  padding: 24px 26px;
+  margin-bottom: 20px;
+  text-align: left;
+  transition: all 0.3s ease;
+}
+
+.pregunta-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 18px rgba(255, 193, 7, 0.2);
+  background: rgba(36, 36, 36, 0.95);
+}
+
+.pregunta-titulo {
+  font-size: 1.4rem;
+  color: #ffc107;
+  margin-bottom: 12px;
+}
+
+.pregunta-info p {
+  font-size: 1rem;
+  color: #ddd;
+  margin-bottom: 6px;
+}
+
+.respuestas h3 {
+  color: #ffc107;
+  font-size: 1.1rem;
+  margin-bottom: 10px;
+}
+
+.respuesta-item {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 8px;
+  padding: 10px 14px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.estado {
+  font-weight: 600;
+}
+
+.meta-info.warning {
+  color: #ffb300;
+  font-size: 0.95rem;
+}
+
+.alerta {
+  background: rgba(40, 40, 40, 0.8);
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 15px 20px;
+  margin: 15px 0;
+  font-size: 1rem;
+  text-align: center;
+}
+
+.alerta.success {
+  color: #4caf50;
+}
+
+.alerta.danger {
+  color: #ff5252;
+}
+
+.motivo-textarea {
+  width: 100%;
+  background: rgba(31, 31, 31, 0.9);
+  color: #e0e0e0;
+  border: 1px solid rgba(255, 193, 7, 0.4);
+  border-radius: 8px;
+  padding: 10px;
+  font-size: 0.95rem;
+  resize: vertical;
+}
+
+.acciones {
+  display: flex;
+  gap: 12px;
+  justify-content: flex-end;
+  margin-top: 20px;
+}
+
+.btn {
+  padding: 10px 22px;
+  border-radius: 8px;
+  font-weight: 600;
+  text-transform: uppercase;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.btn-danger {
+  background: rgba(244, 67, 54, 0.2);
+  border: 2px solid rgba(244, 67, 54, 0.4);
+  color: #ff5252;
+}
+
+.btn-danger:hover {
+  background: rgba(244, 67, 54, 0.3);
+  transform: translateY(-2px);
+}
+
+.btn-volver {
+  border: 2px solid rgba(255, 193, 7, 0.4);
+  color: #ffc107;
+  background: transparent;
+}
+
+.btn-volver:hover {
+  background: rgba(255, 193, 7, 0.15);
+  box-shadow: 0 4px 10px rgba(255, 193, 7, 0.4);
+}

@@ -82,7 +82,7 @@ class ConfigFactory
 
         $this->objetos["InicioAdminController"] = new InicioAdminController(new InicioAdminModel($this->conexion), $this->renderer);
 
-        $this->objetos["PartidaController"]= new PartidaController(new PartidaModel($this->conexion, $this->usuarioModel), $this->renderer, $this->redirectModel, $this->usuarioModel);
+        $this->objetos["PartidaController"]= new PartidaController(new PartidaModel($this->conexion, $this->usuarioModel), $this->renderer, $this->redirectModel, $this->usuarioModel, $this->preguntasModel);
 
         $this->objetos["MapaController"] = new MapaController();
 
