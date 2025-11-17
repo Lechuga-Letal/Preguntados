@@ -47,7 +47,7 @@ class inicioAdminController{
 
         $baseDir= __DIR__ . "/../public/graficos";
 
-        $rutaUsuariosPeriodo="/../public/graficos/usuarios_por_periodo.png";
+        $rutaUsuariosPeriodo = $baseDir . "/usuarios_por_periodo.png";
         $rutaSexo= $baseDir . "/usuarios_por_sexo.png";
         $rutaEdad= $baseDir . "/usuarios_por_edad.png";
         $rutaPais= $baseDir . "/usuarios_por_pais.png";
@@ -213,3 +213,4 @@ class inicioAdminController{
         $dompdf->stream("panel_administracion.pdf", ["Attachment" => 0]);
     }
 }
+?>

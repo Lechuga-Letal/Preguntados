@@ -3,16 +3,21 @@
 <head>
     <meta charset="UTF-8">
     <title>Panel de Administrador</title>
-    <link rel="stylesheet" href="/public/css/adminStyle.css">
+    <link rel="stylesheet" href="/public/css/vistas/adminStyle.css">
+    <link rel="stylesheet" href="/public/css/componentes/headerComponente.css">
 </head>
 
 <body>
-<header class="header">
-    <img src="/public/imagenes/Logo.png" alt="logo" class="logo">
-    <form method="POST" action="/Preguntados/inicio/logout">
+  <header class="header"> 
+    <h2 class="titulo">Preguntados</h2>
+    <div class="user-info">
+        <form method="POST" action="/Preguntados/inicio/logout">
         <input class="logout-btn" type="submit" value="Cerrar sesión">
-    </form>
-</header>
+        </form>
+        <p class="username">{{usuario}}</p>
+        <img src="/{{foto_perfil}}" alt="{{usuario}}">
+    </div>
+  </header>
 
 <main class="container">
 
@@ -96,6 +101,11 @@
         </table>
     </section>
     <h2>Reportes visuales</h2>
+
+    <form method="POST" action="/inicioAdmin/generarPDF">
+        <button type="submit" class="logout-btn">Descargar PDF</button>
+    </form>
+
     <section class="charts">
         <div class="chart-card">
             <h3>Usuarios por sexo</h3>
@@ -119,9 +129,10 @@
 
     </section>
 
+    <form method="POST" action="/inicioAdmin/generarPDF">
+        <button type="submit" class="logout-btn">Descargar PDF</button>
+    </form>
+
 </main>
-<form method="POST" action="/inicioAdmin/generarPDF">
-    <button type="submit" class="logout-btn">Descargar PDF</button>
-</form>
 </body>
 </html>

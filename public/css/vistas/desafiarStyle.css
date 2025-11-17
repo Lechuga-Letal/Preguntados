@@ -26,13 +26,12 @@ main h1 {
   margin: 0 auto;
 }
 
-/* --- Cards container --- */
 .oponentes-lista {
   display: flex;
   flex-direction: column;
   gap: 14px;
 }
-/* Layout inside each card */
+
 .card {
   display: flex;
   flex-direction: row;
@@ -102,7 +101,6 @@ main h1 {
   transform: translateY(-2px);
 }
 
-/* --- Desafiar button --- */
 .btn-cambiar {
   background: transparent;
   color: var(--color-primary);
@@ -121,7 +119,6 @@ main h1 {
   box-shadow: 0 4px 10px rgba(255, 193, 7, 0.3);
 }
 
-/* --- Back button --- */
 .text-center {
   text-align: center;
   margin-top: 40px;
@@ -145,7 +142,6 @@ main h1 {
   box-shadow: 0 4px 10px rgba(255, 193, 7, 0.4);
 }
 
-/* --- Responsive --- */
 @media (max-width: 600px) {
   .card {
     flex-direction: column;
