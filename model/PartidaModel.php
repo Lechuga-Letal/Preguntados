@@ -408,8 +408,6 @@ class PartidaModel {
 
         //En caso de que no encuentre una, borra all y vuelve a cargar el resultado
         if (empty($resultado)) {
-            var_dump("no encontre preguntas");
-            echo "<br>";
 //            $this->conexion->query("
 //            DELETE FROM preguntasVistas
 //            WHERE id_usuario = $idUsuario

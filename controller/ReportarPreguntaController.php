@@ -60,6 +60,22 @@ class ReportarPreguntaController
         $this->renderer->render('reportarPregunta', $data);
     }
 
+    public function listarPreguntasPartida(){
+        if (!isset($_SESSION['usuario'])) {
+            $this->redirectModel->redirect('login/loginForm');
+            return;
+        }
+
+        $idJugador=$this->usuarioModel->obtenerIdUsuarioPorNombre($_SESSION['usuario']);
+        $preguntasDelJugador=$this->preguntasModel->obtenerPreguntasDeLaUltimaPartidaDelJugador($idJugador);
+
+        $data=[
+            "preguntas"=>$preguntasDelJugador,
+        ];
+
+        $this->renderer->render('reportarPreguntaLista', $data);
+    }
+
     public function crearReporteDePregunta()
     {
         if (!isset($_SESSION['usuario'])) {

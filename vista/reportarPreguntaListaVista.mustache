@@ -1,0 +1,46 @@
+<title>Reportar</title>
+<link rel="stylesheet" href="../public/css/vistas/reportarPreguntaStyle.css">
+<link rel="stylesheet" href="../public/css/componentes/headerComponente.css">
+<body>
+<header class="header">
+    <h2 class="titulo">Preguntados</h2>
+    <div class="user-info">
+        <form method="POST" action="/Preguntados/inicio/logout">
+            <input class="logout-btn" type="submit" value="Cerrar sesión">
+        </form>
+        <p class="username">{{usuario}}</p>
+        <img src="/{{foto_perfil}}" alt="{{usuario}}">
+    </div>
+</header>
+
+<main class="container">
+    <h1>Reportar Pregunta</h1>
+
+    <section class="pregunta-card">
+        <h2 class="pregunta-titulo">Preguntas de la partida</h2>
+
+        <!--      COMPLETAR-->
+        <form action="#" method="get">
+            <div class="mb-3">
+                <div class="border border-secondary rounded p-3">
+                    <div class="row g-3 d-flex justify-content-center">
+                        <div class="col-md-10">
+                            {{#preguntas}}
+                                <div class="bg-secondary border border-secondary rounded p-3 d-flex justify-content-between mb-2">
+                                    <label class="text-light">{{pregunta}}</label>
+                                    <input type="radio" name="idPregunta" value="{{id}}" required>
+                                </div>
+                            {{/preguntas}}
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="acciones">
+                <button type="submit" class="btn btn-volver">Seleccionar</button>
+                <a href="/inicio" class="btn btn-volver">Volver</a>
+            </div>
+        </form>
+    </section>
+</main>
