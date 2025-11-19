@@ -223,7 +223,7 @@ require_once __DIR__ . '/../helper/MailService.php';
         }
 
 
-        $sql = "SELECT u.id, u.nombre_completo, u.pais, max(part.puntaje) AS mejor_puntaje
+        $sql = "SELECT u.id, u.foto_perfil, u.nombre_completo, u.pais, max(part.puntaje) AS mejor_puntaje
                 FROM partidas part
                 JOIN usuarios u ON part.id_usuario = u.id
                 JOIN nivelJugadorGeneral nivelJ ON nivelJ.id_usuario = u.id
@@ -264,7 +264,7 @@ require_once __DIR__ . '/../helper/MailService.php';
         }
 
 
-        $sql = "SELECT u.id, u.nombre_completo, u.pais, nivelCate.nivel AS mejor_puntaje
+        $sql = "SELECT u.id, u.foto_perfil, u.nombre_completo, u.pais, nivelCate.nivel AS mejor_puntaje
                 FROM usuarios u
                 JOIN niveljugadorporcategoria nivelCate ON nivelCate.id_usuario = u.id
                 WHERE nivelCate.id_categoria = $categoriaSeleccionada

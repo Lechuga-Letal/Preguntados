@@ -50,7 +50,6 @@ class LoginController
         } else {
             $this->renderer->render('login', ['error' => 'Usuario o contraseña incorrectos']);
         }
-
     }
 
     private function vistaSegunRol()
