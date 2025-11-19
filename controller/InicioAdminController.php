@@ -8,10 +8,12 @@ use Dompdf\Options;
 class inicioAdminController{
     private $model;
     private $renderer;
+    private $categoriaModel;
 
-    public function __construct($model, $renderer){
+    public function __construct($model, $renderer, $categoriaModel){
         $this->model = $model;
         $this->renderer = $renderer;
+        $this->categoriaModel = $categoriaModel; 
     }
 
     public function base(){
@@ -99,7 +101,7 @@ class inicioAdminController{
             $rutaRol
         );
 
-        $categorias = $this->model->getCategoriasYPorcentaje();
+        $categorias = $this->categoriaModel->getCategoriasYPorcentaje();
 
         $data = [
             "usuario" => $_SESSION["usuario"],

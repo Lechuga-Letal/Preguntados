@@ -135,9 +135,11 @@
             </tbody>
         </table>
 
-        <form method="POST" action="/inicioAdmin/crearCategoria">
+        <form method="POST" method="multipart/form-data" action="/inicioAdmin/crearCategoria">
             <label for="categoriaNombre">Nombre de categoria: </label>
             <input type="text" name="categoriaNombre" id="categoriaNombre" placeholder="Nombre de categoria">
+            <label for="categoriaImagen">Imagen de categoria:</label>
+            <input type="file" name="foto_categoria" accept="image/*">
             <button type="submit" class="logout-btn">Crear categoria</button>
         </form>
         
