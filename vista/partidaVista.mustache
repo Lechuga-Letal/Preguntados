@@ -27,6 +27,10 @@
                 console.log("Tiempo máximo:", data);
 
                 tiempo=data.tiempoMaximoPorTurno;
+                {{#tiempo}}
+                    tiempo={{tiempo}};
+                {{/tiempo}}
+
                 cronometroElemento.innerText = tiempo;
 
                 // no me convence porque no usamos los tiempos desde el backend, es todo desde el front y lo pueden tocar desde inspeccionar
@@ -36,7 +40,7 @@
                     if(tiempo <= 0){
                         clearInterval(intervalo);//corta el cronometro
                         console.log("llego al maximo");
-                        window.location.replace('/partida/evaluarTurno?turno={{id_turno}}&idPregunta={{idPregunta}}');
+                        window.location.replace('/partida/evaluarTurno?turno={{id_turno}}&idPregunta={{idPregunta}}&tiempo=true');
                         // window.location.replace('/partida/evaluarTurno?tiempoFinalizado=true');
                         // window.location.replace('/partida/terminarPartida');
                     }
