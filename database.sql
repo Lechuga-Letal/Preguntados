@@ -89,6 +89,7 @@ CREATE TABLE turno (
                        id_categoria INT NOT NULL,
                        activo INT DEFAULT 0,
                        aciertos INT DEFAULT 0,
+--                        aciertos INT DEFAULT null,
                        FOREIGN KEY (id_partida) REFERENCES partidas(id),
                        FOREIGN KEY (id_usuario) REFERENCES usuarios(id)
 );
@@ -98,6 +99,7 @@ CREATE TABLE turno_pregunta (
                                 id_pregunta INT NOT NULL,
                                 respondida BOOLEAN DEFAULT FALSE,
                                 acierto BOOLEAN DEFAULT FALSE,
+--                                 acierto BOOLEAN DEFAULT null,
                                 PRIMARY KEY (id_turno, id_pregunta),
                                 FOREIGN KEY (id_turno) REFERENCES turno(id),
                                 FOREIGN KEY (id_pregunta) REFERENCES pregunta(id_pregunta)

@@ -247,7 +247,35 @@ class PartidaModel {
             WHERE id_turno = $idTurno AND id_pregunta = $idPregunta";
         $this->conexion->query($sql);
 
-        $sqlUpdateAciertos = "UPDATE turno SET activo =  1  WHERE id = $idTurno";
+        $sqlUpdateAciertos = "
+            UPDATE turno 
+            SET activo =  1 
+            WHERE id = $idTurno";
+        $this->conexion->query($sqlUpdateAciertos);
+    }
+//En caso de ponerle NULL por defecto
+//    public function acreditarIntentoFallido($idTurno, $idPregunta) {
+//        $sql = "UPDATE turno_pregunta
+//            SET respondida = true,
+//            acierto= false
+//            WHERE id_turno = $idTurno AND id_pregunta = $idPregunta";
+//        $this->conexion->query($sql);
+//
+//        $sqlUpdateAciertos = "
+//            UPDATE turno
+//            SET activo =  1 ,
+//            aciertos = 0
+//            WHERE id = $idTurno";
+//        $this->conexion->query($sqlUpdateAciertos);
+//    }
+
+    public function acreditarFueraPasadoDeTiempo($idTurno, $idPregunta) {
+        $sql = "UPDATE turno_pregunta
+            SET acierto = false
+            WHERE id_turno = $idTurno AND id_pregunta = $idPregunta";
+        $this->conexion->query($sql);
+
+        $sqlUpdateAciertos = "UPDATE turno SET aciertos =  0  WHERE id = $idTurno";
         $this->conexion->query($sqlUpdateAciertos);
     }
 
@@ -269,7 +297,6 @@ class PartidaModel {
             FROM turno_pregunta tp
             JOIN pregunta p ON tp.id_pregunta = p.id_pregunta
             WHERE tp.id_turno = $idTurno
-              AND tp.respondida = FALSE
             ORDER BY tp.id_pregunta
             LIMIT 1";
 
