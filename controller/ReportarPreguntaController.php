@@ -32,7 +32,7 @@ class ReportarPreguntaController
             return;
         }
 
-        $id_pregunta = $_GET['id'] ?? null;
+        $id_pregunta = $_GET['idPregunta'] ?? null;
         if (!$id_pregunta || !is_numeric($id_pregunta)) {
             $this->renderer->render('error', ['mensaje' => 'ID de pregunta inválido.']);
             return;
@@ -89,19 +89,20 @@ class ReportarPreguntaController
         $id_pregunta = $_POST['id_pregunta'] ?? null;
         $motivo = trim($_POST['motivo'] ?? '');
 
-        if (!$id_pregunta || !is_numeric($id_pregunta) || empty($motivo) || !$id_usuario) {
-            header("Location: /reportarPregunta?id=$id_pregunta&error=1");
-            exit;
-        }
+//        if (!$id_pregunta || !is_numeric($id_pregunta) || empty($motivo) || !$id_usuario) {
+//            header("Location: /reportarPregunta?id=$id_pregunta&error=1");
+//            exit;
+//        }
 
         $id_reporte = $this->reportesModel->crearReporte($id_pregunta, $id_usuario, $motivo);
+        $this->redirectModel->redirect('/localhost/inicio');
 
         // Esto no funciona correctamente. Asi que siempre te dice que funciono...
-        if ($id_reporte) {
-            header("Location: /reportarPregunta?id=$id_pregunta&success=1");
-        } else {
-            header("Location: /reportarPregunta?id=$id_pregunta&success=1");
-        }
-        exit;
+//        if ($id_reporte) {
+//            header("Location: /reportarPregunta?id=$id_pregunta&success=1");
+//        } else {
+//            header("Location: /reportarPregunta?id=$id_pregunta&success=1");
+//        }
+//        exit;
     }
 }
