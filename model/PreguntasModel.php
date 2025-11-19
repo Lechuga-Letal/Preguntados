@@ -226,4 +226,27 @@ class PreguntasModel
         $this->conexion->query("DELETE FROM respuesta_sugerida WHERE id_sugerencia = $id_sugerencia");
         $this->conexion->query("DELETE FROM sugerencia WHERE id_sugerencia = $id_sugerencia");
     }
+
+    public function obtenerPreguntasDeLaUltimaPartidaDelJugador($idUsuario){
+        $idPartida=$this->obtenerIdDeUltimaPartida($idUsuario);
+
+        $sql="
+            SELECT p.id_pregunta as 'id' ,p.descripcion as 'pregunta' FROM turno t 
+            join turno_pregunta tp on t.id=tp.id_turno
+            join pregunta p on p.id_pregunta=tp.id_pregunta
+            where t.id_partida=$idPartida";
+        $result = $this->conexion->query($sql);
+
+        return $result;
+    }
+
+    public function obtenerIdDeUltimaPartida($idUsuario){
+        $sql="select id from partidas
+                where id_usuario = $idUsuario
+                order by id desc 
+                limit 1";
+        $result=$this->conexion->query($sql);
+
+        return $result[0]['id'];
+    }
 }

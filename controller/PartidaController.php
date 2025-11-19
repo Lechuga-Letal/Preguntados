@@ -6,6 +6,7 @@ class PartidaController{
     private $redirectModel;
     private $usuarioModel;
     private $preguntasModel;
+    private $obtenerIdUsuarioPorNombre;
 
     public function __construct($model, $renderer, $redirectModel, $usuarioModel, $preguntasModel){
 
@@ -25,7 +26,6 @@ class PartidaController{
             header("Location: /login/loginForm");
             exit();
         }
-
         $this->renderer->render("oponente");
     }
 
@@ -34,6 +34,13 @@ class PartidaController{
         header("Location: /login/loginForm");
         exit();
     }
+
+        if($_SESSION["id"]){
+            $puntaje=$this->model->obtenerTotalAciertosPorPartida($_SESSION["id"]);
+            $this->model->finalizarPartida($_SESSION["id"],$puntaje);
+            $this->borradoDeDatosPartidaEnSession();
+        }
+
         $this->renderer->render("ruleta");
     }
 
