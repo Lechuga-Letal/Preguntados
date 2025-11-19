@@ -99,6 +99,8 @@ class inicioAdminController{
             $rutaRol
         );
 
+        $categorias = $this->model->getCategoriasYPorcentaje();
+
         $data = [
             "usuario" => $_SESSION["usuario"],
 
@@ -107,6 +109,7 @@ class inicioAdminController{
             "preguntasTotales"    => $preguntasTotales,
             "preguntasReportadas" => $preguntasReportadas,
             "usuarios" => $usuarios,
+            "categorias" => $categorias,
 
             "grafUsuariosSexo" => "/public/graficos/usuarios_por_sexo.png",
             "grafUsuariosEdad" => "/public/graficos/usuarios_por_edad.png",
