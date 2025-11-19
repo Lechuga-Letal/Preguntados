@@ -6,15 +6,21 @@
 
 <body>
 
-  <header class="header">
-      <h2 class="titulo">Preguntados</h2>
-      <div class="user-info">
-          <form method="POST" action="/Preguntados/inicio/logout">
-          <input class="logout-btn" type="submit" value="Cerrar sesión">
-          </form>
-          <p class="username">{{usuario.nombre_completo}}</p>
-          <img src="/{{usuario.foto_perfil}}" alt="{{usuario.nombre_completo}}">
-      </div>
+  <header class="header"> 
+    <h2 class="titulo">Preguntados</h2>
+    <div class="user-info">
+        <form method="POST" action="/Preguntados/inicio/logout">
+        <input class="logout-btn" type="submit" value="Cerrar sesión">
+        </form>
+        <p class="username">{{usuario}}</p>
+        {{#foto_perfil}}
+            <img src="/{{foto_perfil}}" alt="{{usuario}}" class="img-fluid rounded-circle" width="50" height="50">
+        {{/foto_perfil}}
+
+        {{^foto_perfil}}
+            <img src="/public/imagenes/usuarioImagenDefault.png" alt="{{usuario}}" class="img-fluid rounded-circle" width="50" height="50">
+        {{/foto_perfil}} 
+    </div>
   </header>
 
 <main class="container my-5">
@@ -44,8 +50,13 @@
         <!-- Categoría Disabled, En el controlador no se verifixa-->
         <div class="mb-4">
         <label for="categoria" class="form-label fw-bold text-muted">Categoría</label>
-        <select name="id_categoria" id="categoria" class="form-select bg-dark text-light border-0 opacity-50" disabled>
-            <option value="" disabled selected>Deshabilitado</option>
+        <select name="id_categoria" id="categoria" class="form-select bg-dark text-light border-0 opacity-50">
+
+            <option value="1"selected>Informatica</option>
+            <option value="2"  >Deporte</option>
+            <option value="3"  >Entretenimiento</option>
+            <option value="4"  >Matematica</option>
+            <option value="5" >Historia</option>
         </select>
         <div class="form-text text-muted fst-italic">
             (Bloqueado temporalmente para edición)
