@@ -6,12 +6,14 @@ class PreguntasListaController
     private $renderer;
     private $redirectModel; 
     private $preguntasModel; 
-    public function __construct($model, $renderer, $redirectModel, $preguntasModel)
+    private $categoriasModel; 
+    public function __construct($model, $renderer, $redirectModel, $preguntasModel, $categoriasModel)
     {
         $this->model = $model;     
         $this->renderer = $renderer; 
         $this->redirectModel = $redirectModel;
         $this->preguntasModel = $preguntasModel;    
+        $this->categoriasModel = $categoriasModel;
     }
 
     public function base()
@@ -22,6 +24,7 @@ class PreguntasListaController
     public function obtenerOperacion()
     {
         $tipo = $_GET["tipo"] ?? 'activas';
+        $categoria = $_GET["categoria"] ?? null;
 
         switch ($tipo) {
             case 'reportes':
@@ -34,15 +37,22 @@ class PreguntasListaController
                 $preguntas = $this->preguntasModel->obtenerPreguntasConRespuestas();
                 break;
         }
-        $this->listarPreguntas($preguntas);
+        $this->listarPreguntas($preguntas, $categoria);
     }
 
-    public function listarPreguntas($preguntas)
-        {
+    public function listarPreguntas($preguntas, $categoria)
+    {
+
+        if ($categoria) {
+            $preguntas = array_filter($preguntas, function($p) use ($categoria) {
+                return isset($p['categoria']) && $p['categoria'] === $categoria;
+            });
+        }
+
         $agrupadas = [];
         $tmp = [];
 
-            if(!empty($preguntas)) {
+        if(!empty($preguntas)) {
             foreach ($preguntas as $fila) {
                 $id = $fila['pregunta_id'];
 
@@ -53,8 +63,7 @@ class PreguntasListaController
                         'categoria' => $fila['categoria'] ?? null,
                         'respuestas' => [],
                         'cantidad_reportes' => $fila['cantidad_reportes'] ?? 0,
-                        'usuario_sugirio' => $fila['usuario_sugirio'] ?? null,
-                        'tipo' => $_GET['tipo'] ?? 'activas' //Hay que volver a pasar el parametro, no se bien porque
+                        'usuario_sugirio' => $fila['usuario_sugirio'] ?? null
                     ];
                 }
 
@@ -64,11 +73,21 @@ class PreguntasListaController
                         'es_correcta' => $fila['es_correcta']
                     ];
                 }
-                
             }
         }
+
         $agrupadas = array_values($tmp);
 
-        $this->renderer->render("preguntasLista", ['preguntas' => $agrupadas]);
+        $categorias = $this->categoriasModel->getAllCategorias();
+
+        foreach ($categorias as &$cat) {
+            $cat['seleccionada'] = ($cat['nombre'] === $categoria);
+        }
+
+        $this->renderer->render("preguntasLista", [
+            'preguntas'       => $agrupadas,
+            'categorias'      => $categorias
+        ]);
     }
+
 }

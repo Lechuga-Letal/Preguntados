@@ -26,6 +26,17 @@
     <a href="/inicioEditor/" class="btn-volver">Volver</a>
   </div>
   <br>
+
+  <form method="GET" class="filtros">
+    <select name="categoria">
+      <option value="">Todas las categorías</option>
+      {{#categorias}}
+        <option value="{{nombre}}">{{nombre}}</option>
+      {{/categorias}}
+    </select>
+    <button type="submit">Filtrar</button>
+  </form>
+  <br>
   <section class="pregunta-card">
     {{#preguntas}}
     <div class="pregunta-card">
