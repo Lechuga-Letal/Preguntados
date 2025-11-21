@@ -8,7 +8,8 @@ class GestionarPreguntaController
     private $preguntasModel;
     private $respuestasModel; 
     private $reportesModel; 
-    public function __construct($model, $renderer, $redirectModel, $preguntasModel, $respuestasModel, $reportesModel)
+    private $categoriasModel;
+    public function __construct($model, $renderer, $redirectModel, $preguntasModel, $respuestasModel, $reportesModel, $categoriasModel)
     {
         $this->model = $model;     
         $this->renderer = $renderer; 
@@ -16,6 +17,7 @@ class GestionarPreguntaController
         $this->preguntasModel = $preguntasModel;
         $this->respuestasModel = $respuestasModel;
         $this->reportesModel = $reportesModel;
+        $this->categoriasModel = $categoriasModel; 
     }
 
     public function base()
@@ -57,8 +59,10 @@ class GestionarPreguntaController
                 $this->reportesModel->rechazarReportes($id);
                 $this->redirectModel->redirect("gestionarPregunta?id=$id");
                 break;
-            case 'eliminar': //pregunta activa
-                $this->preguntasModel->eliminarPregunta($id);
+            case 'eliminar': 
+                $id_categoria = $this->preguntasModel->getCategoriaDe($id);
+                $this->preguntasModel->eliminarPregunta($id); 
+                $this->categoriasModel->actualizarCategoria($id_categoria); 
                 $this->redirectModel->redirect('preguntasLista?tipo=activas');
                 break;
             case 'editar':

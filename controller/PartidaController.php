@@ -43,7 +43,7 @@ class PartidaController{
             $this->borradoDeDatosPartidaEnSession();
         }
 
-        $categorias = $this->categoriasModel->getCategorias();
+        $categorias = $this->categoriasModel->getCategoriasActivas();
 
         $data =  [
             "categorias" => $categorias

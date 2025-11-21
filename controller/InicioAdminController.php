@@ -107,7 +107,14 @@ class inicioAdminController{
             $rutaRol
         );
 
-        $categorias = $this->categoriaModel->getCategoriasYPorcentaje();
+        $categoriasAct = $this->categoriaModel->getCategoriasActivasData();
+        $categoriasInact = $this->categoriaModel->getCategoriasInactivasData(); 
+
+        $MIN_PREGUNTAS = $this->categoriaModel->getMinPreguntas();
+
+        foreach ($categoriasInact as &$cat) {
+            $cat['faltantes'] = max(0, $MIN_PREGUNTAS - $cat['cantidad_preguntas']);
+        }
 
         $data = [
             "usuario" => $_SESSION["usuario"],
@@ -117,7 +124,8 @@ class inicioAdminController{
             "preguntasTotales"    => $preguntasTotales,
             "preguntasReportadas" => $preguntasReportadas,
             "usuarios" => $usuarios,
-            "categorias" => $categorias,
+            "categoriasAct" => $categoriasAct,
+            "categoriasInact" => $categoriasInact,
 
             "grafUsuariosSexo" => "/public/graficos/usuarios_por_sexo.png",
             "grafUsuariosEdad" => "/public/graficos/usuarios_por_edad.png",

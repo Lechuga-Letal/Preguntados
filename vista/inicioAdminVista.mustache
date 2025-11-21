@@ -110,19 +110,22 @@
     <section class="tabla">
         <h2>Gestion de categorias</h2>
 
+        <h3>Categorias Activas</h3>
         <table>
             <thead>
                 <tr>
                     <th>Nombre de categoria.</th>
+                    <th>Cantidad de preguntas</th>
                     <th>% De aciertos</th>
                     <!--<td>Eliminar</td>-->
                 </tr>
             </thead>
 
             <tbody>
-                {{#categorias}}
+                {{#categoriasAct}}
                     <tr>
                         <td>{{nombre}}</td>
+                        <td>{{cantidad_preguntas}}</td>
                         <td>{{promedio_nivel}}</td>
                         <!--<td>
                             <form method="POST" action="/inicioAdmin/eliminarCategoria">
@@ -131,8 +134,28 @@
                             </form>
                         </td> -->
                     </tr>
-                {{/categorias}}
+                {{/categoriasAct}}
             </tbody>
+        </table>
+
+        <h3>Categorias Inactivas</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>Nombre de categoria</th>
+                    <th>Cantidad de preguntas</th>
+                    <th>Cantidad de preguntas restantes para ser activa</th>
+                </tr>
+            </thead>
+            <tbody>
+                {{#categoriasInact}}
+                <tr>
+                    <td>{{nombre}}</td>
+                    <td>{{cantidad_preguntas}}</td>
+                    <td>{{faltantes}}</td>
+                </tr>
+                {{/categoriasInact}}
+            </tbody>   
         </table>
 
         <form method="POST" enctype="multipart/form-data" action="/inicioAdmin/crearCategoria">

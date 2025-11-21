@@ -8,8 +8,8 @@ class NuevaPreguntaController
     private $preguntasModel;
     private $respuestasModel;
     private $usuarioModel;
-
-    public function __construct($model, $renderer, $redirectModel, $preguntasModel, $respuestasModel,$usuarioModel)
+    private $categoriasModel; 
+    public function __construct($model, $renderer, $redirectModel, $preguntasModel, $respuestasModel,$usuarioModel, $categoriasModel)
     {
         $this->model = $model;     
         $this->renderer = $renderer; 
@@ -17,6 +17,7 @@ class NuevaPreguntaController
         $this->preguntasModel = $preguntasModel;
         $this->respuestasModel = $respuestasModel;
         $this->usuarioModel = $usuarioModel;
+        $this->categoriasModel = $categoriasModel;
     }
 
     public function base()
@@ -35,16 +36,18 @@ class NuevaPreguntaController
 
         $data = [];
         if($rol== 'Jugador') {
+            $categoriasActivas = $this->categoriasModel->getCategoriasActivas(); 
             $data = [
+                'categorias' => $categoriasActivas,
                 'Editor' => false
             ];
         } else {
+            $todasLasCategorias = $this->categoriasModel->getAllCategorias();
             $data = [
+                'categorias' => $todasLasCategorias,
                 'Editor' => true
             ];
         }
-
-
         $this->renderer->render("nuevaPregunta", $data);
     }
 
@@ -66,6 +69,8 @@ class NuevaPreguntaController
             $esCorrecta = ($i == $indiceCorrecta) ? 1 : 0;
             $this->respuestasModel->insertarRespuesta($texto, $esCorrecta, $id_pregunta);
         } 
+
+        $this->categoriasModel->actualizarCategoria($id_categoria); 
 
         $data = [
             'mensaje' => 'La pregunta fue agregada exitosamente',

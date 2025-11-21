@@ -51,16 +51,10 @@
         <div class="mb-4">
         <label for="categoria" class="form-label fw-bold text-muted">Categoría</label>
         <select name="id_categoria" id="categoria" class="form-select bg-dark text-light border-0 opacity-50">
-
-            <option value="1"selected>Informatica</option>
-            <option value="2"  >Deporte</option>
-            <option value="3"  >Entretenimiento</option>
-            <option value="4"  >Matematica</option>
-            <option value="5" >Historia</option>
+            {{#categorias}}
+              <option value="{{id_categoria}}">{{nombre}}</option>
+            {{/categorias}}            
         </select>
-        <div class="form-text text-muted fst-italic">
-            (Bloqueado temporalmente para edición)
-        </div>
         </div>
 
         <!-- Respuestas -->
