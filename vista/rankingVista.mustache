@@ -21,7 +21,8 @@
 
         {{^foto_perfil}}
             <img src="/public/imagenes/usuarioImagenDefault.png" alt="{{usuario}}" class="img-fluid rounded-circle" width="50" height="50">
-        {{/foto_perfil}} 
+        {{/foto_perfil}}
+        </a>
     </div>
   </header>
 
@@ -110,6 +111,8 @@
                         <tr>
 
                             <td>
+                                <!-- no se por qué cuando muestra el ranking sin filtro muestra la foto de perfil del usuario en sesion en los otros jugadores
+                                cuando filtras se sale-->
                                 {{#foto_perfil}}
                                 <img src="/{{foto_perfil}}" alt="{{usuario}}" class="img-fluid rounded-circle" width="50" height="50">
                                 {{/foto_perfil}}
