@@ -22,7 +22,7 @@
 
         <div class="ruleta-wrapper">
             <div class="flecha"></div>
-            <canvas id="ruletaCanvas" width="300" height="300"></canvas>
+            <canvas id="ruleta" width="300" height="300"></canvas>
         </div>
 
         <p id="mensaje"></p>
@@ -33,6 +33,18 @@
         </form>
     </section>
 </div>
+<script>
+    window.categorias = [
+        {{#categorias}}
+            {
+                id: {{id_categoria}},
+                nombre: "{{nombre}}"
+            }{{^-last}},{{/-last}}
+        {{/categorias}}
+    ];
+
+    window.colores = ["#ffebb5", "#bcedff", "#c2e68d", "rgba(255,197,214,0.89)", "#8338ec"];
+</script>
 <script src="/public/js/ruleta.js"></script>
 </body>
 </html>

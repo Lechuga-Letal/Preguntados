@@ -52,7 +52,6 @@ class PartidaController{
         $this->renderer->render("ruleta", $data);
     }
 
-
     public function misDesafios() {
         if (!isset($_SESSION['usuario'])) {
             header("Location: /login/loginForm");
@@ -123,21 +122,22 @@ class PartidaController{
         }else{
             $usuarioNombre = $_SESSION['usuario'];
             $usuarioId = $this->usuarioModel->obtenerIdUsuarioPorNombre($usuarioNombre);
-            $categoria = $_POST['categoria']?? $_SESSION['categoria_actual'] ?? null;
+            $categoria = $_POST['idCategoria'] ?? $_SESSION['categoria_actual'] ?? null;
             if ($categoria) $_SESSION['categoria_actual'] = $categoria;
 
             $idPartida = $_SESSION['id'] ?? $this->model->crearPartida($usuarioId);
             $_SESSION['id'] = $idPartida;
 
+            /*
             $mapaCategorias = [
                 'Deportes' => 1,
                 'Entretenimiento' => 2,
                 'Informática' => 3,
                 'Matemáticas' => 4,
                 'Historia' => 5
-            ];
-            $idCategoria = $mapaCategorias[$categoria] ?? null;
-
+            ]; */
+            //$idCategoria = $mapaCategorias[$categoria] ?? null;
+            $idCategoria = intval($categoria);
             $idTurno = $this->model->crearTurno($usuarioId, $idPartida, $idCategoria);
             $_SESSION['turno'] = $idTurno;
             $pregunta = $_SESSION['pregunta_turno'] ?? null;
