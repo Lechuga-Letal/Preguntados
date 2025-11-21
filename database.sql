@@ -370,3 +370,38 @@ VALUES
 (3, 3),
 (3, 4),
 (3, 5);
+
+
+INSERT INTO usuarios (usuario, mail, password, nombre_completo, anio_nacimiento, sexo, pais, ciudad, coordenadas, rol)
+VALUES
+('BotRex','botrex@example.com','123','Bot Rex',1992,'Prefiero no cargarlo','Argentina','CABA','-34.60,-58.38','Jugador'),
+('BotLuna','botluna@example.com','123','Bot Luna',1996,'Prefiero no cargarlo','México','CDMX','19.43,-99.13','Jugador');
+
+-- Obtener sus IDs automáticamente (en tu caso ya existen FK)
+-- Suponiendo que son los últimos dos creados:
+SET @idRex = (SELECT id FROM usuarios WHERE usuario='BotRex');
+SET @idLuna = (SELECT id FROM usuarios WHERE usuario='BotLuna');
+
+
+-- 2) NIVEL JUGADOR GENERAL
+INSERT INTO nivelJugadorGeneral (id_usuario, nivel)
+VALUES
+(@idRex, 0.8),  -- rango PRO
+(@idLuna, 0.45); -- rango MEDIO
+
+
+-- 3) NIVEL POR CATEGORÍA (5 categorías: 1–5)
+INSERT INTO nivelJugadorPorCategoria (id_usuario, id_categoria, nivel)
+VALUES
+(@idRex, 1, 0.7), (@idRex, 2, 0.6), (@idRex, 3, 0.8), (@idRex, 4, 0.9), (@idRex, 5, 0.75),
+(@idLuna, 1, 0.3), (@idLuna, 2, 0.4), (@idLuna, 3, 0.5), (@idLuna, 4, 0.45), (@idLuna, 5, 0.4);
+
+
+-- 4) PARTIDAS FINALIZADAS (ranking usa MAX(puntaje))
+INSERT INTO partidas (id_usuario, id_oponente, fecha_inicio, fecha_fin, puntaje, estado)
+VALUES
+(@idRex, NULL, NOW(), NOW(), 6, 'finalizada'),
+(@idRex, NULL, NOW(), NOW(), 11, 'finalizada'), -- mejor puntaje = 11
+
+(@idLuna, NULL, NOW(), NOW(), 6, 'finalizada'),
+(@idLuna, NULL, NOW(), NOW(), 7, 'finalizada');

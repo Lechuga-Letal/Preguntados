@@ -5,6 +5,7 @@
 </head>
 
 <body>
+
   <header class="header"> 
     <h2 class="titulo">Preguntados</h2>
     <div class="user-info">
@@ -15,12 +16,12 @@
 
         <a href="/perfil">
         {{#foto_perfil}}
-                <img src="/{{foto_perfil}}" alt="{{usuario}}" class="img-fluid rounded-circle" width="50" height="50">
-            {{/foto_perfil}}
-            {{^foto_perfil}}
-                <img src="/public/imagenes/usuarioImagenDefault.png" alt="{{usuario}}" class="img-fluid rounded-circle" width="50" height="50">
-            {{/foto_perfil}}
-        </a>
+            <img src="/{{foto_perfil}}" alt="{{usuario}}" class="img-fluid rounded-circle" width="50" height="50">
+        {{/foto_perfil}}
+
+        {{^foto_perfil}}
+            <img src="/public/imagenes/usuarioImagenDefault.png" alt="{{usuario}}" class="img-fluid rounded-circle" width="50" height="50">
+        {{/foto_perfil}} 
     </div>
   </header>
 
@@ -42,7 +43,7 @@
         <input type="button" class="btn btn-light mb-3" value="rango novato" onclick="cambiarRango('novato')">
       </div>
       
-      <div>
+      <div> <!-- Limite de usuarios a mostrar, abria que ver como actualizar -->
         <select name="limite" onchange="document.getElementById('rankingForm').submit()">
           <option value="10">filtro</option>
           <option value="1">1</option>
@@ -66,9 +67,11 @@
         <input type="button" class="btn btn-light mb-3" value="Entretenimiento" onclick="cambiarCategoria('Entretenimiento')">
         <input type="button" class="btn btn-light mb-3" value="Informática" onclick="cambiarCategoria('Informática')">
         <input type="button" class="btn btn-light mb-3" value="Matematicas" onclick="cambiarCategoria('Matematicas')">
+
+
       </div>
       
-      <div>
+      <div> <!-- Limite de usuarios a mostrar, abria que ver como actualizar -->
         <select name="limite" onchange="document.getElementById('rankingCategoriaForm').submit()">
           <option value="1">1</option>
           <option value="5">5</option>
@@ -79,6 +82,7 @@
         </select>  
       </div>
     </form>
+
     <script>
 
     function cambiarRango(rango) {
@@ -92,39 +96,42 @@
     }
     </script>
 
+            <table class="table table-dark table-striped table-hover">
+                <thead>
+                    <tr>
+                        <th>Foto</th>
+                        <th>Usuario</th>
+                        <th>Puntaje</th>
+                        <th>Pais</th>
+                    </tr>
+                </thead>
+                <tbody  style="text-align: center">
+                    {{#usuarios}}
+                        <tr>
 
-    
+                            <td>
+                                {{#foto_perfil}}
+                                <img src="/{{foto_perfil}}" alt="{{usuario}}" class="img-fluid rounded-circle" width="50" height="50">
+                                {{/foto_perfil}}
 
-    {{#usuarios}}
-    <div class="card text-light mb-2 p-3 rounded-3 shadow-sm">
-        <a class="row align-items-center">
-            <div class="col-md-3">
-                <!--Lo comento porque se le esta asignando la misma foto que al usuario logueado -->
-<!--                {{#foto_perfil}}-->
-<!--                <img src="/{{foto_perfil}}" alt="{{usuario}}" class="img-fluid rounded-circle" width="50" height="50">-->
-<!--                {{/foto_perfil}}-->
-
-                {{#foto_perfil}}
-                    <img alt="{{usuario}}" class="img-fluid rounded-circle" width="50" height="50">
-                {{/foto_perfil}}
-                {{^foto_perfil}}
-                <img src="/public/imagenes/usuarioImagenDefault.png" alt="{{usuario}}" class="img-fluid rounded-circle" width="50" height="50">
-                {{/foto_perfil}}        
-            </div>
-            <div class="col-md-4">{{nombre_completo}}</div>
-            <div class="col-md-4 text-muted small">{{mejor_puntaje}}</div>
-            <div class="col-md-4 text-muted small">{{pais}}</div>
-        </a>
-    </div>
-    {{/usuarios}}
-
-    {{^usuarios}}
-    <div class="alert alert-secondary text-center text-light bg-dark border-light">
-        No hay usuarios registrados.
-    </div>
-    {{/usuarios}}
-    </div>
-
+                                {{^foto_perfil}}
+                                <img src="/public/imagenes/usuarioImagenDefault.png" alt="{{usuario}}" class="img-fluid rounded-circle" width="50" height="50">
+                                {{/foto_perfil}}
+                            </td>
+                            <td>{{usuario}}</td>
+                            <td>{{mejor_puntaje}}</td>
+                            <td>{{pais}}</td>
+                        </tr>
+                    {{/usuarios}}
+                    {{^usuarios}}
+                        <tr>
+                            <td colspan="5" class="text-center text-muted">
+                                No has terminado ninguna partida aún.
+                            </td>
+                        </tr>
+                    {{/usuarios}}
+                </tbody>
+            </table>
 
     <div class="text-center mt-5">
       <a href="/inicio" class="btn btn-secondary">Volver</a>
