@@ -34,7 +34,6 @@ class PreguntasListaController
                 $preguntas = $this->preguntasModel->obtenerPreguntasConRespuestas();
                 break;
         }
-
         $this->listarPreguntas($preguntas);
     }
 
@@ -51,6 +50,7 @@ class PreguntasListaController
                     $tmp[$id] = [
                         'pregunta_id' => $id,
                         'pregunta' => $fila['pregunta'],
+                        'categoria' => $fila['categoria'] ?? null,
                         'respuestas' => [],
                         'cantidad_reportes' => $fila['cantidad_reportes'] ?? 0,
                         'usuario_sugirio' => $fila['usuario_sugirio'] ?? null,

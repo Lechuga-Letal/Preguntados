@@ -95,15 +95,21 @@ CREATE TABLE turno (
 );
 
 CREATE TABLE turno_pregunta (
-                                id_turno INT NOT NULL,
-                                id_pregunta INT NOT NULL,
-                                respondida BOOLEAN DEFAULT FALSE,
-                                acierto BOOLEAN DEFAULT FALSE,
---                                 acierto BOOLEAN DEFAULT null,
-                                PRIMARY KEY (id_turno, id_pregunta),
-                                FOREIGN KEY (id_turno) REFERENCES turno(id),
-                                FOREIGN KEY (id_pregunta) REFERENCES pregunta(id_pregunta)
+    id_turno INT NOT NULL,
+    id_pregunta INT NOT NULL,
+    respondida BOOLEAN DEFAULT FALSE,
+    acierto BOOLEAN DEFAULT FALSE,
+    PRIMARY KEY (id_turno, id_pregunta),
+
+    FOREIGN KEY (id_turno) REFERENCES turno(id)
+        ON DELETE CASCADE
+        ON UPDATE CASCADE,
+        
+    FOREIGN KEY (id_pregunta) REFERENCES pregunta(id_pregunta)
+        ON DELETE CASCADE
+        ON UPDATE CASCADE
 );
+
 -- Las contrasenias son 123!
 INSERT INTO usuarios (usuario, mail, password, nombre_completo, anio_nacimiento, sexo, pais, ciudad, coordenadas)
 VALUES

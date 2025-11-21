@@ -22,6 +22,10 @@
     También podés filtrarlas según su tipo: reportadas, sugeridas o activas.
   </p>
 
+  <div class="volver-contenedor">
+    <a href="/inicioEditor/" class="btn-volver">Volver</a>
+  </div>
+  <br>
   <section class="pregunta-card">
     {{#preguntas}}
     <div class="pregunta-card">
@@ -38,6 +42,8 @@
       {{#usuario_sugirio}}
       <p class="meta-info warning"><strong>Sugerida por:</strong> {{usuario_sugirio}}</p>
       {{/usuario_sugirio}}
+
+      <p class="meta-info warning"><strong>{{categoria}}</strong></p>
 
       <ul class="respuestas">
         {{#respuestas}}
