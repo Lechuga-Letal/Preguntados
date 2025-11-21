@@ -20,6 +20,8 @@ class inicioAdminController{
         $this->inicioAdmin();
     }
 
+
+
     public function inicioAdmin(){
         if (!isset($_SESSION["usuario"])) {
             header("Location: /login/loginForm");
@@ -31,6 +33,10 @@ class inicioAdminController{
             exit;
         }
 
+        $this->cargarData(null); 
+    }
+
+    public function cargarData($mensajeCat) {
         $totalUsuarios= $this->model->contarUsuarios();
         $partidasJugadas= $this->model->partidasFinalizadas();
         $preguntasTotales= $this->model->preguntasTotales();
@@ -117,7 +123,9 @@ class inicioAdminController{
             "grafUsuariosEdad" => "/public/graficos/usuarios_por_edad.png",
             "grafUsuariosPais" => "/public/graficos/usuarios_por_pais.png",
             "grafUsuariosRol"  => "/public/graficos/usuarios_por_rol.png",
-            "grafUsuariosPeriodo" => "/public/graficos/usuarios_por_periodo.png"
+            "grafUsuariosPeriodo" => "/public/graficos/usuarios_por_periodo.png",
+
+            "mensajeCat" => $mensajeCat
         ];
 
         $this->renderer->render("inicioAdmin", $data);
@@ -148,7 +156,22 @@ class inicioAdminController{
         $graph->Stroke($archivo);
     }
 
-
+    public function crearCategoria()
+    {
+        $nombreCategoria = $_POST['categoriaNombre'] ?? null; 
+        $fotoCategoria = null; 
+        if(!empty($_FILES['categoriaImagen']['name'])) {
+            $imagen = "public/imagenes/";
+            $fotoCategoria = $imagen . basename($_FILES['categoriaImagen']['name']);
+            move_uploaded_file($_FILES['categoriaImagen']['tmp_name'], $fotoCategoria); 
+        }
+        $sePudo = $this->categoriaModel->crearNuevaCategoria($nombreCategoria, $fotoCategoria);
+        if(!$sePudo) { //De momento sin mensajes especificos segun error
+            $this->cargarData("No se puso agregar la categoria.");
+        } else {
+            $this->cargarData("Se agrego la categoria exitosamente.");
+        }
+    }
 
     public function generarPDF(){
         $usuarios = $this->model->obtenerUsuarios();

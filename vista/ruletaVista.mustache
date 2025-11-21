@@ -10,22 +10,11 @@
 
     <aside class="trofeos">
         <h3>Mis Trofeos</h3>
-        
-        <div class="muñeco">
-            <img src="/public/imagenes/DeportesColor.png" alt="Deportes">
-        </div>
-        <div class="muñeco">
-            <img src="/public/imagenes/EntretenimientoColor.png" alt="Entretenimiento">
-        </div>
-        <div class="muñeco">
-            <img src="/public/imagenes/InformaticaColor.png" alt="Informática">
-        </div>
-        <div class="muñeco">
-            <img src="/public/imagenes/MatematicasColor.png" alt="Matemáticas">
-        </div>
-        <div class="muñeco">
-            <img src="/public/imagenes/HistoriaColor.png" alt="Historia">
-        </div>
+        {{#categorias}}
+            <div class="muñeco">
+                <img src="/{{foto_categoria}}" alt="{{nombre}}">
+            </div>
+        {{/categorias}}
     </aside>
 
     <section class="ruleta-container">
