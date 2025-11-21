@@ -89,7 +89,6 @@ require_once __DIR__ . '/../helper/MailService.php';
 
         $sql = "SELECT * FROM usuarios WHERE id = $id";
         $resultado = $this->conexion->query($sql);
-        //var_dump($resultado);
         if ($resultado && count($resultado) > 0) {
             return (array) $resultado[0];
         }

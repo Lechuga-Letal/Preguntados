@@ -12,20 +12,11 @@
         <form method="POST" action="/Preguntados/inicio/logout">
         <input class="logout-btn" type="submit" value="Cerrar sesión">
         </form>
-        <p class="username">{{usuario}}</p>
-        {{#foto_perfil}}
-            <img src="/{{foto_perfil}}" alt="{{usuario}}" class="img-fluid rounded-circle" width="50" height="50">
-        {{/foto_perfil}}
-
-        {{^foto_perfil}}
-            <img src="/public/imagenes/usuarioImagenDefault.png" alt="{{usuario}}" class="img-fluid rounded-circle" width="50" height="50">
-        {{/foto_perfil}} 
     </div>
   </header>
 
     <main class="container py-3">
         <div class="row g-3 align-items-start">
-            <!-- User Card -->
             <div class="col-md-6">
             <div class="card bg-dark text-light p-3 rounded-3 shadow-sm">
                 <div class="text-center">
@@ -51,7 +42,6 @@
             </div>
             </div>
 
-            <!-- Map -->
             <div class="col-md-6">
             <div id="mapa" style="height:400px;" class="rounded border border-secondary"></div>
             </div>

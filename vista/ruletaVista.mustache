@@ -10,21 +10,11 @@
 
     <aside class="trofeos">
         <h3>Mis Trofeos</h3>
-        <div class="muñeco">
-            <img src="/public/imagenes/DeportesColor.png" alt="Deportes">
-        </div>
-        <div class="muñeco">
-            <img src="/public/imagenes/EntretenimientoColor.png" alt="Entretenimiento">
-        </div>
-        <div class="muñeco">
-            <img src="/public/imagenes/InformaticaColor.png" alt="Informática">
-        </div>
-        <div class="muñeco">
-            <img src="/public/imagenes/MatematicasColor.png" alt="Matemáticas">
-        </div>
-        <div class="muñeco">
-            <img src="/public/imagenes/HistoriaColor.png" alt="Historia">
-        </div>
+        {{#categorias}}
+            <div class="muñeco">
+                <img src="/{{foto_categoria}}" alt="{{nombre}}">
+            </div>
+        {{/categorias}}
     </aside>
 
     <section class="ruleta-container">
@@ -32,7 +22,7 @@
 
         <div class="ruleta-wrapper">
             <div class="flecha"></div>
-            <canvas id="ruletaCanvas" width="300" height="300"></canvas>
+            <canvas id="ruleta" width="300" height="300"></canvas>
         </div>
 
         <p id="mensaje"></p>
@@ -43,6 +33,18 @@
         </form>
     </section>
 </div>
+<script>
+    window.categorias = [
+        {{#categorias}}
+            {
+                id: {{id_categoria}},
+                nombre: "{{nombre}}"
+            }{{^-last}},{{/-last}}
+        {{/categorias}}
+    ];
+
+    window.colores = ["#ffebb5", "#bcedff", "#c2e68d", "rgba(255,197,214,0.89)", "#8338ec"];
+</script>
 <script src="/public/js/ruleta.js"></script>
 </body>
 </html>

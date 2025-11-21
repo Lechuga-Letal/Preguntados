@@ -1,39 +1,45 @@
-const canvas = document.getElementById("ruletaCanvas");
-const ctx = canvas.getContext("2d");
-const btn = document.getElementById("girarBtn");
-const mensaje = document.getElementById("mensaje");
-const form = document.getElementById("formRuleta");
+const categorias = window.categorias || [];
+const colores = window.colores || ["#ffebb5", "#bcedff", "#c2e68d", "rgba(255,197,214,0.89)", "#8338ec"];
 
-const categorias = ["Deportes", "Entretenimiento", "Informática", "Matemáticas", "Historia"];
-const colores = ["#ffebb5", "#bcedff", "#c2e68d", "rgba(255,197,214,0.89)", "#8338ec"];
-const numSegmentos = categorias.length;
-const anguloSegmento = (2 * Math.PI) / numSegmentos;
+//console.log("Categorias cargadas:", categorias);
+
+const canvas = document.getElementById("ruleta");
+const ctx = canvas.getContext("2d");
+
+const size = categorias.length;
+const arc = (2 * Math.PI) / size;
 let anguloActual = 0;
 
 function dibujarRuleta() {
-    for (let i = 0; i < numSegmentos; i++) {
-        const angInicio = i * anguloSegmento;
+    for (let i = 0; i < size; i++) {
+        const inicio = i * arc;
+
         ctx.beginPath();
-        ctx.moveTo(150, 150);
-        ctx.arc(150, 150, 140, angInicio, angInicio + anguloSegmento);
         ctx.fillStyle = colores[i % colores.length];
+        ctx.moveTo(150, 150);
+        ctx.arc(150, 150, 140, inicio, inicio + arc);
         ctx.fill();
 
         ctx.save();
         ctx.translate(150, 150);
-        ctx.rotate(angInicio + anguloSegmento / 2);
+        ctx.rotate(inicio + arc / 2);
         ctx.textAlign = "right";
-        ctx.fillStyle = "#fff";
-        ctx.font = "bold 14px Poppins";
-        ctx.fillText(categorias[i], 125, 5);
+        ctx.fillStyle = "#ffffff";
+        ctx.font = "bold 14px Arial";
+        ctx.fillText(categorias[i].nombre, 125, 5);
         ctx.restore();
     }
 }
 
 dibujarRuleta();
 
+const btn = document.getElementById("girarBtn");
+const mensaje = document.getElementById("mensaje");
+const form = document.getElementById("formRuleta");
+
 btn.addEventListener("click", (e) => {
     e.preventDefault();
+
     btn.disabled = true;
     mensaje.textContent = "Girando...";
 
@@ -41,9 +47,10 @@ btn.addEventListener("click", (e) => {
     const duracion = 4000;
     const inicio = performance.now();
 
-    function animar(tiempo) {
-        const progreso = Math.min((tiempo - inicio) / duracion, 1);
+    function animar(t) {
+        const progreso = Math.min((t - inicio) / duracion, 1);
         const angulo = giroTotal * (1 - Math.pow(1 - progreso, 3));
+
         ctx.clearRect(0, 0, 300, 300);
         ctx.save();
         ctx.translate(150, 150);
@@ -57,17 +64,16 @@ btn.addEventListener("click", (e) => {
         } else {
             anguloActual = angulo % 360;
 
-            const anguloAjustado = (anguloActual + 90) % 360;
-            const indice = Math.floor(numSegmentos - (anguloAjustado / 360) * numSegmentos) % numSegmentos;
+            const ajustado = (anguloActual + 90) % 360;
+            const indice = Math.floor(size - (ajustado / 360) * size) % size;
+
             const categoria = categorias[indice];
 
-            mensaje.innerHTML = `Categoría seleccionada: <span class="highlight">${categoria}</span>`;
+            mensaje.innerHTML = `Categoría seleccionada: <b>${categoria.nombre}</b>`;
 
-            const inputCategoria = document.createElement("input");
-            inputCategoria.type = "hidden";
-            inputCategoria.name = "categoria";
-            inputCategoria.value = categoria;
-            form.appendChild(inputCategoria);
+            console.log(categoria.id); 
+            document.getElementById("idCategoria").value = categoria.id;
+            console.log(document.getElementById("idCategoria").value); 
 
             setTimeout(() => form.submit(), 2500);
             btn.disabled = false;
@@ -76,4 +82,3 @@ btn.addEventListener("click", (e) => {
 
     requestAnimationFrame(animar);
 });
-

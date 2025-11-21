@@ -22,9 +22,12 @@ class InicioEditorController
             header("Location: /login/loginForm");
             exit;
         }
-
+        $foto = $_SESSION['foto_perfil'] ?? '/public/imagenes/usuarioImagenDefault.png';
+        $data =[
+            "foto_perfil"=> $foto
+        ];
         if ($_SESSION["rol"] === "Editor") {
-            $this->renderer->render("inicioEditor");
+            $this->renderer->render("inicioEditor", $data);
             exit;
         } else {
             header("Location: /login/loginForm");

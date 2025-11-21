@@ -13,13 +13,16 @@
         <input class="logout-btn" type="submit" value="Cerrar sesión">
         </form>
         <p class="username">{{usuario}}</p>
+
+        <a href="/perfil">
         {{#foto_perfil}}
             <img src="/{{foto_perfil}}" alt="{{usuario}}" class="img-fluid rounded-circle" width="50" height="50">
         {{/foto_perfil}}
 
         {{^foto_perfil}}
             <img src="/public/imagenes/usuarioImagenDefault.png" alt="{{usuario}}" class="img-fluid rounded-circle" width="50" height="50">
-        {{/foto_perfil}} 
+        {{/foto_perfil}}
+        </a>
     </div>
   </header>
 
@@ -106,15 +109,17 @@
                 <tbody  style="text-align: center">
                     {{#usuarios}}
                         <tr>
-                                
+
                             <td>
+                                <!-- no se por qué cuando muestra el ranking sin filtro muestra la foto de perfil del usuario en sesion en los otros jugadores
+                                cuando filtras se sale-->
                                 {{#foto_perfil}}
                                 <img src="/{{foto_perfil}}" alt="{{usuario}}" class="img-fluid rounded-circle" width="50" height="50">
                                 {{/foto_perfil}}
 
                                 {{^foto_perfil}}
                                 <img src="/public/imagenes/usuarioImagenDefault.png" alt="{{usuario}}" class="img-fluid rounded-circle" width="50" height="50">
-                                {{/foto_perfil}}        
+                                {{/foto_perfil}}
                             </td>
                             <td>{{usuario}}</td>
                             <td>{{mejor_puntaje}}</td>
@@ -135,4 +140,5 @@
       <a href="/inicio" class="btn btn-secondary">Volver</a>
     </div>
   </main>
+</body>
 </html>
