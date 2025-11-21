@@ -42,6 +42,7 @@ class LoginController
         $resultado = $this->model->getUserWith($usuario, $password);
 
         if (!empty($resultado)) {
+            $_SESSION['id'] = $resultado['id'];
             $_SESSION['usuario'] = $resultado['usuario'];                     
             $_SESSION['rol'] = $resultado['rol'];
             $_SESSION['sexo'] = $resultado['sexo'];               

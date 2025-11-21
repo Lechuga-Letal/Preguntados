@@ -43,7 +43,6 @@ class GestionarPreguntaController
 
     private function procesarAccion($id, $action)
     {
-        //Si se toco algun boton: 
         switch ($action) {
             case 'aceptar_sugerencia':
                 $this->preguntasModel->darDeAltaASugerencia($id);

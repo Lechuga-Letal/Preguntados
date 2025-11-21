@@ -24,7 +24,7 @@ class InicioController
             $this->redirectModel->redirect('login/loginForm');
             return;
         }
-
+        $id = $_SESSION["id"];
         $usuario = $_SESSION['usuario'] ?? '';
         $rol = $_SESSION['rol'] ?? 'Jugador';
         $sexo = $_SESSION['sexo'] ?? '';
@@ -40,6 +40,7 @@ class InicioController
         $data = [
             "usuario" => $usuario,
             "sexo" => $sexo,
+            "id" => $id,
             "foto_perfil" => $foto,
             "isEditor" => $isEditor,
             "esMasculino" => ($sexo === "Masculino"),

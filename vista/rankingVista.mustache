@@ -5,7 +5,6 @@
 </head>
 
 <body>
-
   <header class="header"> 
     <h2 class="titulo">Preguntados</h2>
     <div class="user-info">
@@ -13,13 +12,15 @@
         <input class="logout-btn" type="submit" value="Cerrar sesión">
         </form>
         <p class="username">{{usuario}}</p>
-        {{#foto_perfil}}
-            <img src="/{{foto_perfil}}" alt="{{usuario}}" class="img-fluid rounded-circle" width="50" height="50">
-        {{/foto_perfil}}
 
-        {{^foto_perfil}}
-            <img src="/public/imagenes/usuarioImagenDefault.png" alt="{{usuario}}" class="img-fluid rounded-circle" width="50" height="50">
-        {{/foto_perfil}} 
+        <a href="/perfil">
+        {{#foto_perfil}}
+                <img src="/{{foto_perfil}}" alt="{{usuario}}" class="img-fluid rounded-circle" width="50" height="50">
+            {{/foto_perfil}}
+            {{^foto_perfil}}
+                <img src="/public/imagenes/usuarioImagenDefault.png" alt="{{usuario}}" class="img-fluid rounded-circle" width="50" height="50">
+            {{/foto_perfil}}
+        </a>
     </div>
   </header>
 
@@ -41,7 +42,7 @@
         <input type="button" class="btn btn-light mb-3" value="rango novato" onclick="cambiarRango('novato')">
       </div>
       
-      <div> <!-- Limite de usuarios a mostrar, abria que ver como actualizar -->
+      <div>
         <select name="limite" onchange="document.getElementById('rankingForm').submit()">
           <option value="10">filtro</option>
           <option value="1">1</option>
@@ -65,11 +66,9 @@
         <input type="button" class="btn btn-light mb-3" value="Entretenimiento" onclick="cambiarCategoria('Entretenimiento')">
         <input type="button" class="btn btn-light mb-3" value="Informática" onclick="cambiarCategoria('Informática')">
         <input type="button" class="btn btn-light mb-3" value="Matematicas" onclick="cambiarCategoria('Matematicas')">
-
-
       </div>
       
-      <div> <!-- Limite de usuarios a mostrar, abria que ver como actualizar -->
+      <div>
         <select name="limite" onchange="document.getElementById('rankingCategoriaForm').submit()">
           <option value="1">1</option>
           <option value="5">5</option>
@@ -80,7 +79,6 @@
         </select>  
       </div>
     </form>
-
     <script>
 
     function cambiarRango(rango) {
@@ -99,13 +97,16 @@
 
     {{#usuarios}}
     <div class="card text-light mb-2 p-3 rounded-3 shadow-sm">
-        <!--De momento dse pasa por $_GET-->
-        <a href="/perfil?id={{id}}" class="row align-items-center">
+        <a class="row align-items-center">
             <div class="col-md-3">
-                {{#foto_perfil}}
-                <img src="/{{foto_perfil}}" alt="{{usuario}}" class="img-fluid rounded-circle" width="50" height="50">
-                {{/foto_perfil}}
+                <!--Lo comento porque se le esta asignando la misma foto que al usuario logueado -->
+<!--                {{#foto_perfil}}-->
+<!--                <img src="/{{foto_perfil}}" alt="{{usuario}}" class="img-fluid rounded-circle" width="50" height="50">-->
+<!--                {{/foto_perfil}}-->
 
+                {{#foto_perfil}}
+                    <img alt="{{usuario}}" class="img-fluid rounded-circle" width="50" height="50">
+                {{/foto_perfil}}
                 {{^foto_perfil}}
                 <img src="/public/imagenes/usuarioImagenDefault.png" alt="{{usuario}}" class="img-fluid rounded-circle" width="50" height="50">
                 {{/foto_perfil}}        
@@ -129,4 +130,5 @@
       <a href="/inicio" class="btn btn-secondary">Volver</a>
     </div>
   </main>
+</body>
 </html>
