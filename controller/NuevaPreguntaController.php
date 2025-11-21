@@ -31,19 +31,18 @@ class NuevaPreguntaController
             return;
         }
 
+        $foto = $_SESSION['foto_perfil'] ?? '/public/imagenes/usuarioImagenDefault.png';
         $rol = $_SESSION['rol'] ?? 'Jugador';
 
-        $data = [];
+        $data = [
+        ];
         if($rol== 'Jugador') {
-            $data = [
-                'Editor' => false
-            ];
+            $data = ['Editor' => false,
+                "foto_perfil" => $foto];
         } else {
-            $data = [
-                'Editor' => true
-            ];
+            $data = ['Editor' => true,
+                "foto_perfil" => $foto];
         }
-
 
         $this->renderer->render("nuevaPregunta", $data);
     }
@@ -54,6 +53,7 @@ class NuevaPreguntaController
         $id_categoria = $_POST['id_categoria'] ?? 0;
         $respuestas = $_POST['respuestas'] ?? [];
         $indiceCorrecta = $_POST['es_correcta'] ?? 0;
+        $foto = $_SESSION['foto_perfil'] ?? '/public/imagenes/usuarioImagenDefault.png';
 
         if (!$this->validarCampos($descripcion, $respuestas, $indiceCorrecta)) {
             $this->renderer->render('nuevaPregunta', ['error' => 'Todos los campos son obligatorios.']);
@@ -69,7 +69,8 @@ class NuevaPreguntaController
 
         $data = [
             'mensaje' => 'La pregunta fue agregada exitosamente',
-            'Editor' => true
+            'Editor' => true,
+            "foto_perfil" => $foto
         ];
         $this->renderer->render('nuevaPregunta', $data);
     }
@@ -80,6 +81,7 @@ class NuevaPreguntaController
         $id_categoria = $_POST['id_categoria'] ?? 0;
         $respuestas = $_POST['respuestas'] ?? [];
         $indiceCorrecta = $_POST['es_correcta'] ?? 0;
+        $foto = $_SESSION['foto_perfil'] ?? '/public/imagenes/usuarioImagenDefault.png';
 
         if (!$this->validarCampos($descripcion, $respuestas, $indiceCorrecta)) {
             $this->renderer->render('nuevaPregunta', ['error' => 'Todos los campos son obligatorios.']);
@@ -103,7 +105,8 @@ class NuevaPreguntaController
         } 
         $data = [
             'mensaje' => 'La pregunta fue sugerida exitosamente',
-            'Editor' => false
+            'Editor' => false,
+            "foto_perfil" => $foto
         ];
         $this->renderer->render('nuevaPregunta', $data);
     }

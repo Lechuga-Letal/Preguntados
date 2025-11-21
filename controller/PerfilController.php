@@ -22,10 +22,11 @@ class PerfilController
 
     public function getPerfil()
     {
-        $usuario = $this->usuarioModel->getUsuarioById($_GET["id"]);
+        $id = $_SESSION['id'];
+        $usuario = $this->usuarioModel->getUsuarioById($_SESSION["id"]);
         $data = [
-            "usuario" => $usuario
-        ];
+            "usuario" => $usuario,
+            "id"=> $id];
         $this->renderer->render("perfil", $data);
     }
 }

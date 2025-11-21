@@ -22,20 +22,21 @@ class RankingController
 
     public function ranking()
     {
-        $usuarios = $this->usuarioModel->getAllUsuarios(); 
+        $usuarios = $this->usuarioModel->getAllUsuarios();
+
         $data = [
-            "usuarios" => $usuarios
+            "usuarios" => $usuarios,
         ];
         $this->renderer->render("ranking", $data);
     }
 
-    //en base a los puntos obtenidos en las partidas general
     public function mejorJugador()
     {
-        
+        $foto = $_SESSION['foto_perfil'] ?? '/public/imagenes/usuarioImagenDefault.png';
         $usuarios = $this->usuarioModel->obtenerListaMejoresJugadores();
         $data = [
-            "usuarios" => $usuarios
+            "usuarios" => $usuarios,
+            "foto_perfil" => $foto,
         ];
         $this->renderer->render("ranking", $data);
 
@@ -45,10 +46,13 @@ class RankingController
     {     
         $limite = $_GET['limite'] ?? null;
         $rango = $_GET['rango'] ?? null;
+        $foto = $_SESSION['foto_perfil'] ?? '/public/imagenes/usuarioImagenDefault.png';
 
         $usuarios = $this->usuarioModel->obtenerListaMejoresJugadoresPorRango($rango, $limite);
         $data = [
-            "usuarios" => $usuarios
+            "usuarios" => $usuarios,
+            "foto_perfil" => $foto,
+
         ];
         $this->renderer->render("ranking", $data);
 
@@ -58,10 +62,12 @@ class RankingController
     {     
         $limite = $_GET['limite'] ?? null;
         $categoria = $_GET['categoria'] ?? null;
-
+        $foto = $_SESSION['foto_perfil'] ?? '/public/imagenes/usuarioImagenDefault.png';
         $usuarios = $this->usuarioModel->obtenerListaMejoresJugadoresPorCategoria($categoria, $limite);
+
         $data = [
-            "usuarios" => $usuarios
+            "usuarios" => $usuarios,
+            "foto_perfil" => $foto,
         ];
         $this->renderer->render("ranking", $data);
 

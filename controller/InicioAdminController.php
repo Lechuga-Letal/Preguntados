@@ -29,6 +29,7 @@ class inicioAdminController{
             exit;
         }
 
+        $foto = $_SESSION['foto_perfil'] ?? '/public/imagenes/usuarioImagenDefault.png';
         $totalUsuarios= $this->model->contarUsuarios();
         $partidasJugadas= $this->model->partidasFinalizadas();
         $preguntasTotales= $this->model->preguntasTotales();
@@ -107,7 +108,7 @@ class inicioAdminController{
             "preguntasTotales"    => $preguntasTotales,
             "preguntasReportadas" => $preguntasReportadas,
             "usuarios" => $usuarios,
-
+            "foto_perfil" => $foto,
             "grafUsuariosSexo" => "/public/graficos/usuarios_por_sexo.png",
             "grafUsuariosEdad" => "/public/graficos/usuarios_por_edad.png",
             "grafUsuariosPais" => "/public/graficos/usuarios_por_pais.png",

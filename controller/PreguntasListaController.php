@@ -34,7 +34,7 @@ class PreguntasListaController
                 $preguntas = $this->preguntasModel->obtenerPreguntasConRespuestas();
                 break;
         }
-        
+
         $this->listarPreguntas($preguntas);
     }
 
@@ -42,8 +42,8 @@ class PreguntasListaController
         {
         $agrupadas = [];
         $tmp = [];
-        
-        if(!empty($preguntas)) {    
+
+            if(!empty($preguntas)) {
             foreach ($preguntas as $fila) {
                 $id = $fila['pregunta_id'];
 
@@ -67,7 +67,6 @@ class PreguntasListaController
                 
             }
         }
-
         $agrupadas = array_values($tmp);
 
         $this->renderer->render("preguntasLista", ['preguntas' => $agrupadas]);
