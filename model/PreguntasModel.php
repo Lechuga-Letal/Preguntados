@@ -249,4 +249,14 @@ class PreguntasModel
 
         return $result[0]['id'];
     }
+
+    public function getCategoriaDe($id_pregunta)
+    {
+        $query = "SELECT id_categoria FROM pregunta WHERE id_pregunta = $id_pregunta";
+        $result = $this->conexion->query($query);
+
+        return ($result && isset($result[0]['id_categoria']))
+            ? $result[0]['id_categoria']
+            : null;
+    }
 }

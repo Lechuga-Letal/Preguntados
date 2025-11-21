@@ -389,19 +389,19 @@ class PartidaModel {
 
 //      se obtiene preguntas de la categoria y que no haya hecho el jugador
         $sql = "
-        SELECT p.*
-        FROM pregunta p
-        WHERE p.id_categoria = $idCategoria
-        AND p.dificultad BETWEEN ($nivelUsuario - $margen) AND ($nivelUsuario + $margen)
-        AND p.id_pregunta NOT IN (
-              SELECT pv.id_pregunta
-              FROM preguntasVistas pv
-              JOIN pregunta p2 ON pv.id_pregunta = p2.id_pregunta
-              WHERE pv.id_usuario = $idUsuario AND p2.id_categoria = $idCategoria
-          )
-        ORDER BY RAND()
-        LIMIT 1
-    ";
+            SELECT p.*
+            FROM pregunta p
+            WHERE p.id_categoria = $idCategoria
+            AND p.dificultad = $nivelUsuario
+            AND p.id_pregunta NOT IN (
+                SELECT pv.id_pregunta
+                FROM preguntasVistas pv
+                JOIN pregunta p2 ON pv.id_pregunta = p2.id_pregunta
+                WHERE pv.id_usuario = $idUsuario AND p2.id_categoria = $idCategoria
+            )
+            ORDER BY RAND()
+            LIMIT 1
+        ";
 
         $resultado = $this->conexion->query($sql);
 

@@ -7,14 +7,16 @@ class PartidaController{
     private $usuarioModel;
     private $preguntasModel;
     private $obtenerIdUsuarioPorNombre;
+    private $categoriasModel; 
 
-    public function __construct($model, $renderer, $redirectModel, $usuarioModel, $preguntasModel){
+    public function __construct($model, $renderer, $redirectModel, $usuarioModel, $preguntasModel, $categoriasModel){
 
         $this->model = $model;
         $this->renderer = $renderer;
         $this->redirectModel = $redirectModel;
         $this->usuarioModel = $usuarioModel;
         $this->preguntasModel = $preguntasModel;
+        $this->categoriasModel = $categoriasModel;
     }
 
     public function base(){
@@ -46,9 +48,14 @@ class PartidaController{
             $this->borradoDeDatosPartidaEnSession();
         }
 
-        $this->renderer->render("ruleta");
-    }
+        $categorias = $this->categoriasModel->getCategoriasActivas();
 
+        $data =  [
+            "categorias" => $categorias
+        ];
+
+        $this->renderer->render("ruleta", $data);
+    }
 
     public function misDesafios() {
         if (!isset($_SESSION['usuario'])) {
@@ -123,21 +130,22 @@ class PartidaController{
         }else{
             $usuarioNombre = $_SESSION['usuario'];
             $usuarioId = $this->usuarioModel->obtenerIdUsuarioPorNombre($usuarioNombre);
-            $categoria = $_POST['categoria']?? $_SESSION['categoria_actual'] ?? null;
+            $categoria = $_POST['idCategoria'] ?? $_SESSION['categoria_actual'] ?? null;
             if ($categoria) $_SESSION['categoria_actual'] = $categoria;
 
             $idPartida = $_SESSION['id'] ?? $this->model->crearPartida($usuarioId);
             $_SESSION['id'] = $idPartida;
 
+            /*
             $mapaCategorias = [
                 'Deportes' => 1,
                 'Entretenimiento' => 2,
                 'Informática' => 3,
                 'Matemáticas' => 4,
                 'Historia' => 5
-            ];
-            $idCategoria = $mapaCategorias[$categoria] ?? null;
-
+            ]; */
+            //$idCategoria = $mapaCategorias[$categoria] ?? null;
+            $idCategoria = intval($categoria);
             $idTurno = $this->model->crearTurno($usuarioId, $idPartida, $idCategoria);
             $_SESSION['turno'] = $idTurno;
             $pregunta = $_SESSION['pregunta_turno'] ?? null;
@@ -296,7 +304,7 @@ class PartidaController{
 
     public function mostrarTiempo(){
         header('Content-Type: application/json');
-        $tiempoRestante = $this->obtenerTiempoTranscurrido();
+        $tiempoRestante = $this->model->obtenerTiempoTranscurrido();
         echo json_encode(['tiempoRestante' => $tiempoRestante]);
     }
 
