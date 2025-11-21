@@ -19,4 +19,10 @@ class CategoriasModel
         return $result; 
     }
 
+    public function crearNuevaCategoria($nomnre, $imagen) {
+        $query = "INSERT INTO categoria (nombre, foto_categoria) VALUES
+        ('$imagen','$imagen')"
+        $result = $this->conexion->query($query);
+    }
+
 }

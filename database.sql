@@ -308,15 +308,16 @@ INSERT INTO respuesta_sugerida (descripcion, es_correcta, id_sugerencia) VALUES
 
 CREATE TABLE categoria (
 id_categoria INT AUTO_INCREMENT PRIMARY KEY,
-nombre VARCHAR(50) NOT NULL
+nombre VARCHAR(50) NOT NULL,
+foto_categoria VARCHAR(50) NOT NULL
 );
 
-INSERT INTO categoria (nombre) VALUES
-('Deportes'),
-('Entretenimiento'),
-('Informática'),
-('Matematicas'),
-('Historia');
+INSERT INTO categoria (nombre, foto_categoria) VALUES
+('Deportes', 'public/imagenes/DeportesColor.png'),
+('Entretenimiento', 'public/imagenes/EntretenimientoColor.png'),
+('Informática', 'public/imagenes/InformaticaColor.png'),
+('Matematicas', 'public/imagenes/MatematicasColor.png'),
+('Historia', 'public/imagenes/HistoriaColor.png');
 
 CREATE TABLE preguntasVistas (
 id INT AUTO_INCREMENT PRIMARY KEY,
