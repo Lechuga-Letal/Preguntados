@@ -116,7 +116,7 @@ class inicioAdminController{
             $cat['faltantes'] = max(0, $MIN_PREGUNTAS - $cat['cantidad_preguntas']);
         }
 
-        $foto = $_SESSION['foto_perfil'] ?? '/public/imagenes/usuarioImagenDefault.png';
+        $foto = $_SESSION['foto_perfil'] ?? 'public/imagenes/usuarioImagenDefault.png';
 
         $data = [
             "usuario" => $_SESSION["usuario"],
