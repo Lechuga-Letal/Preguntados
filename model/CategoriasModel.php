@@ -5,10 +5,11 @@ class CategoriasModel
     private $conexion;
 
     private $MIN_PREGUNTAS = 5;
-
-    public function __construct($conexion)
+    private $usuarioModel;
+    public function __construct($conexion, $usuarioModel)
     {
         $this->conexion = $conexion;
+        $this->usuarioModel = $usuarioModel; 
     }
 
     public function getCategoriasActivasData() 
@@ -80,34 +81,68 @@ class CategoriasModel
         return $this->conexion->query($query);
     }
 
-public function actualizarCategoria($id_categoria)
-{
-    $MIN_PREGUNTAS = $this->MIN_PREGUNTAS;
+    public function actualizarCategoria($id_categoria)
+    {
+        $MIN_PREGUNTAS = $this->MIN_PREGUNTAS;
 
-    $queryCount = "
-        SELECT COUNT(*) AS cantidad 
-        FROM pregunta 
-        WHERE id_categoria = $id_categoria
-    ";
+        $queryCount = "
+            SELECT COUNT(*) AS cantidad 
+            FROM pregunta 
+            WHERE id_categoria = $id_categoria
+        ";
 
-    $result = $this->conexion->query($queryCount);
+        $result = $this->conexion->query($queryCount);
 
-    $cantidad = ($result && isset($result[0]['cantidad']))
-        ? (int)$result[0]['cantidad']
-        : 0;
+        $cantidad = ($result && isset($result[0]['cantidad']))
+            ? (int)$result[0]['cantidad']
+            : 0;
 
-    $nuevoEstado = ($cantidad >= $MIN_PREGUNTAS) ? 1 : 0;
+        $nuevoEstado = ($cantidad >= $MIN_PREGUNTAS) ? 1 : 0;
 
-    $queryUpdate = "
-        UPDATE categoria 
-        SET estado = $nuevoEstado
-        WHERE id_categoria = $id_categoria
-    ";
+        $queryOldEstado = "
+            SELECT estado FROM categoria WHERE id_categoria = $id_categoria
+        ";
+        $resEstado = $this->conexion->query($queryOldEstado);
+        $estadoAnterior = ($resEstado && isset($resEstado[0]['estado']))
+            ? (int)$resEstado[0]['estado']
+            : null;
 
-    return $this->conexion->query($queryUpdate);
-}
+        $queryUpdate = "
+            UPDATE categoria 
+            SET estado = $nuevoEstado
+            WHERE id_categoria = $id_categoria
+        ";
+        $this->conexion->query($queryUpdate);
 
+        if ($estadoAnterior === $nuevoEstado) {
+            return true;
+        }
 
+        if ($nuevoEstado === 1) {
+
+            $usuarios = $this->usuarioModel->getAllUsuarios();
+
+            foreach ($usuarios as $u) {
+                $idUsuario = $u['id'];
+
+                $queryInsert = "
+                    INSERT IGNORE INTO nivelJugadorPorCategoria (id_usuario, id_categoria)
+                    VALUES ($idUsuario, $id_categoria)
+                ";
+                $this->conexion->query($queryInsert);
+            }
+        }
+
+        else {
+            $queryDelete = "
+                DELETE FROM nivelJugadorPorCategoria
+                WHERE id_categoria = $id_categoria
+            ";
+            $this->conexion->query($queryDelete);
+        }
+
+        return true;
+    }
 
     public function getMinPreguntas()
     {

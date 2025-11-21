@@ -72,7 +72,7 @@ class ConfigFactory
 
         $this->usuarioModel = new UsuarioModel($this->conexion);
 
-        $this->categoriasModel = new CategoriasModel($this->conexion); 
+        $this->categoriasModel = new CategoriasModel($this->conexion, $this->usuarioModel); 
 
 
 //Hay 2 instancias de modelo, este se tiene que crear previamente e inyectarlo en los controladores que se necesita

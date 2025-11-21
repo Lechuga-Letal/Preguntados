@@ -32,24 +32,28 @@ class NuevaPreguntaController
             return;
         }
 
+        $data = $this->cargarDatos();
+
+        $this->renderer->render('nuevaPregunta', $data);
+    }
+
+    private function cargarDatos()
+    {
         $rol = $_SESSION['rol'] ?? 'Jugador';
 
-        $data = [];
-        if($rol== 'Jugador') {
-            $categoriasActivas = $this->categoriasModel->getCategoriasActivas(); 
-            $data = [
-                'categorias' => $categoriasActivas,
+        if ($rol == 'Jugador') {
+            return [
+                'categorias' => $this->categoriasModel->getCategoriasActivas(),
                 'Editor' => false
             ];
-        } else {
-            $todasLasCategorias = $this->categoriasModel->getAllCategorias();
-            $data = [
-                'categorias' => $todasLasCategorias,
-                'Editor' => true
-            ];
         }
-        $this->renderer->render("nuevaPregunta", $data);
+
+        return [
+            'categorias' => $this->categoriasModel->getAllCategorias(),
+            'Editor' => true
+        ];
     }
+
 
     public function guardarPregunta()
     {
@@ -72,10 +76,8 @@ class NuevaPreguntaController
 
         $this->categoriasModel->actualizarCategoria($id_categoria); 
 
-        $data = [
-            'mensaje' => 'La pregunta fue agregada exitosamente',
-            'Editor' => true
-        ];
+        $data = $this->cargarDatos();
+        $data['mensaje'] = "La pregunta fue agregada exitosamente.";
         $this->renderer->render('nuevaPregunta', $data);
     }
 
@@ -106,10 +108,9 @@ class NuevaPreguntaController
             $esCorrecta = ($i == $indiceCorrecta) ? 1 : 0;
             $this->respuestasModel->insertarRespuestaSugerida($texto, $esCorrecta, $id_pregunta);
         } 
-        $data = [
-            'mensaje' => 'La pregunta fue sugerida exitosamente',
-            'Editor' => false
-        ];
+        
+        $data = $this->cargarDatos();
+        $data['mensaje'] = "La pregunta fue sugerida exitosamente.";
         $this->renderer->render('nuevaPregunta', $data);
     }
 
