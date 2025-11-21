@@ -1,3 +1,8 @@
+body{
+    background-color: var(--color-bg-dark, #141414); 
+
+}
+
 main.container {
   padding: 60px 20px;
   max-width: 900px;
@@ -94,3 +99,36 @@ h3.text-light {
   transform: translateY(-2px);
   box-shadow: 0 4px 10px rgba(255, 193, 7, 0.4);
 }
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+thead {
+  background: rgba(255, 255, 255, 0.05);
+}
+
+th, td {
+  padding: 12px;
+  text-align: left;
+  font-size: 0.95rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+th {
+  color: var(--color-primary);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+tbody tr:hover {
+  background: rgba(255, 193, 7, 0.05);
+  transition: background var(--transition-fast);
+}
+
+.text-muted {
+  color: var(--color-text-secondary);
+  font-style: italic;
+} 

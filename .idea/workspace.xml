@@ -6,8 +6,7 @@
   <component name="ChangeListManager">
     <list default="true" id="c6cda32a-4762-447d-96e3-315a19b9578d" name="Changes" comment="vista intermedia de reportarPreguntas hech">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/controller/ReportarPreguntaController.php" beforeDir="false" afterPath="$PROJECT_DIR$/controller/ReportarPreguntaController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/vista/reportarPreguntaListaVista.mustache" beforeDir="false" afterPath="$PROJECT_DIR$/vista/reportarPreguntaListaVista.mustache" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/vista/rankingVista.mustache" beforeDir="false" afterPath="$PROJECT_DIR$/vista/rankingVista.mustache" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -35,7 +34,7 @@
   <component name="GithubPullRequestsUISettings">{
   &quot;selectedUrlAndAccountId&quot;: {
     &quot;url&quot;: &quot;https://github.com/Lechuga-Letal/Preguntados.git&quot;,
-    &quot;accountId&quot;: &quot;804748b4-2eaa-4cca-a95b-e35d65836fa3&quot;
+    &quot;accountId&quot;: &quot;afd2a763-efd4-42f5-9fc3-ce970c3151b6&quot;
   }
 }</component>
   <component name="PhpWorkspaceProjectConfiguration" interpreter_name="PHP" />
@@ -47,27 +46,27 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;arregloReportarPregunta&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/xampp/htdocs/Preguntados/vista&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "ModuleVcsDetector.initialDetectionPerformed": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "git-widget-placeholder": "foto-perfil",
+    "last_opened_file_path": "C:/xampp/htdocs/Preguntados/vista",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "vue.rearranger.settings.migration": "true"
   },
-  &quot;keyToStringList&quot;: {
-    &quot;DatabaseDriversLRU&quot;: [
-      &quot;mysql&quot;
+  "keyToStringList": {
+    "DatabaseDriversLRU": [
+      "mysql"
     ]
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="C:\xampp\htdocs\Preguntados\vista" />
@@ -76,8 +75,8 @@
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
-        <option value="bundled-js-predefined-d6986cc7102b-e03c56caf84a-JavaScript-PS-252.23892.419" />
-        <option value="bundled-php-predefined-a98d8de5180a-c72577f2c82f-com.jetbrains.php.sharedIndexes-PS-252.23892.419" />
+        <option value="bundled-js-predefined-d6986cc7102b-b598e85cdad2-JavaScript-PS-252.25557.128" />
+        <option value="bundled-php-predefined-a98d8de5180a-ce40d0652d34-com.jetbrains.php.sharedIndexes-PS-252.25557.128" />
       </set>
     </attachedChunks>
   </component>
@@ -93,6 +92,7 @@
       <workItem from="1763382184919" duration="427000" />
       <workItem from="1763520121805" duration="5456000" />
       <workItem from="1763552816276" duration="7747000" />
+      <workItem from="1763729022615" duration="389000" />
     </task>
     <task id="LOCAL-00001" summary="arreglo de partida pendiente cancelada">
       <option name="closed" value="true" />

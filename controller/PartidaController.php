@@ -28,7 +28,12 @@ class PartidaController{
             header("Location: /login/loginForm");
             exit();
         }
-        $this->renderer->render("oponente");
+
+        $foto = $_SESSION['foto_perfil'] ?? '/public/imagenes/usuarioImagenDefault.png';
+        $data =[
+          "foto_perfil" => $foto
+        ];
+        $this->renderer->render("oponente", $data);
     }
 
     public function iniciarPartida() {
@@ -57,7 +62,7 @@ class PartidaController{
             header("Location: /login/loginForm");
             exit();
         }
-
+        $foto = $_SESSION['foto_perfil'] ?? '/public/imagenes/usuarioImagenDefault.png';
         $usuario = $_SESSION['usuario'];
         $idUsuario = $this->usuarioModel->obtenerIdUsuarioPorNombre($usuario);
         $dataDePartidasFinalizadas = $this->model->obtenerPartidasFinalizadasPorId($idUsuario);
@@ -71,6 +76,7 @@ class PartidaController{
             "usuario" => $usuario,
             "partidas_finalizadas" => $dataDePartidasFinalizadas,
 //            "partidas_enCurso" => $dataDePartidasEnEspera
+            "foto_perfil" => $foto,
         ];
 
         $this->renderer->render("misDesafios", $data);
@@ -79,6 +85,7 @@ class PartidaController{
 
     public function desafiar() {
         $idUsuario = $_SESSION['usuario']['id'] ?? $_SESSION['usuario'];
+        $foto = $_SESSION['foto_perfil'] ?? '/public/imagenes/usuarioImagenDefault.png';
         $jugadores = $this->usuarioModel->obtenerListadoDeJugadoresMenos($idUsuario);
         $this->renderer->render("desafiar", ["usuarios" => $jugadores]);
     }
@@ -86,7 +93,6 @@ class PartidaController{
     public function mostrarPartida() {
         $idTurno = $_GET["idTurno"];
         $_SESSION['turno'] = $idTurno;
-
         $idPartida = $_SESSION['id'] ?? $this->model->obtenerIdPartidaPorTurno($idTurno);
         $usuarioNombre = $_SESSION['usuario'];
         $idUsuario = $this->usuarioModel->obtenerIdUsuarioPorNombre($usuarioNombre);
@@ -99,6 +105,8 @@ class PartidaController{
             'Respuestas' => $this->model->obtenerRespuestasDelTurno($idTurno),
             'nombreOponente' => $this->model->getNombreOponente($idTurno) ?? 'Desconocido'
         ];
+
+
         $this->inicioCronometroAPI();// inicia el cronometro al cargar la partida asi es solouna vez(?)
         $this->renderer->render("partida", $model);
     }

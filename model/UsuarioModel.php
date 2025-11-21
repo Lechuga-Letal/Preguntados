@@ -89,7 +89,6 @@ require_once __DIR__ . '/../helper/MailService.php';
 
         $sql = "SELECT * FROM usuarios WHERE id = $id";
         $resultado = $this->conexion->query($sql);
-        //var_dump($resultado);
         if ($resultado && count($resultado) > 0) {
             return (array) $resultado[0];
         }
@@ -191,7 +190,7 @@ require_once __DIR__ . '/../helper/MailService.php';
         //de usuario sacamos id, nombre completo, pais, foto(?), rol
         //de partida sacamos id_usuario, puntaje, estado(?)
 
-        $sql = "SELECT u.id, u.nombre_completo, u.pais, max(part.puntaje) AS mejor_puntaje
+        $sql = "SELECT u.id, u.usuario, u.pais, max(part.puntaje) AS mejor_puntaje
                 FROM partidas part
                 JOIN usuarios u ON part.id_usuario = u.id
                 WHERE part.estado = 'finalizada' 
@@ -223,7 +222,7 @@ require_once __DIR__ . '/../helper/MailService.php';
         }
 
 
-        $sql = "SELECT u.id, u.foto_perfil, u.nombre_completo, u.pais, max(part.puntaje) AS mejor_puntaje
+        $sql = "SELECT u.id, u.foto_perfil, u.usuario, u.pais, max(part.puntaje) AS mejor_puntaje
                 FROM partidas part
                 JOIN usuarios u ON part.id_usuario = u.id
                 JOIN nivelJugadorGeneral nivelJ ON nivelJ.id_usuario = u.id
@@ -264,7 +263,7 @@ require_once __DIR__ . '/../helper/MailService.php';
         }
 
 
-        $sql = "SELECT u.id, u.foto_perfil, u.nombre_completo, u.pais, nivelCate.nivel AS mejor_puntaje
+        $sql = "SELECT u.id, u.foto_perfil, u.usuario, u.pais, nivelCate.nivel AS mejor_puntaje
                 FROM usuarios u
                 JOIN niveljugadorporcategoria nivelCate ON nivelCate.id_usuario = u.id
                 WHERE nivelCate.id_categoria = $categoriaSeleccionada

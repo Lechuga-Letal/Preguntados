@@ -8,14 +8,6 @@
         <form method="POST" action="/Preguntados/inicio/logout">
         <input class="logout-btn" type="submit" value="Cerrar sesión">
         </form>
-        <p class="username">{{usuario}}</p>
-        {{#foto_perfil}}
-            <img src="/{{foto_perfil}}" alt="{{usuario}}" class="img-fluid rounded-circle" width="50" height="50">
-        {{/foto_perfil}}
-
-        {{^foto_perfil}}
-            <img src="/public/imagenes/usuarioImagenDefault.png" alt="{{usuario}}" class="img-fluid rounded-circle" width="50" height="50">
-        {{/foto_perfil}} 
     </div>
   </header>
 <main class="container">

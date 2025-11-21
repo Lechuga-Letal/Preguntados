@@ -40,17 +40,20 @@ class NuevaPreguntaController
     private function cargarDatos()
     {
         $rol = $_SESSION['rol'] ?? 'Jugador';
+        $foto = $_SESSION['foto_perfil'] ?? '/public/imagenes/usuarioImagenDefault.png';
 
         if ($rol == 'Jugador') {
             return [
                 'categorias' => $this->categoriasModel->getCategoriasActivas(),
-                'Editor' => false
+                'Editor' => false,
+                'foto_perfil' => $foto
             ];
         }
 
         return [
             'categorias' => $this->categoriasModel->getAllCategorias(),
-            'Editor' => true
+            'Editor' => true,
+            'foto_perfil' => $foto
         ];
     }
 
