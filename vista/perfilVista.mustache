@@ -47,8 +47,13 @@
             </div>
         </div>
 
+        {{#esEditor}}
         <div class="text-center mt-3">
-            <a href="/ranking" class="btn btn-secondary btn-sm px-4">Volver</a>
+            <a href="ReportarUsuario/formulario?id={{usuario.id}}" class="btn btn-secondary btn-sm px-4">Reportar</a>
+        </div>
+        {{/esEditor}}
+        <div class="text-center mt-3">
+            <a href="inicio" class="btn btn-secondary btn-sm px-4">Volver</a>
         </div>
 
     </main>

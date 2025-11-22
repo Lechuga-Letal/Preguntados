@@ -36,7 +36,7 @@ class RankingController
         $usuarios = $this->usuarioModel->obtenerListaMejoresJugadores();
         $data = [
             "usuarios" => $usuarios,
-            "foto_perfil" => $foto,
+            "foto_sesion" => $foto
         ];
         $this->renderer->render("ranking", $data);
 
@@ -51,9 +51,10 @@ class RankingController
         $usuarios = $this->usuarioModel->obtenerListaMejoresJugadoresPorRango($rango, $limite);
         $data = [
             "usuarios" => $usuarios,
+            "foto_sesion" => $foto,
             "foto_perfil" => $foto,
-            "rango" => $rango,  
-            "filtro"=> $limite   
+            "rango" => $rango,
+            "filtro"=> $limite
         ];
         $this->renderer->render("ranking", $data);
 
@@ -68,9 +69,10 @@ class RankingController
 
         $data = [
             "usuarios" => $usuarios,
-            "foto_perfil" => $foto,
             "categoria" => $categoria,
-            "filtro"=> $limite   
+            "foto_perfil" => $foto,
+            "filtro"=> $limite,
+            "foto_sesion" => $foto
         ];
         $this->renderer->render("ranking", $data);
 

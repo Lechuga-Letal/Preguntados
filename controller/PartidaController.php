@@ -29,6 +29,14 @@ class PartidaController{
             exit();
         }
 
+        $usuarioSesionId = $_SESSION['id'];
+        $usuario = $this->usuarioModel->getUsuarioById($usuarioSesionId);
+
+        if (!empty($usuario) && $usuario['baneado_definitivo'] == 1) {
+            $this->renderer->render("usuarioBaneado");
+            return;
+        }
+
         $foto = $_SESSION['foto_perfil'] ?? '/public/imagenes/usuarioImagenDefault.png';
         $data =[
           "foto_perfil" => $foto
@@ -68,11 +76,7 @@ class PartidaController{
         $dataDePartidasFinalizadas = $this->model->obtenerPartidasFinalizadasPorId($idUsuario);
 //        $dataDePartidasFinalizadas = $this->model->obtenerDataDePartidasPorEstado($idUsuario, "finalizada");
         $dataDePartidasEnEspera = $this->model->obtenerDataDePartidasPorEstado($idUsuario, "en curso");
-        //Falta mover mayoria de codigo al modelo
-
-//        var_dump($dataDePartidasFinalizadas);
         $data = [
-            //De momento solo se utiliza la data del oponente, nada de la partida. 
             "usuario" => $usuario,
             "partidas_finalizadas" => $dataDePartidasFinalizadas,
 //            "partidas_enCurso" => $dataDePartidasEnEspera

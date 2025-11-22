@@ -57,5 +57,71 @@ class ReportesModel
         }
     }
 
+    public function crearReporteUsuario($idUsuarioQueReporta, $idUsuarioReportado, $motivo)
+    {
+        $query = "
+        INSERT INTO reporteUsuario (id_usuario, id_usuarioReportado, descripcion)
+        VALUES ('$idUsuarioQueReporta', '$idUsuarioReportado', '$motivo')
+    ";
+
+        $this->banearUsuario($idUsuarioReportado);
+        $this->conexion->query($query);
+    }
+
+
+    public function banearUsuario($idUsuario)
+    {
+        $idUsuario = intval($idUsuario);
+
+        $query = "
+        UPDATE usuarios
+        SET baneado = 1
+        WHERE id = $idUsuario
+    ";
+
+        return $this->conexion->query($query);
+    }
+
+    public function banearDefinitivamente($id)
+    {
+        $id = intval($id);
+        $query = "UPDATE usuarios SET baneado_definitivo = 1 WHERE id = $id";
+        return $this->conexion->query($query);
+    }
+
+    public function desbanearUsuario($idUsuario)
+    {
+        $idUsuario = intval($idUsuario);
+
+        $query = "
+        UPDATE usuarios
+        SET baneado = 0 
+        WHERE id = $idUsuario
+    ";
+
+        return $this->conexion->query($query);
+    }
+
+    public function obtenerUsuariosBaneados() {
+        $query = "
+        SELECT
+            u.id,
+            u.usuario,
+            u.nombre_completo,
+            u.mail,
+            u.sexo,
+            u.foto_perfil,
+            u.anio_nacimiento,
+            u.rol,
+            r.descripcion AS motivo,
+            COUNT(r.id_reporte) AS cantidad_reportes
+        FROM usuarios u
+        JOIN reporteUsuario r ON r.id_usuarioReportado = u.id
+        WHERE u.baneado = 1 AND u.baneado_definitivo=0
+        GROUP BY u.id
+        ORDER BY cantidad_reportes DESC
+    ";
+        return $this->conexion->query($query);
+    }
+
 }
-?>

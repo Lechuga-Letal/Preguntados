@@ -15,7 +15,7 @@ include_once("controller/PaginaPrincipalController.php");
 include_once("controller/MapaController.php");
 include_once("controller/InicioAdminController.php");
 include_once("model/InicioAdminModel.php");
-
+include_once("controller/ReportarUsuarioController.php");
 include_once("controller/InicioEditorController.php");
 include_once("model/PreguntasModel.php");
 include_once("controller/NuevaPreguntaController.php");
@@ -101,7 +101,9 @@ class ConfigFactory
         $this->objetos["RankingController"] = new RankingController(($this->conexion), $this->renderer, $this->redirectModel, $this->usuarioModel);
     
         $this->objetos["PerfilController"] = new PerfilController(($this->conexion), $this->renderer, $this->redirectModel, $this->usuarioModel);
-    
+
+        $this->objetos["ReportarUsuarioController"] = new ReportarUsuarioController($this->renderer, $this->usuarioModel, $this->reportesModel, $this->redirectModel);
+
         $this->objetos["ReportarPreguntaController"] = new ReportarPreguntaController(($this->conexion), $this->renderer, $this->redirectModel, $this->usuarioModel, $this->preguntasModel, $this->respuestasModel, $this->reportesModel);
     }
 
