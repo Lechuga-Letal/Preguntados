@@ -15,13 +15,13 @@
         <p class="username">{{usuario}}</p>
 
         <a href="/perfil">
-        {{#foto_perfil}}
-            <img src="/{{foto_perfil}}" alt="{{usuario}}" class="img-fluid rounded-circle" width="50" height="50">
-        {{/foto_perfil}}
+            {{#foto_sesion}}
+                <img src="/{{foto_sesion}}" alt="{{usuario}}" class="img-fluid rounded-circle" width="50" height="50">
+            {{/foto_sesion}}
 
-        {{^foto_perfil}}
-            <img src="/public/imagenes/usuarioImagenDefault.png" alt="{{usuario}}" class="img-fluid rounded-circle" width="50" height="50">
-        {{/foto_perfil}}
+            {{^foto_sesion}}
+                <img src="/public/imagenes/usuarioImagenDefault.png" alt="{{usuario}}" class="img-fluid rounded-circle" width="50" height="50">
+            {{/foto_sesion}}
         </a>
     </div>
   </header>
@@ -107,26 +107,29 @@
                     </tr>
                 </thead>
                 <tbody  style="text-align: center">
-                    {{#usuarios}}
-                        <tr>
+                {{#usuarios}}
+                    <tr>
+                        <td>
+                            {{#foto_perfil}}
+                                <a href="/perfil?id={{id}}">
+                                <img src="/{{foto_perfil}}" class="img-fluid rounded-circle" width="50" height="50">
+                                </a>
+                            {{/foto_perfil}}
 
-                            <td>
-                                <!-- no se por qué cuando muestra el ranking sin filtro muestra la foto de perfil del usuario en sesion en los otros jugadores
-                                cuando filtras se sale-->
-                                {{#foto_perfil}}
-                                <img src="/{{foto_perfil}}" alt="{{usuario}}" class="img-fluid rounded-circle" width="50" height="50">
-                                {{/foto_perfil}}
+                            {{^foto_perfil}}
+                                <a href="/perfil?id={{id}}">
+                                <img src="/public/imagenes/usuarioImagenDefault.png" class="img-fluid rounded-circle" width="50" height="50">
+                                </a>
+                            {{/foto_perfil}}
+                        </td>
 
-                                {{^foto_perfil}}
-                                <img src="/public/imagenes/usuarioImagenDefault.png" alt="{{usuario}}" class="img-fluid rounded-circle" width="50" height="50">
-                                {{/foto_perfil}}
-                            </td>
-                            <td>{{usuario}}</td>
-                            <td>{{mejor_puntaje}}</td>
-                            <td>{{pais}}</td>
-                        </tr>
-                    {{/usuarios}}
-                    {{^usuarios}}
+                        <td>{{usuario}}</td>
+                        <td>{{mejor_puntaje}}</td>
+                        <td>{{pais}}</td>
+                    </tr>
+                {{/usuarios}}
+
+                {{^usuarios}}
                         <tr>
                             <td colspan="5" class="text-center text-muted">
                                 No has terminado ninguna partida aún.

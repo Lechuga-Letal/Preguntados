@@ -23,7 +23,9 @@ CREATE TABLE usuarios (
     ciudad VARCHAR(100) NOT NULL,
     coordenadas VARCHAR(100) NOT NULL,
     foto_perfil VARCHAR(255) DEFAULT NULL,
-    rol ENUM('Administrador', 'Editor', 'Jugador') NOT NULL DEFAULT 'Jugador', -- pasarlo a una tabla Roles
+    baneado TINYINT(1) NOT NULL DEFAULT 0,
+    baneado_definitivo TINYINT(1) NOT NULL DEFAULT 0,
+    rol ENUM('Administrador', 'Editor', 'Jugador') NOT NULL DEFAULT 'Jugador',
     creacion DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
@@ -50,6 +52,16 @@ CREATE TABLE reporte (
     descripcion TEXT NOT NULL,
     FOREIGN KEY (id_pregunta) REFERENCES pregunta(id_pregunta) ON DELETE CASCADE,
     FOREIGN KEY (id_usuario) REFERENCES usuarios(id) ON DELETE CASCADE
+);
+
+CREATE TABLE reporteUsuario (
+                         id_reporte INT AUTO_INCREMENT PRIMARY KEY,
+                         id_usuario INT NOT NULL,
+                         id_usuarioReportado INT NOT NULL,
+                         descripcion TEXT NOT NULL,
+                         FOREIGN KEY (id_usuario) REFERENCES usuarios(id) ON DELETE CASCADE,
+                         FOREIGN KEY (id_usuarioReportado) REFERENCES usuarios(id) ON DELETE CASCADE
+
 );
 
 -- Preguntas Sugeridas
@@ -105,18 +117,18 @@ CREATE TABLE turno_pregunta (
                                 FOREIGN KEY (id_pregunta) REFERENCES pregunta(id_pregunta)
 );
 -- Las contrasenias son 123!
-INSERT INTO usuarios (usuario, mail, password, nombre_completo, anio_nacimiento, sexo, pais, ciudad, coordenadas)
+INSERT INTO usuarios (usuario, mail, password, nombre_completo, anio_nacimiento, sexo, pais, ciudad, coordenadas, foto_perfil)
 VALUES
-('MiaG', 'juan@example.com', '$2y$10$gVthlUqs36PVJIYh3XNWyeIE71jyNjkUnVWs1l6PbRZbtU4tbTlz6', 'Juan Pérez', 2001, 'Femenino', 'Argentina', 'Rosario','-34.6037, -58.3816'),
-('Jere', 'ana@example.com', '$2y$10$gVthlUqs36PVJIYh3XNWyeIE71jyNjkUnVWs1l6PbRZbtU4tbTlz6', 'Ana López', 1999, 'Masculino', 'Argentina', 'Córdoba','-34.6037, -58.3816');
+('MiaG', 'juan@example.com', '$2y$10$gVthlUqs36PVJIYh3XNWyeIE71jyNjkUnVWs1l6PbRZbtU4tbTlz6', 'Juan Pérez', 2001, 'Femenino', 'Argentina', 'Rosario','-34.6037, -58.3816', 'public/imagenes/que-es-un-buyer-persona-6.jpg'),
+('Jere', 'ana@example.com', '$2y$10$gVthlUqs36PVJIYh3XNWyeIE71jyNjkUnVWs1l6PbRZbtU4tbTlz6', 'Ana López', 1999, 'Masculino', 'Argentina', 'Córdoba','-34.6037, -58.3816', 'public/imagenes/que-es-un-buyer-persona-6.jpg'),
+('Diego', 'diego@example.com', '$2y$10$gVthlUqs36PVJIYh3XNWyeIE71jyNjkUnVWs1l6PbRZbtU4tbTlz6', 'diego Pérez', 2021, 'Masculino', 'Argentina', 'Rosario','-34.6037, -58.3816', 'public/imagenes/que-es-un-buyer-persona-6.jpg');
 
 INSERT INTO usuarios (usuario, mail, password, nombre_completo, anio_nacimiento, sexo, pais, ciudad, coordenadas, foto_perfil)
 VALUES
 ('Joaco pro', 'Xeneixe2015@example.com', '$2y$10$gVthlUqs36PVJIYh3XNWyeIE71jyNjkUnVWs1l6PbRZbtU4tbTlz6', 'Joaquin', 1905, 'Masculino', 'Argentina', 'Buenos Aires','-34.6037, -58.3816', 'public/imagenes/carnet.jpg');
 -- admin123
-INSERT INTO usuarios (usuario, mail, password, anio_nacimiento, nombre_completo, pais, rol)
-VALUES ('admin', 'admin@preguntados.com', '$2y$10$VUtlqJI6Ycv1f/LCecC1le2CcmHXnJHJalGOH12qhsIZMtC9FL3NK', 2025,'Administrador del Sistema', 'Brasil' , 'Administrador');
-VALUES ('diego', 'diego@preguntados.com', '$2y$10$VUtlqJI6Ycv1f/LCecC1le2CcmHXnJHJalGOH12qhsIZMtC9FL3NK', 2025,'diego oliva', 'Argentina' , 'Editor');
+INSERT INTO usuarios (usuario, mail, password, nombre_completo, anio_nacimiento, sexo, pais, ciudad, coordenadas, rol)
+VALUES ('admin', 'admin@preguntados.com', '$2y$10$VUtlqJI6Ycv1f/LCecC1le2CcmHXnJHJalGOH12qhsIZMtC9FL3NK', 'admin', 2025, 'Femenino', 'Argentina', 'Rosario','-34.6037, -58.3816', 'administrador');
 
 INSERT INTO pregunta (descripcion, id_categoria) VALUES
 ('¿Cuántos jugadores tiene un equipo de fútbol en el campo?', 1),
@@ -372,10 +384,10 @@ VALUES
 (3, 5);
 
 
-INSERT INTO usuarios (usuario, mail, password, nombre_completo, anio_nacimiento, sexo, pais, ciudad, coordenadas, rol)
+INSERT INTO usuarios (usuario, mail, password, nombre_completo, anio_nacimiento, sexo, pais, ciudad, coordenadas, rol, foto_perfil)
 VALUES
-('BotRex','botrex@example.com','123','Bot Rex',1992,'Prefiero no cargarlo','Argentina','CABA','-34.60,-58.38','Jugador'),
-('BotLuna','botluna@example.com','123','Bot Luna',1996,'Prefiero no cargarlo','México','CDMX','19.43,-99.13','Jugador');
+('BotRex','botrex@example.com','123','Bot Rex',1992,'Prefiero no cargarlo','Argentina','CABA','-34.60,-58.38','Jugador', 'public/imagenes/que-es-un-buyer-persona-6.jpg'),
+('BotLuna','botluna@example.com','123','Bot Luna',1996,'Prefiero no cargarlo','México','CDMX','19.43,-99.13','Jugador', 'public/imagenes/que-es-un-buyer-persona-6.jpg');
 
 -- Obtener sus IDs automáticamente (en tu caso ya existen FK)
 -- Suponiendo que son los últimos dos creados:
@@ -401,7 +413,7 @@ VALUES
 INSERT INTO partidas (id_usuario, id_oponente, fecha_inicio, fecha_fin, puntaje, estado)
 VALUES
 (@idRex, NULL, NOW(), NOW(), 6, 'finalizada'),
-(@idRex, NULL, NOW(), NOW(), 11, 'finalizada'), -- mejor puntaje = 11
+(@idRex, NULL, NOW(), NOW(), 11, 'finalizada'),
 
 (@idLuna, NULL, NOW(), NOW(), 6, 'finalizada'),
 (@idLuna, NULL, NOW(), NOW(), 7, 'finalizada');
