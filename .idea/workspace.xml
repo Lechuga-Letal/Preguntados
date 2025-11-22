@@ -4,9 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="c6cda32a-4762-447d-96e3-315a19b9578d" name="Changes" comment="vista intermedia de reportarPreguntas hech">
-      <change beforePath="$PROJECT_DIR$/controller/RankingController.php" beforeDir="false" afterPath="$PROJECT_DIR$/controller/RankingController.php" afterDir="false" />
-    </list>
+    <list default="true" id="c6cda32a-4762-447d-96e3-315a19b9578d" name="Changes" comment="vista intermedia de reportarPreguntas hech" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
