@@ -102,6 +102,7 @@ h3.text-light {
 
 table {
   width: 100%;
+  margin-top: 15px;
   border-collapse: collapse;
 }
 
@@ -132,3 +133,38 @@ tbody tr:hover {
   color: var(--color-text-secondary);
   font-style: italic;
 } 
+
+.formularios {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    margin-bottom: 30px;
+}
+
+.categorias{
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: row;
+    height: 100px;
+    width: 450px;
+    margin-bottom: 10px;
+}
+
+.botonOpcion{
+    margin-right: 10px;
+    margin-bottom: 10px;
+    padding: 10px 15px;
+    border-radius: 8px;
+    font-weight: 600;
+    text-transform: uppercase;
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+.descripcion{
+  font-size: 1.4rem;
+  color: var(--color-text-main);
+  margin-bottom: 150px;
+  border-left: 4px solid var(--color-primary);
+  padding-left: 10px; 
+}
+    

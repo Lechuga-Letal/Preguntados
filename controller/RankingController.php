@@ -52,7 +52,8 @@ class RankingController
         $data = [
             "usuarios" => $usuarios,
             "foto_perfil" => $foto,
-
+            "rango" => $rango,  
+            "filtro"=> $limite   
         ];
         $this->renderer->render("ranking", $data);
 
@@ -68,6 +69,8 @@ class RankingController
         $data = [
             "usuarios" => $usuarios,
             "foto_perfil" => $foto,
+            "categoria" => $categoria,
+            "filtro"=> $limite   
         ];
         $this->renderer->render("ranking", $data);
 

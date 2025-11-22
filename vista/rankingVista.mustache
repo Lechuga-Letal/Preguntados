@@ -33,57 +33,52 @@
         Bienvenido al ranking!
       </p>
     </div>
-
-  <form id="rankingForm" action="/ranking/obtenerListaMejoresJugadoresPorRango" method="GET">
-
-      <div class="container mt-4">
+  <div class="formularios">  
+    <form id="rankingForm" action="/ranking/obtenerListaMejoresJugadoresPorRango" method="GET">
+        
         <h3 class="text-light mb-3">Ranking de usuarios</h3>
-        <input type="hidden" name="rango" id="rango" value="pro">
-        <input type="button" class="btn btn-light mb-3" value="rango pro" onclick="cambiarRango('pro')">
-        <input type="button" class="btn btn-light mb-3" value="rango medio" onclick="cambiarRango('medio')">
-        <input type="button" class="btn btn-light mb-3" value="rango novato" onclick="cambiarRango('novato')">
-      </div>
-      
-      <div> <!-- Limite de usuarios a mostrar, abria que ver como actualizar -->
+        <div class="categorias">
+          <input type="hidden" name="rango" id="rango" value="pro">
+          <input type="button" class="botonOpcion" value="rango pro" onclick="cambiarRango('pro')">
+          <input type="button" class="botonOpcion" value="rango medio" onclick="cambiarRango('medio')">
+          <input type="button" class="botonOpcion" value="rango novato" onclick="cambiarRango('novato')">
+        </div>
+        
         <select name="limite" onchange="document.getElementById('rankingForm').submit()">
-          <option value="10">filtro</option>
-          <option value="1">1</option>
-          <option value="5">5</option>
-          <option value="10">10</option>
-          <option value="25">25</option>
-          <option value="50">50</option>
-          <option value="100">100</option>
+            <option value="10">filtro</option>
+            <option value="1">1</option>
+            <option value="5">5</option>
+            <option value="10">10</option>
+            <option value="25">25</option>
+            <option value="50">50</option>
+            <option value="100">100</option>
         </select>  
-      </div>
-    </form>
+
+      </form>
 
 
-      <form id="rankingCategoriaForm" action="/ranking/obtenerListaMejoresJugadoresPorCategoria" method="GET">
-
-      <div class="container mt-4">
+        <form id="rankingCategoriaForm" action="/ranking/obtenerListaMejoresJugadoresPorCategoria" method="GET">
+        
         <h3 class="text-light mb-3">Ranking de usuarios categoria</h3>
-        <input type="hidden" name="categoria" id="categoria" value="Historia">
-        <input type="button" class="btn btn-light mb-3" value="Historia" onclick="cambiarCategoria('Historia')">
-        <input type="button" class="btn btn-light mb-3" value="Deportes" onclick="cambiarCategoria('Deportes')">
-        <input type="button" class="btn btn-light mb-3" value="Entretenimiento" onclick="cambiarCategoria('Entretenimiento')">
-        <input type="button" class="btn btn-light mb-3" value="Informática" onclick="cambiarCategoria('Informática')">
-        <input type="button" class="btn btn-light mb-3" value="Matematicas" onclick="cambiarCategoria('Matematicas')">
-
-
-      </div>
-      
-      <div> <!-- Limite de usuarios a mostrar, abria que ver como actualizar -->
-        <select name="limite" onchange="document.getElementById('rankingCategoriaForm').submit()">
-          <option value="1">1</option>
-          <option value="5">5</option>
-          <option value="10" selected>10</option>
-          <option value="25">25</option>
-          <option value="50">50</option>
-          <option value="100">100</option>
-        </select>  
-      </div>
-    </form>
-
+        <div class="categorias">
+          <input type="hidden" name="categoria" id="categoria" value="Historia">
+          <input type="button" class="botonOpcion" value="Historia" onclick="cambiarCategoria('Historia')">
+          <input type="button" class="botonOpcion" value="Deportes" onclick="cambiarCategoria('Deportes')">
+          <input type="button" class="botonOpcion" value="Entretenimiento" onclick="cambiarCategoria('Entretenimiento')">
+          <input type="button" class="botonOpcion" value="Informática" onclick="cambiarCategoria('Informática')">
+          <input type="button" class="botonOpcion" value="Matematicas" onclick="cambiarCategoria('Matematicas')">
+        </div>
+        
+            <select name="limite" onchange="document.getElementById('rankingCategoriaForm').submit()">
+            <option value="1">1</option>
+            <option value="5">5</option>
+            <option value="10" selected>10</option>
+            <option value="25">25</option>
+            <option value="50">50</option>
+            <option value="100">100</option>
+          </select>
+      </form>
+    </div>
     <script>
 
     function cambiarRango(rango) {
@@ -93,9 +88,18 @@
 
     function cambiarCategoria(categoria) {
       document.getElementById('categoria').value = categoria;
-      document.getElementById('rankingCategoriaForm').submit();
-    }
+      document.getElementById('rankingCategoriaForm').submit();    
+      }
     </script>
+
+    <strong class="descripcion">
+      Mostrando ranking: 
+      <strong>
+      {{#rango}}Rango: {{rango}}{{/rango}}
+      {{#categoria}}Categoria: {{categoria}}{{/categoria}}
+      {{#filtro}}, Mostrando: {{filtro}}{{/filtro}}
+      </strong>
+    </strong>
 
             <table class="table table-dark table-striped table-hover">
                 <thead>
