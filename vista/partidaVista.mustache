@@ -32,7 +32,11 @@
                 tiempo=data.tiempoMaximoPorTurno;
                 {{#tiempo}}
                     tiempo={{tiempo}};
+                    console.log("otro tiempo: "+tiempo)
+
                 {{/tiempo}}
+
+                console.log(tiempo)
 
                 cronometroElemento.innerText = tiempo;
 

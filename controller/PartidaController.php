@@ -43,29 +43,32 @@ class PartidaController{
         ];
         $this->renderer->render("oponente", $data);
     }
-
     public function iniciarPartida() {
-    if (!isset($_SESSION['usuario'])) {
-        header("Location: /login/loginForm");
-        exit();
-    }
-
-        if($_SESSION["id"]){
-            $puntaje=$this->model->obtenerTotalAciertosPorPartida($_SESSION["id"]);
-            $this->model->finalizarPartida($_SESSION["id"],$puntaje);
-            $this->borradoDeDatosPartidaEnSession();
+        if(!isset($_SESSION['usuario'])){
+            header("Location: /login/loginForm");
+            exit();
         }
+
+        //Este metodo tiene que ir en otro lado
+        //En vez de buscar por ID, buscar si el usuario tiene una partida sin terminar
+        // se soluciona con un direccionamiento de link
+//        if($_SESSION["id"]){
+//            $puntaje=$this->model->obtenerTotalAciertosPorPartida($_SESSION["id"]);
+//            $this->model->finalizarPartida($_SESSION["id"],$puntaje);
+//            $this->borradoDeDatosPartidaEnSession();
+//        }
 
         $categorias = $this->categoriasModel->getCategoriasActivas();
 
-        $data =  [
+        $data = [
             "categorias" => $categorias
         ];
 
         $this->renderer->render("ruleta", $data);
     }
 
-    public function misDesafios() {
+    public function misDesafios()
+    {
         if (!isset($_SESSION['usuario'])) {
             header("Location: /login/loginForm");
             exit();
@@ -87,14 +90,16 @@ class PartidaController{
     }
 
 
-    public function desafiar() {
+    public function desafiar()
+    {
         $idUsuario = $_SESSION['usuario']['id'] ?? $_SESSION['usuario'];
         $foto = $_SESSION['foto_perfil'] ?? '/public/imagenes/usuarioImagenDefault.png';
         $jugadores = $this->usuarioModel->obtenerListadoDeJugadoresMenos($idUsuario);
         $this->renderer->render("desafiar", ["usuarios" => $jugadores]);
     }
 
-    public function mostrarPartida() {
+    public function mostrarPartida()
+    {
         $idTurno = $_GET["idTurno"];
         $_SESSION['turno'] = $idTurno;
         $idPartida = $_SESSION['id'] ?? $this->model->obtenerIdPartidaPorTurno($idTurno);
@@ -115,23 +120,26 @@ class PartidaController{
         $this->renderer->render("partida", $model);
     }
 
-    public function crearTurno() {
+    public function crearTurno()
+    {
         //si hay un turno pendiente o si el tiempo del turno no termino
         $usuarioId = $this->usuarioModel->obtenerIdUsuarioPorNombre($_SESSION["usuario"]);
         if (isset($_SESSION["pregunta_turno"])) {
-            $tiempoRestante=15-(time()-$_SESSION["cronometro"]);
+
+            $tiempoRestante = 15 - (time() - $_SESSION["cronometro"]);
+            // Arreglar cronometro
 
             $model = [
                 'id_turno' => $_SESSION["turno"],
                 'pregunta' => $_SESSION["pregunta_turno"]["descripcion"],
                 'idPregunta' => $_SESSION["pregunta_turno"]["id_pregunta"],
                 'Respuestas' => $this->model->obtenerRespuestasDelTurno($_SESSION["turno"]),
-                'cantidadCorrectas'=> $this->model->mostrarCantidadCorrectasPorPartida($_SESSION["turno"], $_SESSION['id'], $usuarioId),
+                'cantidadCorrectas' => $this->model->mostrarCantidadCorrectasPorPartida($_SESSION["turno"], $_SESSION['id'], $usuarioId),
                 'nombreOponente' => 'Desconocido',
-                'tiempo' =>$tiempoRestante
+                'tiempo' => $tiempoRestante
             ];
 
-        }else{
+        } else {
             $usuarioNombre = $_SESSION['usuario'];
             $usuarioId = $this->usuarioModel->obtenerIdUsuarioPorNombre($usuarioNombre);
             $categoria = $_POST['idCategoria'] ?? $_SESSION['categoria_actual'] ?? null;
@@ -153,6 +161,7 @@ class PartidaController{
             $idTurno = $this->model->crearTurno($usuarioId, $idPartida, $idCategoria);
             $_SESSION['turno'] = $idTurno;
             $pregunta = $_SESSION['pregunta_turno'] ?? null;
+
             $idPregunta = $pregunta['id_pregunta'];
             $descripcionPregunta = $pregunta['descripcion'];
             $respuestas = $this->model->obtenerRespuestasDelTurno($idTurno);
@@ -221,6 +230,7 @@ class PartidaController{
         if ($_SESSION['preguntas_respondidas'] >= 5) {
             unset($_SESSION['preguntas_respondidas']);
             unset($_SESSION['categoria_actual']);
+            $this->borradoDeDatosPreguntaYcronometro();
             $this->redirectModel->redirect("partida/iniciarPartida");
             return;
         }
@@ -230,33 +240,43 @@ class PartidaController{
 
         $idPartida = $this->model->obtenerIdPartidaPorTurno($idTurno);
         $this->borradoDeDatosPregunta();
+
         $URL = "partida/crearTurno?nombreUsuario=$nombreUsuario&idPartida=$idPartida&categoria=$categoria";
         $this->redirectModel->redirect($URL);
     }
 
-    public function terminarPartida(){
+    public function terminarPartida()
+    {
         $usuarioNombre = $_SESSION['usuario'];
         $usuarioId = $this->usuarioModel->obtenerIdUsuarioPorNombre($usuarioNombre);
-        $idTurno=$_SESSION['turno'] ?? null;
-        $idPartida=$this->model->obtenerIdPartidaPorTurno($idTurno);
-        $cantidadCorrectas=$this->model->mostrarCantidadCorrectasPorPartida($idTurno, $idPartida, $usuarioId);
+        $idTurno = $_SESSION['turno'] ?? null;
+        $idPartida = $this->model->obtenerIdPartidaPorTurno($idTurno);
+        $cantidadCorrectas = $this->model->mostrarCantidadCorrectasPorPartida($idTurno, $idPartida, $usuarioId);
 
         $this->model->finalizarPartida($idPartida, $cantidadCorrectas);
 
         $this->borradoDeDatosPartidaEnSession();
         $this->renderer->render("partidaFinalizada",
-            ["puntaje"=>$cantidadCorrectas,
-                'nombreOponente' =>$this->model->getNombreOponente($idTurno)?? 'Desconocido',
-                "pregunta"=>$this->model->obtenerDescripcionDeLaPreguntaPorTurno($idTurno),
+            ["puntaje" => $cantidadCorrectas,
+                'nombreOponente' => $this->model->getNombreOponente($idTurno) ?? 'Desconocido',
+                "pregunta" => $this->model->obtenerDescripcionDeLaPreguntaPorTurno($idTurno),
                 "cantidadCorrectas" => $cantidadCorrectas,
-                "respuestaCorrecta"=>$this->model->obtenerDescripcionDeLaRepuestaCorrectaDeLaPreguntaPorTurno($idTurno)]);
+                "respuestaCorrecta" => $this->model->obtenerDescripcionDeLaRepuestaCorrectaDeLaPreguntaPorTurno($idTurno)]);
     }
 
-    public function inicioCronometro(){
-        $_SESSION['cronometro'] = time(); // HORA DE INICIO tiempo
+//    public function inicioCronometro()
+//    {
+//        $_SESSION['cronometro'] = time(); // HORA DE INICIO tiempo
+//    }
+    public function inicioCronometro()
+    {
+        if (!isset($_SESSION['cronometro'])){
+            $_SESSION['cronometro'] = time(); // HORA DE INICIO tiempo
+        }
     }
 
-    public function duracionTiempoMaximoPorTurno(){
+    public function duracionTiempoMaximoPorTurno()
+    {
         $tiempoMaximoEnResponder = 15; // segundos
         return $tiempoMaximoEnResponder;
     }
@@ -279,13 +299,14 @@ class PartidaController{
             'tiempoInicio' => $tiempoInicio,
             'tiempoFin' => $tiempoFin //no se si es necesario aca, no lo usamos
         ];
-          /*  Estos son los datos que muestra, setea el inicio del cronometro, duracion y fin
-        */
+        /*  Estos son los datos que muestra, setea el inicio del cronometro, duracion y fin
+      */
 
         echo json_encode($data);
     }
 
-    public function controlarTiempo(){
+    public function controlarTiempo()
+    {
 //        $terminarPartida = false;
 //        $turno=$_SESSION['turno'];
 //        $finCronometro = $this->finCronometro();
@@ -300,13 +321,14 @@ class PartidaController{
         $terminarPartida = false;
         $finCronometro = $this->finCronometro();
         $tiempoActual = time();
-        if($finCronometro <= $tiempoActual){
+        if ($finCronometro <= $tiempoActual) {
             $terminarPartida = true;
         }
         return $terminarPartida;
     }
 
-    public function mostrarTiempo(){
+    public function mostrarTiempo()
+    {
         header('Content-Type: application/json');
         $tiempoRestante = $this->model->obtenerTiempoTranscurrido();
         echo json_encode(['tiempoRestante' => $tiempoRestante]);
@@ -319,22 +341,36 @@ class PartidaController{
 
     }*/
 
-    public function mensajeDeRevisionDeErrores(){
+    public function mensajeDeRevisionDeErrores()
+    {
         var_dump("llegue");
         die();
     }
 
-    public function borradoDeDatosPartidaEnSession(){
-        $valoresPartidaBorradosSession = ["id","cronometro", "pregunta_turno", "turno", "categoria_actual", "preguntas_respondidas"];
+    public function borradoDeDatosPartidaEnSession()
+    {
+        $valoresPartidaBorradosSession = ["id", "cronometro", "pregunta_turno", "turno", "categoria_actual", "preguntas_respondidas"];
         foreach ($valoresPartidaBorradosSession as $clave) {
             if (isset($_SESSION[$clave])) {
                 unset($_SESSION[$clave]);
             }
         }
     }
-    public function borradoDeDatosPregunta(){
+
+    public function borradoDeDatosPregunta()
+    {
 //        $valoresPartidaBorradosSession = ["cronometro", "pregunta_turno", "turno", "categoria_actual", "preguntas_respondidas"];
-        $valoresPartidaBorradosSession = ["pregunta_turno"];
+        $valoresPartidaBorradosSession = ["pregunta_turno","cronometro"];
+        foreach ($valoresPartidaBorradosSession as $clave) {
+            if (isset($_SESSION[$clave])) {
+                unset($_SESSION[$clave]);
+            }
+        }
+    }
+
+    public function borradoDeDatosPreguntaYcronometro(){
+//        $valoresPartidaBorradosSession = ["cronometro", "pregunta_turno", "turno", "categoria_actual", "preguntas_respondidas"];
+        $valoresPartidaBorradosSession = ["pregunta_turno","cronometro"];
         foreach ($valoresPartidaBorradosSession as $clave) {
             if (isset($_SESSION[$clave])) {
                 unset($_SESSION[$clave]);
