@@ -86,6 +86,7 @@ class GestionarPreguntaController
         $data = [ //Ttodo lo necesario para que mustache presente la pregunta 
             'pregunta_id' => $id,
             'pregunta' => $pregunta,
+            'categoria' => $pregunta['categoria'] ?? null,
             'respuestas' => $respuestas,
             'tipo' => ['is_sugerida' => $tipo === 'sugeridas'],
             'reports' => $reportes,

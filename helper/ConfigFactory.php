@@ -94,7 +94,7 @@ class ConfigFactory
 
         $this->objetos["NuevaPreguntaController"] = new NuevaPreguntaController(($this->conexion), $this->renderer, $this->redirectModel, $this->preguntasModel, $this->respuestasModel, $this->usuarioModel, $this->categoriasModel);
 
-        $this->objetos["PreguntasListaController"] = new PreguntasListaController(($this->conexion), $this->renderer, $this->redirectModel, $this->preguntasModel);
+        $this->objetos["PreguntasListaController"] = new PreguntasListaController(($this->conexion), $this->renderer, $this->redirectModel, $this->preguntasModel, $this->categoriasModel);
 
         $this->objetos["GestionarPreguntaController"] = new GestionarPreguntaController(($this->conexion), $this->renderer, $this->redirectModel, $this->preguntasModel, $this->respuestasModel, $this->reportesModel, $this->categoriasModel);
     
