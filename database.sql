@@ -107,28 +107,33 @@ CREATE TABLE turno (
 );
 
 CREATE TABLE turno_pregunta (
-                                id_turno INT NOT NULL,
-                                id_pregunta INT NOT NULL,
-                                respondida BOOLEAN DEFAULT FALSE,
-                                acierto BOOLEAN DEFAULT FALSE,
---                                 acierto BOOLEAN DEFAULT null,
-                                PRIMARY KEY (id_turno, id_pregunta),
-                                FOREIGN KEY (id_turno) REFERENCES turno(id),
-                                FOREIGN KEY (id_pregunta) REFERENCES pregunta(id_pregunta)
+    id_turno INT NOT NULL,
+    id_pregunta INT NOT NULL,
+    respondida BOOLEAN DEFAULT FALSE,
+    acierto BOOLEAN DEFAULT FALSE,
+    PRIMARY KEY (id_turno, id_pregunta),
+
+    FOREIGN KEY (id_turno) REFERENCES turno(id)
+        ON DELETE CASCADE
+        ON UPDATE CASCADE,
+
+    FOREIGN KEY (id_pregunta) REFERENCES pregunta(id_pregunta)
+        ON DELETE CASCADE
+        ON UPDATE CASCADE
 );
 -- Las contrasenias son 123!
-INSERT INTO usuarios (usuario, mail, password, nombre_completo, anio_nacimiento, sexo, pais, ciudad, coordenadas, foto_perfil)
+INSERT INTO usuarios (usuario, mail, password, nombre_completo, anio_nacimiento, sexo, pais, ciudad, coordenadas)
 VALUES
-('MiaG', 'juan@example.com', '$2y$10$gVthlUqs36PVJIYh3XNWyeIE71jyNjkUnVWs1l6PbRZbtU4tbTlz6', 'Juan Pérez', 2001, 'Femenino', 'Argentina', 'Rosario','-34.6037, -58.3816', 'public/imagenes/que-es-un-buyer-persona-6.jpg'),
-('Jere', 'ana@example.com', '$2y$10$gVthlUqs36PVJIYh3XNWyeIE71jyNjkUnVWs1l6PbRZbtU4tbTlz6', 'Ana López', 1999, 'Masculino', 'Argentina', 'Córdoba','-34.6037, -58.3816', 'public/imagenes/que-es-un-buyer-persona-6.jpg'),
-('Diego', 'diego@example.com', '$2y$10$gVthlUqs36PVJIYh3XNWyeIE71jyNjkUnVWs1l6PbRZbtU4tbTlz6', 'diego Pérez', 2021, 'Masculino', 'Argentina', 'Rosario','-34.6037, -58.3816', 'public/imagenes/que-es-un-buyer-persona-6.jpg');
+('MiaG', 'juan@example.com', '$2y$10$gVthlUqs36PVJIYh3XNWyeIE71jyNjkUnVWs1l6PbRZbtU4tbTlz6', 'Juan Pérez', 2001, 'Femenino', 'Argentina', 'Rosario','-34.6037, -58.3816'),
+('Jere', 'ana@example.com', '$2y$10$gVthlUqs36PVJIYh3XNWyeIE71jyNjkUnVWs1l6PbRZbtU4tbTlz6', 'Ana López', 1999, 'Masculino', 'Argentina', 'Córdoba','-34.6037, -58.3816');
 
 INSERT INTO usuarios (usuario, mail, password, nombre_completo, anio_nacimiento, sexo, pais, ciudad, coordenadas, foto_perfil)
 VALUES
 ('Joaco pro', 'Xeneixe2015@example.com', '$2y$10$gVthlUqs36PVJIYh3XNWyeIE71jyNjkUnVWs1l6PbRZbtU4tbTlz6', 'Joaquin', 1905, 'Masculino', 'Argentina', 'Buenos Aires','-34.6037, -58.3816', 'public/imagenes/carnet.jpg');
 -- admin123
-INSERT INTO usuarios (usuario, mail, password, nombre_completo, anio_nacimiento, sexo, pais, ciudad, coordenadas, rol)
-VALUES ('admin', 'admin@preguntados.com', '$2y$10$VUtlqJI6Ycv1f/LCecC1le2CcmHXnJHJalGOH12qhsIZMtC9FL3NK', 'admin', 2025, 'Femenino', 'Argentina', 'Rosario','-34.6037, -58.3816', 'administrador');
+INSERT INTO usuarios (usuario, mail, password, anio_nacimiento, nombre_completo, pais, rol)
+VALUES ('admin', 'admin@preguntados.com', '$2y$10$VUtlqJI6Ycv1f/LCecC1le2CcmHXnJHJalGOH12qhsIZMtC9FL3NK', 2025,'Administrador del Sistema', 'Brasil' , 'Administrador');
+VALUES ('diego', 'diego@preguntados.com', '$2y$10$VUtlqJI6Ycv1f/LCecC1le2CcmHXnJHJalGOH12qhsIZMtC9FL3NK', 2025,'diego oliva', 'Argentina' , 'Editor');
 
 INSERT INTO pregunta (descripcion, id_categoria) VALUES
 ('¿Cuántos jugadores tiene un equipo de fútbol en el campo?', 1),
@@ -320,15 +325,17 @@ INSERT INTO respuesta_sugerida (descripcion, es_correcta, id_sugerencia) VALUES
 
 CREATE TABLE categoria (
 id_categoria INT AUTO_INCREMENT PRIMARY KEY,
-nombre VARCHAR(50) NOT NULL
+nombre VARCHAR(50) NOT NULL,
+foto_categoria VARCHAR(50) NOT NULL,
+estado INT NOT NULL
 );
 
-INSERT INTO categoria (nombre) VALUES
-('Deportes'),
-('Entretenimiento'),
-('Informática'),
-('Matematicas'),
-('Historia');
+INSERT INTO categoria (nombre, foto_categoria, estado) VALUES
+('Deportes', 'public/imagenes/DeportesColor.png', 1),
+('Entretenimiento', 'public/imagenes/EntretenimientoColor.png', 1),
+('Informática', 'public/imagenes/InformaticaColor.png', 1),
+('Matematicas', 'public/imagenes/MatematicasColor.png', 1),
+('Historia', 'public/imagenes/HistoriaColor.png', 1);
 
 CREATE TABLE preguntasVistas (
 id INT AUTO_INCREMENT PRIMARY KEY,
@@ -383,37 +390,112 @@ VALUES
 (3, 4),
 (3, 5);
 
-
-INSERT INTO usuarios (usuario, mail, password, nombre_completo, anio_nacimiento, sexo, pais, ciudad, coordenadas, rol, foto_perfil)
+-- ============================
+-- 1) INSERTAR 30 USUARIOS
+-- ============================
+INSERT INTO usuarios (usuario, mail, password, nombre_completo, anio_nacimiento, sexo, pais, ciudad, coordenadas, rol)
 VALUES
-('BotRex','botrex@example.com','123','Bot Rex',1992,'Prefiero no cargarlo','Argentina','CABA','-34.60,-58.38','Jugador', 'public/imagenes/que-es-un-buyer-persona-6.jpg'),
-('BotLuna','botluna@example.com','123','Bot Luna',1996,'Prefiero no cargarlo','México','CDMX','19.43,-99.13','Jugador', 'public/imagenes/que-es-un-buyer-persona-6.jpg');
+('andres.perez','andres.perez@example.com','123','Andrés Pérez',1990,'Prefiero no cargarlo','Argentina','Rosario','-32.9,-60.6','Jugador'),
+('maria.suarez','maria.suarez@example.com','123','María Suárez',1993,'Prefiero no cargarlo','México','CDMX','19.4,-99.1','Jugador'),
+('jorge.ibarra','jorge.ibarra@example.com','123','Jorge Ibarra',1988,'Prefiero no cargarlo','Chile','Santiago','-33.4,-70.6','Jugador'),
+('valentina.mesa','valentina.mesa@example.com','123','Valentina Mesa',1996,'Prefiero no cargarlo','Colombia','Medellín','6.2,-75.5','Jugador'),
+('sebastian.lopez','sebastian.lopez@example.com','123','Sebastián López',1999,'Prefiero no cargarlo','Perú','Lima','-12.0,-77.0','Jugador'),
+('claudia.vargas','claudia.vargas@example.com','123','Claudia Vargas',1992,'Prefiero no cargarlo','Uruguay','Montevideo','-34.9,-56.2','Jugador'),
+('tomas.garcia','tomas.garcia@example.com','123','Tomás García',1991,'Prefiero no cargarlo','Argentina','Córdoba','-31.4,-64.2','Jugador'),
+('romina.cortez','romina.cortez@example.com','123','Romina Cortez',1998,'Prefiero no cargarlo','Chile','Valparaíso','-33.0,-71.6','Jugador'),
+('martin.guzman','martin.guzman@example.com','123','Martín Guzmán',1987,'Prefiero no cargarlo','México','Guadalajara','20.7,-103.3','Jugador'),
+('carla.mendez','carla.mendez@example.com','123','Carla Méndez',1994,'Prefiero no cargarlo','Colombia','Bogotá','4.6,-74.1','Jugador'),
+('fabian.roldan','fabian.roldan@example.com','123','Fabián Roldán',1989,'Prefiero no cargarlo','Argentina','Mendoza','-32.9,-68.8','Jugador'),
+('kiara.palma','kiara.palma@example.com','123','Kiara Palma',1997,'Prefiero no cargarlo','Perú','Cusco','-13.5,-71.9','Jugador'),
+('pablo.campos','pablo.campos@example.com','123','Pablo Campos',1995,'Prefiero no cargarlo','México','Monterrey','25.7,-100.3','Jugador'),
+('luciana.rios','luciana.rios@example.com','123','Luciana Ríos',1991,'Prefiero no cargarlo','Chile','Coquimbo','-29.9,-71.3','Jugador'),
+('diego.vera','diego.vera@example.com','123','Diego Vera',1993,'Prefiero no cargarlo','Argentina','La Plata','-34.9,-57.9','Jugador'),
+('rocio.alvarez','rocio.alvarez@example.com','123','Rocío Álvarez',1998,'Prefiero no cargarlo','Colombia','Cali','3.4,-76.5','Jugador'),
+('damian.flores','damian.flores@example.com','123','Damián Flores',1990,'Prefiero no cargarlo','Uruguay','Punta del Este','-34.9,-54.9','Jugador'),
+('sabrina.navarro','sabrina.navarro@example.com','123','Sabrina Navarro',1996,'Prefiero no cargarlo','Argentina','Bahía Blanca','-38.7,-62.3','Jugador'),
+('walter.molina','walter.molina@example.com','123','Walter Molina',1986,'Prefiero no cargarlo','México','Puebla','19.0,-98.2','Jugador'),
+('veronica.soto','veronica.soto@example.com','123','Verónica Soto',1994,'Prefiero no cargarlo','Chile','Temuco','-38.7,-72.6','Jugador'),
+('alan.rojas','alan.rojas@example.com','123','Alan Rojas',1995,'Prefiero no cargarlo','Perú','Arequipa','-16.4,-71.5','Jugador'),
+('mariela.cano','mariela.cano@example.com','123','Mariela Cano',1997,'Prefiero no cargarlo','Argentina','Tucumán','-26.8,-65.2','Jugador'),
+('ramiro.santos','ramiro.santos@example.com','123','Ramiro Santos',1992,'Prefiero no cargarlo','Uruguay','Salto','-31.4,-57.9','Jugador'),
+('julieta.duran','julieta.duran@example.com','123','Julieta Durán',1998,'Prefiero no cargarlo','Colombia','Barranquilla','11.0,-74.8','Jugador'),
+('franco.yanez','franco.yanez@example.com','123','Franco Yáñez',1993,'Prefiero no cargarlo','Argentina','San Juan','-31.5,-68.5','Jugador'),
+('celeste.martinez','celeste.martinez@example.com','123','Celeste Martínez',1994,'Prefiero no cargarlo','México','Cancún','21.1,-86.8','Jugador'),
+('rodrigo.aguirre','rodrigo.aguirre@example.com','123','Rodrigo Aguirre',1990,'Prefiero no cargarlo','Chile','Antofagasta','-23.6,-70.4','Jugador'),
+('agustin.barrios','agustin.barrios@example.com','123','Agustín Barrios',1999,'Prefiero no cargarlo','Argentina','Mar del Plata','-38.0,-57.6','Jugador'),
+('isabela.reyes','isabela.reyes@example.com','123','Isabela Reyes',1996,'Prefiero no cargarlo','Perú','Trujillo','-8.1,-79.0','Jugador'),
+('ricardo.vera','ricardo.vera@example.com','123','Ricardo Vera',1988,'Prefiero no cargarlo','Colombia','Cartagena','10.4,-75.5','Jugador');
 
--- Obtener sus IDs automáticamente (en tu caso ya existen FK)
--- Suponiendo que son los últimos dos creados:
-SET @idRex = (SELECT id FROM usuarios WHERE usuario='BotRex');
-SET @idLuna = (SELECT id FROM usuarios WHERE usuario='BotLuna');
+-- =====================================
+-- 2) INSERTAR NIVELES (A MANO)
+-- Pro: 0.70–0.99 / Medio: 0.40–0.69 / Novato: 0.10–0.39
+-- =====================================
+INSERT INTO nivelJugadorGeneral (id_usuario, nivel) VALUES
+(4,0.78),(5,0.44),
+(6,0.63),(7,0.29),(8,0.81),(9,0.59),(10,0.37),
+(11,0.91),(12,0.48),(13,0.55),(14,0.26),(15,0.73),
+(16,0.34),(17,0.67),(18,0.23),(19,0.77),(20,0.42),
+(21,0.33),(22,0.85),(23,0.58),(24,0.39),(25,0.72),
+(26,0.53),(27,0.44),(28,0.36),(29,0.79),(30,0.62);
 
+-- =====================================
+-- 3) PARTIDAS FINALIZADAS (puntajes 0–15)
+-- =====================================
+INSERT INTO partidas (id_usuario, id_oponente, fecha_inicio, fecha_fin, puntaje, estado) VALUES
+(4,NULL,NOW(),NOW(),14,'finalizada'),
+(5,NULL,NOW(),NOW(),10,'finalizada'),
+(6,NULL,NOW(),NOW(), 8,'finalizada'),
+(7,NULL,NOW(),NOW(), 6,'finalizada'),
+(8,NULL,NOW(),NOW(),15,'finalizada'),
+(9,NULL,NOW(),NOW(), 7,'finalizada'),
+(10,NULL,NOW(),NOW(), 5,'finalizada'),
+(11,NULL,NOW(),NOW(),13,'finalizada'),
+(12,NULL,NOW(),NOW(), 9,'finalizada'),
+(13,NULL,NOW(),NOW(), 6,'finalizada'),
+(14,NULL,NOW(),NOW(), 4,'finalizada'),
+(15,NULL,NOW(),NOW(),15,'finalizada'),
+(16,NULL,NOW(),NOW(), 8,'finalizada'),
+(17,NULL,NOW(),NOW(),10,'finalizada'),
+(18,NULL,NOW(),NOW(), 3,'finalizada'),
+(19,NULL,NOW(),NOW(),14,'finalizada'),
+(20,NULL,NOW(),NOW(), 7,'finalizada'),
+(21,NULL,NOW(),NOW(), 5,'finalizada'),
+(22,NULL,NOW(),NOW(),13,'finalizada'),
+(23,NULL,NOW(),NOW(), 8,'finalizada'),
+(24,NULL,NOW(),NOW(), 4,'finalizada'),
+(25,NULL,NOW(),NOW(),12,'finalizada'),
+(26,NULL,NOW(),NOW(), 9,'finalizada'),
+(27,NULL,NOW(),NOW(), 7,'finalizada'),
+(28,NULL,NOW(),NOW(), 3,'finalizada'),
+(29,NULL,NOW(),NOW(),15,'finalizada'),
+(30,NULL,NOW(),NOW(),10,'finalizada');
 
--- 2) NIVEL JUGADOR GENERAL
-INSERT INTO nivelJugadorGeneral (id_usuario, nivel)
-VALUES
-(@idRex, 0.8),  -- rango PRO
-(@idLuna, 0.45); -- rango MEDIO
-
-
--- 3) NIVEL POR CATEGORÍA (5 categorías: 1–5)
-INSERT INTO nivelJugadorPorCategoria (id_usuario, id_categoria, nivel)
-VALUES
-(@idRex, 1, 0.7), (@idRex, 2, 0.6), (@idRex, 3, 0.8), (@idRex, 4, 0.9), (@idRex, 5, 0.75),
-(@idLuna, 1, 0.3), (@idLuna, 2, 0.4), (@idLuna, 3, 0.5), (@idLuna, 4, 0.45), (@idLuna, 5, 0.4);
-
-
--- 4) PARTIDAS FINALIZADAS (ranking usa MAX(puntaje))
-INSERT INTO partidas (id_usuario, id_oponente, fecha_inicio, fecha_fin, puntaje, estado)
-VALUES
-(@idRex, NULL, NOW(), NOW(), 6, 'finalizada'),
-(@idRex, NULL, NOW(), NOW(), 11, 'finalizada'),
-
-(@idLuna, NULL, NOW(), NOW(), 6, 'finalizada'),
-(@idLuna, NULL, NOW(), NOW(), 7, 'finalizada');
+INSERT INTO nivelJugadorPorCategoria (id_usuario, id_categoria, nivel) VALUES
+(4,1,0.70),(4,2,0.75),(4,3,0.83),(4,4,0.78),(4,5,0.81),
+(5,1,0.36),(5,2,0.41),(5,3,0.49),(5,4,0.44),(5,5,0.47),
+(6,1,0.55),(6,2,0.60),(6,3,0.68),(6,4,0.63),(6,5,0.66),
+(7,1,0.22),(7,2,0.27),(7,3,0.35),(7,4,0.30),(7,5,0.33),
+(8,1,0.73),(8,2,0.78),(8,3,0.86),(8,4,0.81),(8,5,0.84),
+(9,1,0.51),(9,2,0.56),(9,3,0.64),(9,4,0.59),(9,5,0.62),
+(10,1,0.29),(10,2,0.34),(10,3,0.42),(10,4,0.37),(10,5,0.40),
+(11,1,0.83),(11,2,0.88),(11,3,0.96),(11,4,0.91),(11,5,0.94),
+(12,1,0.40),(12,2,0.45),(12,3,0.53),(12,4,0.48),(12,5,0.51),
+(13,1,0.47),(13,2,0.52),(13,3,0.60),(13,4,0.55),(13,5,0.58),
+(14,1,0.18),(14,2,0.21),(14,3,0.29),(14,4,0.26),(14,5,0.29),
+(15,1,0.65),(15,2,0.70),(15,3,0.78),(15,4,0.73),(15,5,0.76),
+(16,1,0.26),(16,2,0.31),(16,3,0.39),(16,4,0.34),(16,5,0.37),
+(17,1,0.59),(17,2,0.64),(17,3,0.72),(17,4,0.67),(17,5,0.70),
+(18,1,0.15),(18,2,0.18),(18,3,0.26),(18,4,0.23),(18,5,0.26),
+(19,1,0.69),(19,2,0.74),(19,3,0.82),(19,4,0.77),(19,5,0.80),
+(20,1,0.34),(20,2,0.39),(20,3,0.47),(20,4,0.42),(20,5,0.45),
+(21,1,0.25),(21,2,0.30),(21,3,0.38),(21,4,0.33),(21,5,0.36),
+(22,1,0.77),(22,2,0.82),(22,3,0.90),(22,4,0.85),(22,5,0.88),
+(23,1,0.50),(23,2,0.55),(23,3,0.63),(23,4,0.58),(23,5,0.61),
+(24,1,0.31),(24,2,0.36),(24,3,0.44),(24,4,0.39),(24,5,0.42),
+(25,1,0.64),(25,2,0.69),(25,3,0.77),(25,4,0.72),(25,5,0.75),
+(26,1,0.45),(26,2,0.50),(26,3,0.58),(26,4,0.53),(26,5,0.56),
+(27,1,0.36),(27,2,0.41),(27,3,0.49),(27,4,0.44),(27,5,0.47),
+(28,1,0.28),(28,2,0.31),(28,3,0.39),(28,4,0.36),(28,5,0.39),
+(29,1,0.71),(29,2,0.76),(29,3,0.84),(29,4,0.79),(29,5,0.82),
+(30,1,0.54),(30,2,0.59),(30,3,0.67),(30,4,0.62),(30,5,0.65)
+ON DUPLICATE KEY UPDATE nivel = VALUES(nivel);

@@ -85,19 +85,32 @@ class PreguntasModel
 
     public function obtenerPreguntaPorId($id)
     {
-        $sql = "SELECT * FROM pregunta WHERE id_pregunta = $id";
+        $sql = "
+            SELECT 
+                p.*, 
+                c.nombre AS categoria
+            FROM pregunta p
+            LEFT JOIN categoria c ON p.id_categoria = c.id_categoria
+            WHERE p.id_pregunta = $id
+        ";
         $result = $this->conexion->query($sql);
         return $result[0] ?? null;
     }
 
     public function obtenerSugerenciaPorId($id)
     {
-        $sql = "SELECT * FROM sugerencia WHERE id_sugerencia = $id";
+        $sql = "
+            SELECT 
+                s.*, 
+                c.nombre AS categoria
+            FROM sugerencia s
+            LEFT JOIN categoria c ON s.id_categoria = c.id_categoria
+            WHERE s.id_sugerencia = $id
+        ";
         $result = $this->conexion->query($sql);
         return $result[0] ?? null;
     }
 
-    //Activas, incluye reportadas 
     public function obtenerPreguntasConRespuestas()
     {
         $sql = "
@@ -105,28 +118,30 @@ class PreguntasModel
                 p.id_pregunta AS pregunta_id, 
                 p.descripcion AS pregunta, 
                 r.descripcion AS respuesta, 
-                r.es_correcta
+                r.es_correcta,
+                c.nombre AS categoria
             FROM pregunta p
             LEFT JOIN respuesta r ON p.id_pregunta = r.id_pregunta
+            LEFT JOIN categoria c ON p.id_categoria = c.id_categoria
             ORDER BY p.id_pregunta;
         ";
 
         return $this->conexion->query($sql);
     }
 
-    //Devuelve preguntas con al menos un reporte, y su cantidad
-    //a cambiar a reportes model
     public function obtenerPreguntasReportadas()
     {
         $sql = "
             SELECT 
                 p.id_pregunta AS pregunta_id,
                 p.descripcion AS pregunta,
+                c.nombre AS categoria,
                 rep_counts.cantidad_reportes,
                 r.descripcion AS respuesta,
                 r.es_correcta
             FROM pregunta p
             LEFT JOIN respuesta r ON p.id_pregunta = r.id_pregunta
+            LEFT JOIN categoria c ON p.id_categoria = c.id_categoria
             INNER JOIN (
                 SELECT id_pregunta, COUNT(*) AS cantidad_reportes
                 FROM reporte
@@ -135,7 +150,8 @@ class PreguntasModel
             ORDER BY p.id_pregunta;
         ";
         return $this->conexion->query($sql);
-    } 
+    }
+
 
     public function obtenerPreguntasSugeridas()
     {
@@ -145,14 +161,18 @@ class PreguntasModel
                 s.descripcion AS pregunta,
                 rs.descripcion AS respuesta,
                 rs.es_correcta,
-                u.usuario AS usuario_sugirio
+                u.usuario AS usuario_sugirio,
+                c.nombre AS categoria
             FROM sugerencia s
             LEFT JOIN respuesta_sugerida rs ON s.id_sugerencia = rs.id_sugerencia
             INNER JOIN usuarios u ON s.id_usuario = u.id
+            LEFT JOIN categoria c ON s.id_categoria = c.id_categoria
             ORDER BY s.id_sugerencia;
         ";
+
         return $this->conexion->query($sql);
     }
+
 
     public function eliminarPregunta($id_pregunta)
     {
@@ -248,5 +268,15 @@ class PreguntasModel
         $result=$this->conexion->query($sql);
 
         return $result[0]['id'];
+    }
+
+    public function getCategoriaDe($id_pregunta)
+    {
+        $query = "SELECT id_categoria FROM pregunta WHERE id_pregunta = $id_pregunta";
+        $result = $this->conexion->query($query);
+
+        return ($result && isset($result[0]['id_categoria']))
+            ? $result[0]['id_categoria']
+            : null;
     }
 }

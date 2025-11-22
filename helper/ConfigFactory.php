@@ -32,6 +32,7 @@ include_once("controller/RankingController.php");
 include_once("controller/perfilController.php");
 
 include_once("model/ReportesModel.php");
+include_once("model/CategoriasModel.php"); 
 class ConfigFactory
 {
     private $config;
@@ -45,6 +46,7 @@ class ConfigFactory
     private $usuarioModel; 
     private $mailService;
     private $reportesModel;
+    private $categoriasModel;
     public function __construct()
     {
         $this->config = parse_ini_file("config/config.ini");
@@ -70,6 +72,8 @@ class ConfigFactory
 
         $this->usuarioModel = new UsuarioModel($this->conexion);
 
+        $this->categoriasModel = new CategoriasModel($this->conexion, $this->usuarioModel); 
+
 
 //Hay 2 instancias de modelo, este se tiene que crear previamente e inyectarlo en los controladores que se necesita
         $this->objetos["LoginController"] = new LoginController(new UsuarioModel($this->conexion), $this->renderer, $this->redirectModel);
@@ -80,19 +84,19 @@ class ConfigFactory
 
         $this->objetos["PaginaPrincipalController"] = new PaginaPrincipalController(($this->conexion), $this->renderer);
 
-        $this->objetos["InicioAdminController"] = new InicioAdminController(new InicioAdminModel($this->conexion), $this->renderer);
+        $this->objetos["InicioAdminController"] = new InicioAdminController(new InicioAdminModel($this->conexion), $this->renderer, $this->categoriasModel);
 
-        $this->objetos["PartidaController"]= new PartidaController(new PartidaModel($this->conexion, $this->usuarioModel), $this->renderer, $this->redirectModel, $this->usuarioModel, $this->preguntasModel);
+        $this->objetos["PartidaController"]= new PartidaController(new PartidaModel($this->conexion, $this->usuarioModel), $this->renderer, $this->redirectModel, $this->usuarioModel, $this->preguntasModel, $this->categoriasModel);
 
         $this->objetos["MapaController"] = new MapaController();
 
         $this->objetos["InicioEditorController"] = new InicioEditorController(($this->conexion), $this->renderer);
 
-        $this->objetos["NuevaPreguntaController"] = new NuevaPreguntaController(($this->conexion), $this->renderer, $this->redirectModel, $this->preguntasModel, $this->respuestasModel, $this->usuarioModel);
+        $this->objetos["NuevaPreguntaController"] = new NuevaPreguntaController(($this->conexion), $this->renderer, $this->redirectModel, $this->preguntasModel, $this->respuestasModel, $this->usuarioModel, $this->categoriasModel);
 
-        $this->objetos["PreguntasListaController"] = new PreguntasListaController(($this->conexion), $this->renderer, $this->redirectModel, $this->preguntasModel);
+        $this->objetos["PreguntasListaController"] = new PreguntasListaController(($this->conexion), $this->renderer, $this->redirectModel, $this->preguntasModel, $this->categoriasModel);
 
-        $this->objetos["GestionarPreguntaController"] = new GestionarPreguntaController(($this->conexion), $this->renderer, $this->redirectModel, $this->preguntasModel, $this->respuestasModel, $this->reportesModel);
+        $this->objetos["GestionarPreguntaController"] = new GestionarPreguntaController(($this->conexion), $this->renderer, $this->redirectModel, $this->preguntasModel, $this->respuestasModel, $this->reportesModel, $this->categoriasModel);
     
         $this->objetos["RankingController"] = new RankingController(($this->conexion), $this->renderer, $this->redirectModel, $this->usuarioModel);
     

@@ -8,8 +8,8 @@ class NuevaPreguntaController
     private $preguntasModel;
     private $respuestasModel;
     private $usuarioModel;
-
-    public function __construct($model, $renderer, $redirectModel, $preguntasModel, $respuestasModel,$usuarioModel)
+    private $categoriasModel; 
+    public function __construct($model, $renderer, $redirectModel, $preguntasModel, $respuestasModel,$usuarioModel, $categoriasModel)
     {
         $this->model = $model;     
         $this->renderer = $renderer; 
@@ -17,6 +17,7 @@ class NuevaPreguntaController
         $this->preguntasModel = $preguntasModel;
         $this->respuestasModel = $respuestasModel;
         $this->usuarioModel = $usuarioModel;
+        $this->categoriasModel = $categoriasModel;
     }
 
     public function base()
@@ -31,21 +32,31 @@ class NuevaPreguntaController
             return;
         }
 
-        $foto = $_SESSION['foto_perfil'] ?? '/public/imagenes/usuarioImagenDefault.png';
-        $rol = $_SESSION['rol'] ?? 'Jugador';
+        $data = $this->cargarDatos();
 
-        $data = [
-        ];
-        if($rol== 'Jugador') {
-            $data = ['Editor' => false,
-                "foto_perfil" => $foto];
-        } else {
-            $data = ['Editor' => true,
-                "foto_perfil" => $foto];
+        $this->renderer->render('nuevaPregunta', $data);
+    }
+
+    private function cargarDatos()
+    {
+        $rol = $_SESSION['rol'] ?? 'Jugador';
+        $foto = $_SESSION['foto_perfil'] ?? '/public/imagenes/usuarioImagenDefault.png';
+
+        if ($rol == 'Jugador') {
+            return [
+                'categorias' => $this->categoriasModel->getCategoriasActivas(),
+                'Editor' => false,
+                'foto_perfil' => $foto
+            ];
         }
 
-        $this->renderer->render("nuevaPregunta", $data);
+        return [
+            'categorias' => $this->categoriasModel->getAllCategorias(),
+            'Editor' => true,
+            'foto_perfil' => $foto
+        ];
     }
+
 
     public function guardarPregunta()
     {
@@ -53,7 +64,6 @@ class NuevaPreguntaController
         $id_categoria = $_POST['id_categoria'] ?? 0;
         $respuestas = $_POST['respuestas'] ?? [];
         $indiceCorrecta = $_POST['es_correcta'] ?? 0;
-        $foto = $_SESSION['foto_perfil'] ?? '/public/imagenes/usuarioImagenDefault.png';
 
         if (!$this->validarCampos($descripcion, $respuestas, $indiceCorrecta)) {
             $this->renderer->render('nuevaPregunta', ['error' => 'Todos los campos son obligatorios.']);
@@ -67,11 +77,10 @@ class NuevaPreguntaController
             $this->respuestasModel->insertarRespuesta($texto, $esCorrecta, $id_pregunta);
         } 
 
-        $data = [
-            'mensaje' => 'La pregunta fue agregada exitosamente',
-            'Editor' => true,
-            "foto_perfil" => $foto
-        ];
+        $this->categoriasModel->actualizarCategoria($id_categoria); 
+
+        $data = $this->cargarDatos();
+        $data['mensaje'] = "La pregunta fue agregada exitosamente.";
         $this->renderer->render('nuevaPregunta', $data);
     }
 
@@ -81,7 +90,6 @@ class NuevaPreguntaController
         $id_categoria = $_POST['id_categoria'] ?? 0;
         $respuestas = $_POST['respuestas'] ?? [];
         $indiceCorrecta = $_POST['es_correcta'] ?? 0;
-        $foto = $_SESSION['foto_perfil'] ?? '/public/imagenes/usuarioImagenDefault.png';
 
         if (!$this->validarCampos($descripcion, $respuestas, $indiceCorrecta)) {
             $this->renderer->render('nuevaPregunta', ['error' => 'Todos los campos son obligatorios.']);
@@ -103,11 +111,9 @@ class NuevaPreguntaController
             $esCorrecta = ($i == $indiceCorrecta) ? 1 : 0;
             $this->respuestasModel->insertarRespuestaSugerida($texto, $esCorrecta, $id_pregunta);
         } 
-        $data = [
-            'mensaje' => 'La pregunta fue sugerida exitosamente',
-            'Editor' => false,
-            "foto_perfil" => $foto
-        ];
+        
+        $data = $this->cargarDatos();
+        $data['mensaje'] = "La pregunta fue sugerida exitosamente.";
         $this->renderer->render('nuevaPregunta', $data);
     }
 

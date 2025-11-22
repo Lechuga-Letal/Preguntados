@@ -8,15 +8,19 @@ use Dompdf\Options;
 class inicioAdminController{
     private $model;
     private $renderer;
+    private $categoriaModel;
 
-    public function __construct($model, $renderer){
+    public function __construct($model, $renderer, $categoriaModel){
         $this->model = $model;
         $this->renderer = $renderer;
+        $this->categoriaModel = $categoriaModel; 
     }
 
     public function base(){
         $this->inicioAdmin();
     }
+
+
 
     public function inicioAdmin(){
         if (!isset($_SESSION["usuario"])) {
@@ -29,7 +33,10 @@ class inicioAdminController{
             exit;
         }
 
-        $foto = $_SESSION['foto_perfil'] ?? '/public/imagenes/usuarioImagenDefault.png';
+        $this->cargarData(null); 
+    }
+
+    public function cargarData($mensajeCat) {
         $totalUsuarios= $this->model->contarUsuarios();
         $partidasJugadas= $this->model->partidasFinalizadas();
         $preguntasTotales= $this->model->preguntasTotales();
@@ -100,6 +107,17 @@ class inicioAdminController{
             $rutaRol
         );
 
+        $categoriasAct = $this->categoriaModel->getCategoriasActivasData();
+        $categoriasInact = $this->categoriaModel->getCategoriasInactivasData(); 
+
+        $MIN_PREGUNTAS = $this->categoriaModel->getMinPreguntas();
+
+        foreach ($categoriasInact as &$cat) {
+            $cat['faltantes'] = max(0, $MIN_PREGUNTAS - $cat['cantidad_preguntas']);
+        }
+
+        $foto = $_SESSION['foto_perfil'] ?? 'public/imagenes/usuarioImagenDefault.png';
+
         $data = [
             "usuario" => $_SESSION["usuario"],
 
@@ -108,12 +126,17 @@ class inicioAdminController{
             "preguntasTotales"    => $preguntasTotales,
             "preguntasReportadas" => $preguntasReportadas,
             "usuarios" => $usuarios,
+            "categoriasAct" => $categoriasAct,
+            "categoriasInact" => $categoriasInact,
+
             "foto_perfil" => $foto,
             "grafUsuariosSexo" => "/public/graficos/usuarios_por_sexo.png",
             "grafUsuariosEdad" => "/public/graficos/usuarios_por_edad.png",
             "grafUsuariosPais" => "/public/graficos/usuarios_por_pais.png",
             "grafUsuariosRol"  => "/public/graficos/usuarios_por_rol.png",
-            "grafUsuariosPeriodo" => "/public/graficos/usuarios_por_periodo.png"
+            "grafUsuariosPeriodo" => "/public/graficos/usuarios_por_periodo.png",
+
+            "mensajeCat" => $mensajeCat
         ];
 
         $this->renderer->render("inicioAdmin", $data);
@@ -144,7 +167,22 @@ class inicioAdminController{
         $graph->Stroke($archivo);
     }
 
-
+    public function crearCategoria()
+    {
+        $nombreCategoria = $_POST['categoriaNombre'] ?? null; 
+        $fotoCategoria = null; 
+        if(!empty($_FILES['categoriaImagen']['name'])) {
+            $imagen = "public/imagenes/";
+            $fotoCategoria = $imagen . basename($_FILES['categoriaImagen']['name']);
+            move_uploaded_file($_FILES['categoriaImagen']['tmp_name'], $fotoCategoria); 
+        }
+        $sePudo = $this->categoriaModel->crearNuevaCategoria($nombreCategoria, $fotoCategoria);
+        if(!$sePudo) { //De momento sin mensajes especificos segun error
+            $this->cargarData("No se puso agregar la categoria.");
+        } else {
+            $this->cargarData("Se agrego la categoria exitosamente.");
+        }
+    }
 
     public function generarPDF(){
         $usuarios = $this->model->obtenerUsuarios();

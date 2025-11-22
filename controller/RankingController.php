@@ -47,11 +47,15 @@ class RankingController
         $limite = $_GET['limite'] ?? null;
         $rango = $_GET['rango'] ?? null;
         $foto = $_SESSION['foto_perfil'] ?? '/public/imagenes/usuarioImagenDefault.png';
+
         $usuarios = $this->usuarioModel->obtenerListaMejoresJugadoresPorRango($rango, $limite);
         $data = [
             "usuarios" => $usuarios,
             "foto_sesion" => $foto
 
+            "foto_perfil" => $foto,
+            "rango" => $rango,
+            "filtro"=> $limite
         ];
         $this->renderer->render("ranking", $data);
 
@@ -66,6 +70,8 @@ class RankingController
 
         $data = [
             "usuarios" => $usuarios,
+            "categoria" => $categoria,
+            "filtro"=> $limite
             "foto_sesion" => $foto
         ];
         $this->renderer->render("ranking", $data);
