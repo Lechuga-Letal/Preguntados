@@ -1,98 +1,109 @@
 body.home {
-  justify-content: center;
-  align-items: center;
+    margin: 0;
+    padding: 0;
+    height: 100vh;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    text-align: center;
+    box-sizing: border-box;
 }
 
 .container-home {
-  text-align: center;
-  padding: 0 20px;
-}
-
-.button-container {
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-  align-items: center;
+    width: 100%;
+    max-width: 480px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+    padding: 0 20px;
 }
 
 .logo-link {
-  margin-bottom: 2rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .logo {
-  width: 160px;
-  height: auto;
-  filter: drop-shadow(0 0 12px rgba(255, 255, 255, 0.15));
-  transition: transform var(--transition-medium);
+    width: 170px;
+    height: auto;
+    margin-top:150px;
+    filter: drop-shadow(0 0 14px rgba(255, 255, 255, 0.18));
+    transition: transform 0.4s ease;
 }
 
 .logo:hover {
-  transform: scale(1.05);
+    transform: scale(1.07);
 }
 
 .container-home h1 {
-  color: var(--color-primary);
-  letter-spacing: 2px;
+    color: var(--color-primary);
+    letter-spacing: 2px;
+    margin: 0;
 }
 
 .container-home p {
-  color: var(--color-text-secondary);
+    color: var(--color-text-secondary);
+    margin: 0;
+    margin-bottom: 10px;
 }
 
 .button-container {
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-  align-items: center;
-  margin-top: 2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    align-items: center;
 }
 
 .btn {
-  display: inline-block;
-  text-decoration: none;
-  font-weight: 600;
-  padding: 15px 60px;
-  border-radius: var(--radius-base);
-  transition: all var(--transition-medium);
-  cursor: pointer;
-  text-transform: uppercase;
-  letter-spacing: 1px;
+    display: inline-block;
+    padding: 15px 60px;
+    border-radius: var(--radius-base);
+    text-decoration: none;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    cursor: pointer;
+    transition: all 0.3s ease;
 }
 
 .btn-custom {
-  background: var(--color-primary);
-  color: #1a1a1a;
-  box-shadow: 0 4px 12px rgba(255, 193, 7, 0.3);
+    background: var(--color-primary);
+    color: #1a1a1a;
+    box-shadow: 0 4px 12px rgba(255, 193, 7, 0.28);
 }
 
 .btn-custom:hover {
-  background: #e0ad06;
-  color: var(--color-text-main);
-  transform: translateY(-3px);
-  box-shadow: 0 6px 16px rgba(255, 193, 7, 0.5);
+    background: #e0ad06;
+    transform: translateY(-3px);
 }
 
 .btn-secondary {
-  background: transparent;
-  border: 2px solid var(--color-accent);
-  color: var(--color-accent);
-  box-shadow: none;
+    background: transparent;
+    border: 2px solid var(--color-accent);
+    color: var(--color-accent);
 }
 
 .btn-secondary:hover {
-  background: var(--color-accent);
-  color: #000;
-  transform: translateY(-3px);
-  box-shadow: 0 4px 12px rgba(0, 188, 212, 0.4);
+    background: var(--color-accent);
+    color: #000;
+    transform: translateY(-3px);
 }
 
 @media (max-width: 480px) {
-  .button-container {
-    gap: 15px;
-  }
+    body.home {
+        height: 100vh;
+    }
 
-  body.home {
-    justify-content: flex-start;
-    padding-top: 80px;
-  }
+    .logo {
+        width: 140px;
+    }
+
+    .button-container {
+        gap: 15px;
+    }
 }
