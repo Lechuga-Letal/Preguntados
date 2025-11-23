@@ -4,7 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="c6cda32a-4762-447d-96e3-315a19b9578d" name="Changes" comment="vista intermedia de reportarPreguntas hech" />
+    <list default="true" id="c6cda32a-4762-447d-96e3-315a19b9578d" name="Changes" comment="vista intermedia de reportarPreguntas hech">
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources/e417b4de-0a45-43e7-9235-de086e57a737.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources/e417b4de-0a45-43e7-9235-de086e57a737.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -103,6 +106,9 @@
       <workItem from="1763828743915" duration="44000" />
       <workItem from="1763833969161" duration="1253000" />
       <workItem from="1763837148627" duration="81000" />
+      <workItem from="1763838661886" duration="355000" />
+      <workItem from="1763851258717" duration="4044000" />
+      <workItem from="1763905436015" duration="653000" />
     </task>
     <task id="LOCAL-00001" summary="arreglo de partida pendiente cancelada">
       <option name="closed" value="true" />
