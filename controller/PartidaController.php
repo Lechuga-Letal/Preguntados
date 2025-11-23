@@ -43,20 +43,25 @@ class PartidaController{
         ];
         $this->renderer->render("oponente", $data);
     }
-    public function iniciarPartida() {
+
+    public function iniciarNuevaPartida() {
         if(!isset($_SESSION['usuario'])){
             header("Location: /login/loginForm");
             exit();
         }
 
-        //Este metodo tiene que ir en otro lado
-        //En vez de buscar por ID, buscar si el usuario tiene una partida sin terminar
-        // se soluciona con un direccionamiento de link
-//        if($_SESSION["id"]){
-//            $puntaje=$this->model->obtenerTotalAciertosPorPartida($_SESSION["id"]);
-//            $this->model->finalizarPartida($_SESSION["id"],$puntaje);
-//            $this->borradoDeDatosPartidaEnSession();
-//        }
+        if($_SESSION["id"]){
+            $puntaje=$this->model->obtenerTotalAciertosPorPartida($_SESSION["id"]);
+            $this->model->finalizarPartida($_SESSION["id"],$puntaje);
+            $this->borradoDeDatosPartidaEnSession();
+        }
+        $this->redirectModel->redirect("partida/iniciarPartida");
+    }
+    public function iniciarPartida() {
+        if(!isset($_SESSION['usuario'])){
+            header("Location: /login/loginForm");
+            exit();
+        }
 
         $categorias = $this->categoriasModel->getCategoriasActivas();
 
