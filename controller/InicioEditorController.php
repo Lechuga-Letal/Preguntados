@@ -32,8 +32,5 @@ class InicioEditorController
         } else {
             header("Location: /login/loginForm");
         }
-
-
     }
-
 }

@@ -33,6 +33,8 @@ include_once("controller/perfilController.php");
 
 include_once("model/ReportesModel.php");
 include_once("model/CategoriasModel.php"); 
+
+include_once("controller/EditarPreguntaController.php"); 
 class ConfigFactory
 {
     private $config;
@@ -105,6 +107,9 @@ class ConfigFactory
         $this->objetos["ReportarUsuarioController"] = new ReportarUsuarioController($this->renderer, $this->usuarioModel, $this->reportesModel, $this->redirectModel);
 
         $this->objetos["ReportarPreguntaController"] = new ReportarPreguntaController(($this->conexion), $this->renderer, $this->redirectModel, $this->usuarioModel, $this->preguntasModel, $this->respuestasModel, $this->reportesModel);
+        
+        $this->objetos["EditarPreguntaController"] = new EditarPreguntaController(($this->conexion), $this->renderer, $this->redirectModel, $this->preguntasModel, $this->respuestasModel, $this->reportesModel, $this->categoriasModel);
+        
     }
 
     public function get($objectName)

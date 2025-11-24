@@ -65,7 +65,7 @@ class GestionarPreguntaController
                 $this->redirectModel->redirect('preguntasLista?tipo=activas');
                 break;
             case 'editar':
-                $this->redirectModel->redirect("editarPregunta?id=$id");
+                $this->redirectModel->redirectConVariable("editarPregunta", $id);
                 break;
         }
     }

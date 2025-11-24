@@ -1,0 +1,103 @@
+<title>Editar Pregunta</title>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+<link rel="stylesheet" href="/public/css/vistas/nuevaPreguntaStyle.css">
+<link rel="stylesheet" href="/public/css/componentes/headerComponente.css">
+</head>
+
+<body>
+
+  <header class="header"> 
+    <h2 class="titulo">Preguntados</h2>
+    <div class="user-info">
+        <form method="POST" action="/Preguntados/inicio/logout">
+        <input class="logout-btn" type="submit" value="Cerrar sesión">
+        </form>
+        <p class="username">{{usuario}}</p>
+        <a href="/perfil">
+            {{#foto_perfil}}
+                <img src="/{{foto_perfil}}" alt="{{usuario}}" class="img-fluid rounded-circle" width="50" height="50">
+            {{/foto_perfil}}
+            {{^foto_perfil}}
+                <img src="/public/imagenes/usuarioImagenDefault.png" alt="{{usuario}}" class="img-fluid rounded-circle" width="50" height="50">
+            {{/foto_perfil}}
+        </a>
+    </div>
+  </header>
+
+<main class="container my-5">
+ <div class="border border-secondary rounded p-4 mx-auto shadow-lg" style="max-width: 700px;">
+      <form method="POST" action="/editarPregunta/guardarEdicion">
+      <h3 class="text-info mb-3">Editar Pregunta</h3>
+
+      {{#error}}
+        <div class="alert alert-danger py-2">{{error}}</div>
+      {{/error}}
+
+      {{#mensaje}}
+        <div class="alert alert-success py-2">{{mensaje}}</div>
+      {{/mensaje}}
+
+      <input type="number" name="id_pregunta" id="id_pregunta" value="{{pregunta.id_pregunta}}" hidden>
+
+        <div class="mb-3">
+          <label for="descripcion" class="form-label fw-bold">Interrogante:</label>
+          <input type="text" name="descripcion" id="descripcion" class="form-control bg-dark text-light border-0" value="{{pregunta.descripcion}}" required>
+        </div>
+
+        <div class="mb-4">
+        <label for="categoria" class="form-label fw-bold text-muted">Categoría</label>
+        <select name="id_categoria" id="categoria" 
+                class="form-select bg-dark text-light border-0 opacity-50">
+
+            {{#categorias}}
+                <option value="{{id_categoria}}" {{#selected}}selected{{/selected}}>
+                    {{nombre}}
+                </option>
+            {{/categorias}}
+
+        </select>
+        </div>
+
+        <div class="border border-secondary rounded p-3">
+        <h4 class="text-warning mb-3 text-center">Respuestas</h4>
+
+        <div class="row g-3">
+            {{#respuestas}}
+            <div class="col-md-12">
+                <div class="input-group">
+                    <span class="input-group-text bg-dark text-light border-0">
+                        {{numero}}
+                    </span>
+
+                    <input type="text" 
+                          name="respuestas[]" 
+                          class="form-control bg-dark text-light border-0" 
+                          value="{{descripcion}}" 
+                          required>
+
+                    <div class="input-group-text bg-dark border-0">
+                        <input class="form-check-input mt-0" 
+                              type="radio" 
+                              name="es_correcta" 
+                              value="{{id_respuesta}}" 
+                              {{#es_correcta}}checked{{/es_correcta}}
+                              required>
+                    </div>
+                </div>
+            </div>
+            {{/respuestas}}
+        </div>
+
+        <div class="d-flex justify-content-between mt-4">
+            <button type="submit" class="btn btn-outline-warning custom-outline-warning">
+                Actualizar pregunta
+            </button>
+
+            <a href="/inicio/" class="btn btn-secondary">
+                Volver
+            </a>
+        </div>
+    </div>
+  </form>
+</div>
+</main>

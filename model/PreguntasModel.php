@@ -18,6 +18,13 @@ class PreguntasModel
         return $res[0]['id'] ?? null;
     }
 
+    public function actualizarPregunta($id_pregunta, $descripcion, $id_categoria)
+    {
+        $query = "UPDATE pregunta SET descripcion = '$descripcion', id_categoria = '$id_categoria'
+                WHERE id_pregunta = '$id_pregunta'";
+        $this->conexion->query($query);
+    }
+
     public function actualizarNivel($idPregunta){
         $cantidadDeVecesDada=$this->obtenerCantidadDeVecesDada($idPregunta);
 
