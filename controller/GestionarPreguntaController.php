@@ -34,6 +34,9 @@ class GestionarPreguntaController
         if ($id > 0) {
             $_SESSION['id_pregunta_actual'] = $id;
             $_SESSION['tipo_pregunta_actual'] = $tipo ?? 'activa';
+            if ($action) {
+                $_SESSION['action_pregunta_actual'] = $action;
+            }
 
             $this->redirectModel->redirect("gestionarPregunta");
             return;
@@ -49,6 +52,11 @@ class GestionarPreguntaController
             return;
         }
 
+        if (!$action && isset($_SESSION['action_pregunta_actual'])) {
+            $action = $_SESSION['action_pregunta_actual'];
+            unset($_SESSION['action_pregunta_actual']); // use once
+        }
+
         if (!empty($action)) {
             $this->procesarAccion($id, $action);
             return;
@@ -56,8 +64,6 @@ class GestionarPreguntaController
 
         $this->cargarPregunta($id, $tipo);
     }
-
-
 
     private function procesarAccion($id, $action)
     {

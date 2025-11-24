@@ -102,7 +102,7 @@ class ConfigFactory
     
         $this->objetos["RankingController"] = new RankingController(($this->conexion), $this->renderer, $this->redirectModel, $this->usuarioModel);
     
-        $this->objetos["PerfilController"] = new PerfilController(($this->conexion), $this->renderer, $this->redirectModel, $this->usuarioModel);
+        $this->objetos["PerfilController"] = new PerfilController(($this->conexion), $this->renderer, $this->redirectModel, $this->usuarioModel, $this->categoriasModel);
 
         $this->objetos["ReportarUsuarioController"] = new ReportarUsuarioController($this->renderer, $this->usuarioModel, $this->reportesModel, $this->redirectModel);
 
