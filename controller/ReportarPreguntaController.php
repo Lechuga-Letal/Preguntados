@@ -32,16 +32,29 @@ class ReportarPreguntaController
             return;
         }
 
-        $id_pregunta = $_GET['idPregunta'] ?? null;
-        if (!$id_pregunta || !is_numeric($id_pregunta)) {
+        if (isset($_GET['idPregunta']) && is_numeric($_GET['idPregunta'])) {
+
+            $_SESSION['id_pregunta_reportar'] = (int) $_GET['idPregunta'];
+
+            if (isset($_GET['success'])) $_SESSION['report_success'] = true;
+            if (isset($_GET['error'])) $_SESSION['report_error'] = true;
+
+            $this->redirectModel->redirect("reportarPregunta"); 
+            return;
+        }
+
+        if (!isset($_SESSION['id_pregunta_reportar'])) {
             $this->renderer->render('error', ['mensaje' => 'ID de pregunta inválido.']);
             return;
         }
+
+        $id_pregunta = $_SESSION['id_pregunta_reportar'];
 
         $pregunta = $this->preguntasModel->obtenerPreguntaPorId($id_pregunta);
         $respuestas = $this->respuestasModel->obtenerRespuestasPorPregunta($id_pregunta);
 
         if (!$pregunta) {
+            unset($_SESSION['id_pregunta_reportar']);
             $this->renderer->render('error', ['mensaje' => 'La pregunta no existe.']);
             return;
         }
@@ -51,10 +64,13 @@ class ReportarPreguntaController
             'respuestas' => $respuestas
         ];
 
-        if (isset($_GET['success'])) {
+        if (!empty($_SESSION['report_success'])) {
             $data['mensaje'] = '✅ El reporte fue enviado correctamente.';
-        } elseif (isset($_GET['error'])) {
+            unset($_SESSION['report_success']);
+        }
+        if (!empty($_SESSION['report_error'])) {
             $data['error'] = '❌ No se pudo enviar el reporte.';
+            unset($_SESSION['report_error']);
         }
 
         $this->renderer->render('reportarPregunta', $data);

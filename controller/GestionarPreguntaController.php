@@ -27,21 +27,37 @@ class GestionarPreguntaController
 
     public function cargarVista()
     {
-        $id = $_GET['id'] ?? null;
-        $tipo = $_GET['tipo'] ?? 'activa';
+        $id = isset($_GET['id']) ? (int) $_GET['id'] : 0;
+        $tipo = $_GET['tipo'] ?? null;
         $action = $_GET['action'] ?? null;
+
+        if ($id > 0) {
+            $_SESSION['id_pregunta_actual'] = $id;
+            $_SESSION['tipo_pregunta_actual'] = $tipo ?? 'activa';
+
+            $this->redirectModel->redirect("gestionarPregunta");
+            return;
+        }
+
+        if (isset($_SESSION['id_pregunta_actual'])) {
+            $id = $_SESSION['id_pregunta_actual'];
+            $tipo = $_SESSION['tipo_pregunta_actual'];
+        }
 
         if ($id <= 0) {
             $this->redirectModel->redirect("editor/");
             return;
         }
 
-        if ($action) {
+        if (!empty($action)) {
             $this->procesarAccion($id, $action);
+            return;
         }
 
         $this->cargarPregunta($id, $tipo);
     }
+
+
 
     private function procesarAccion($id, $action)
     {
@@ -68,11 +84,11 @@ class GestionarPreguntaController
                 $this->redirectModel->redirectConVariable("editarPregunta", $id);
                 break;
         }
+        return; 
     }
 
     private function cargarPregunta($id, $tipo)
     {
-        //Falta escribir el caso de pasar un id por url y que esa pregunta ya no esta en la bd
         if ($tipo === 'sugeridas') {
             $pregunta = $this->preguntasModel->obtenerSugerenciaPorId($id);
             $respuestas = $this->respuestasModel->obtenerRespuestasSugeridas($id);
@@ -83,7 +99,7 @@ class GestionarPreguntaController
             $reportes = $this->reportesModel->obtenerReportesPorPregunta($id);
         }
 
-        $data = [ //Ttodo lo necesario para que mustache presente la pregunta 
+        $data = [ 
             'pregunta_id' => $id,
             'pregunta' => $pregunta,
             'categoria' => $pregunta['categoria'] ?? null,
