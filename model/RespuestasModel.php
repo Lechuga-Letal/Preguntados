@@ -34,4 +34,11 @@ class RespuestasModel
         $sql = "SELECT * FROM respuesta_sugerida WHERE id_sugerencia = $id_sugerencia";
         return $this->conexion->query($sql);
     }
+
+    public function actualizarRespuesta($id_respuesta, $descripcion, $correcta)
+    {
+        $sql = "UPDATE respuesta SET descripcion = '$descripcion', es_correcta = '$correcta'
+                WHERE id_respuesta = '$id_respuesta'";
+        $this->conexion->query($sql); 
+    }
 }
