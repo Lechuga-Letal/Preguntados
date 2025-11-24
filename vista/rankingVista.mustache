@@ -38,7 +38,8 @@
         
         <h3 class="text-light mb-3">Ranking de usuarios</h3>
         <div class="categorias">
-          <input type="hidden" name="rango" id="rango" value="pro">
+        <?php echo "PHP funciona"; ?>
+          <input type="hidden" name="rango" id="rango" value="{{rango}}">
           <input type="button" class="botonOpcion" value="rango pro" onclick="cambiarRango('pro')">
           <input type="button" class="botonOpcion" value="rango medio" onclick="cambiarRango('medio')">
           <input type="button" class="botonOpcion" value="rango novato" onclick="cambiarRango('novato')">
@@ -61,7 +62,7 @@
         
         <h3 class="text-light mb-3">Ranking de usuarios categoria</h3>
         <div class="categorias">
-          <input type="hidden" name="categoria" id="categoria" value="Historia">
+          <input type="hidden" name="categoria" id="categoria" value="{{categoria}}">
           <input type="button" class="botonOpcion" value="Historia" onclick="cambiarCategoria('Historia')">
           <input type="button" class="botonOpcion" value="Deportes" onclick="cambiarCategoria('Deportes')">
           <input type="button" class="botonOpcion" value="Entretenimiento" onclick="cambiarCategoria('Entretenimiento')">
@@ -70,9 +71,10 @@
         </div>
         
             <select name="limite" onchange="document.getElementById('rankingCategoriaForm').submit()">
+            <option value="10">filtro</option>
             <option value="1">1</option>
             <option value="5">5</option>
-            <option value="10" selected>10</option>
+            <option value="10">10</option>
             <option value="25">25</option>
             <option value="50">50</option>
             <option value="100">100</option>

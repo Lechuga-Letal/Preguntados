@@ -45,8 +45,13 @@ class RankingController
     public function obtenerListaMejoresJugadoresPorRango()
     {     
         $limite = $_GET['limite'] ?? null;
-        $rango = $_GET['rango'] ?? null;
         $foto = $_SESSION['foto_perfil'] ?? '/public/imagenes/usuarioImagenDefault.png';
+        if (isset($_GET['rango'])) {
+            $_SESSION['rango'] = $_GET['rango'];
+        }
+
+        $rango = $_SESSION['rango'];
+
 
         $usuarios = $this->usuarioModel->obtenerListaMejoresJugadoresPorRango($rango, $limite);
         $data = [
