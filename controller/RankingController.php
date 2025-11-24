@@ -23,20 +23,27 @@ class RankingController
     public function ranking()
     {
         $usuarios = $this->usuarioModel->getAllUsuarios();
-
+        $idUsuario = $_SESSION['id'] ?? $_SESSION['usuario']; 
+        $usuario = $this->usuarioModel->getUsuarioById($idUsuario);
+        $usuarioNombre = $usuario['usuario'];
         $data = [
             "usuarios" => $usuarios,
+            "usuario" => $usuarioNombre
         ];
         $this->renderer->render("ranking", $data);
     }
 
     public function mejorJugador()
     {
+        $idUsuario = $_SESSION['id'] ?? $_SESSION['usuario']; 
         $foto = $_SESSION['foto_perfil'] ?? '/public/imagenes/usuarioImagenDefault.png';
         $usuarios = $this->usuarioModel->obtenerListaMejoresJugadores();
+        $usuario = $this->usuarioModel->getUsuarioById($idUsuario);
+        $usuarioNombre = $usuario['usuario'];
         $data = [
             "usuarios" => $usuarios,
-            "foto_sesion" => $foto
+            "foto_sesion" => $foto, 
+            "usuario" => $usuarioNombre
         ];
         $this->renderer->render("ranking", $data);
 
@@ -52,6 +59,9 @@ class RankingController
 
         $rango = $_SESSION['rango'];
 
+        $idUsuario = $_SESSION['id'] ?? $_SESSION['usuario']; 
+        $usuario = $this->usuarioModel->getUsuarioById($idUsuario);
+        $usuarioNombre = $usuario['usuario'];
 
         $usuarios = $this->usuarioModel->obtenerListaMejoresJugadoresPorRango($rango, $limite);
         $data = [
@@ -59,7 +69,8 @@ class RankingController
             "foto_sesion" => $foto,
             "foto_perfil" => $foto,
             "rango" => $rango,
-            "filtro"=> $limite
+            "filtro"=> $limite,
+            "usuario" => $usuarioNombre
         ];
         $this->renderer->render("ranking", $data);
 
@@ -71,13 +82,16 @@ class RankingController
         $categoria = $_GET['categoria'] ?? null;
         $foto = $_SESSION['foto_perfil'] ?? '/public/imagenes/usuarioImagenDefault.png';
         $usuarios = $this->usuarioModel->obtenerListaMejoresJugadoresPorCategoria($categoria, $limite);
-
+        $idUsuario = $_SESSION['id'] ?? $_SESSION['usuario']; 
+        $usuario = $this->usuarioModel->getUsuarioById($idUsuario);
+        $usuarioNombre = $usuario['usuario'];
         $data = [
             "usuarios" => $usuarios,
             "categoria" => $categoria,
             "foto_perfil" => $foto,
             "filtro"=> $limite,
-            "foto_sesion" => $foto
+            "foto_sesion" => $foto,
+            $usuario => $usuarioNombre
         ];
         $this->renderer->render("ranking", $data);
 
