@@ -13,7 +13,7 @@ class inicioAdminController{
     public function __construct($model, $renderer, $categoriaModel){
         $this->model = $model;
         $this->renderer = $renderer;
-        $this->categoriaModel = $categoriaModel; 
+        $this->categoriaModel = $categoriaModel;
     }
 
     public function base(){
@@ -33,113 +33,125 @@ class inicioAdminController{
             exit;
         }
 
-        $this->cargarData(null); 
+        $this->cargarData(null);
     }
 
-    public function cargarData($mensajeCat) {
-        $totalUsuarios= $this->model->contarUsuarios();
-        $partidasJugadas= $this->model->partidasFinalizadas();
-        $preguntasTotales= $this->model->preguntasTotales();
-        $preguntasReportadas= $this->model->preguntasReportadas();
+    public function cargarData($mensajeCat)
+    {
+        $metricas = $this->obtenerMetricas();
+        $this->generarGraficos($metricas);
 
-        $usuariosDia= $this->model->contarUsuarios('dia');
-        $usuariosSemana= $this->model->contarUsuarios('semana');
-        $usuariosMes= $this->model->contarUsuarios('mes');
-        $usuariosAnio= $this->model->contarUsuarios('anio');
-        $usuarios= $this->model->obtenerUsuarios();
+        $categorias = $this->obtenerCategoriasData();
+        $data = $this->armarDataVista($metricas, $categorias, $mensajeCat);
+        $this->renderer->render("inicioAdmin", $data);
+    }
 
-        $sexoData= $this->model->contarUsuariosPorSexo();
-        $edadData= $this->model->contarUsuariosPorGrupoDeEdad();
-        $paisData= $this->model->contarUsuariosPorPais();
-        $rolData= $this->model->contarUsuariosPorRol();
+    private function obtenerMetricas()
+    {
+        return [
+            "usuariosTotales"   => $this->model->contarUsuarios(),
+            "partidasJugadas"   => $this->model->partidasFinalizadas(),
+            "preguntasTotales"  => $this->model->preguntasTotales(),
+            "preguntasReportadas" => $this->model->preguntasReportadas(),
 
-        $baseDir= __DIR__ . "/../public/graficos";
+            "usuariosPeriodo" => [
+                "dia"    => $this->model->contarUsuarios('dia'),
+                "semana" => $this->model->contarUsuarios('semana'),
+                "mes"    => $this->model->contarUsuarios('mes'),
+                "anio"   => $this->model->contarUsuarios('anio')
+            ],
 
-        $rutaUsuariosPeriodo = $baseDir . "/usuarios_por_periodo.png";
-        $rutaSexo= $baseDir . "/usuarios_por_sexo.png";
-        $rutaEdad= $baseDir . "/usuarios_por_edad.png";
-        $rutaPais= $baseDir . "/usuarios_por_pais.png";
-        $rutaRol= $baseDir . "/usuarios_por_rol.png";
-        $labelsPeriodo= ["Último día", "Última semana", "Último mes", "Último año"];
-        $valoresPeriodo= [$usuariosDia, $usuariosSemana, $usuariosMes, $usuariosAnio];
+            "usuarios" => $this->model->obtenerUsuarios(),
+
+            "sexo" => $this->model->contarUsuariosPorSexo(),
+            "edad" => $this->model->contarUsuariosPorGrupoDeEdad(),
+            "pais" => $this->model->contarUsuariosPorPais(),
+            "rol"  => $this->model->contarUsuariosPorRol()
+        ];
+    }
+
+    private function generarGraficos($m)
+    {
+        $baseDir = __DIR__ . "/../public/graficos";
 
         $this->generarGraficoBarras(
-            $labelsPeriodo,
-            $valoresPeriodo,
+            ["Último día","Última semana","Último mes","Último año"],
+            array_values($m["usuariosPeriodo"]),
             "Usuarios por periodo",
-            $rutaUsuariosPeriodo
+            "$baseDir/usuarios_por_periodo.png"
         );
 
         $this->generarGraficoBarras(
-            array_keys($sexoData),
-            array_values($sexoData),
+            array_keys($m["sexo"]),
+            array_values($m["sexo"]),
             "Usuarios por sexo",
-            $rutaSexo
+            "$baseDir/usuarios_por_sexo.png"
         );
 
-        $edadLabels= array_column($edadData, "grupo_edad");
-        $edadValores= array_column($edadData, "total");
-
         $this->generarGraficoBarras(
-            $edadLabels,
-            $edadValores,
+            array_column($m["edad"], "grupo_edad"),
+            array_column($m["edad"], "total"),
             "Usuarios por edad",
-            $rutaEdad
+            "$baseDir/usuarios_por_edad.png"
         );
 
-        $paisLabels= array_column($paisData, "pais");
-        $paisValores= array_column($paisData, "total");
-
         $this->generarGraficoBarras(
-            $paisLabels,
-            $paisValores,
+            array_column($m["pais"], "pais"),
+            array_column($m["pais"], "total"),
             "Usuarios por país",
-            $rutaPais
+            "$baseDir/usuarios_por_pais.png"
         );
-
-        $rolLabels= array_column($rolData, "rol");
-        $rolValores = array_column($rolData, "total");
 
         $this->generarGraficoBarras(
-            $rolLabels,
-            $rolValores,
+            array_column($m["rol"], "rol"),
+            array_column($m["rol"], "total"),
             "Usuarios por rol",
-            $rutaRol
+            "$baseDir/usuarios_por_rol.png"
         );
+    }
 
-        $categoriasAct = $this->categoriaModel->getCategoriasActivasData();
-        $categoriasInact = $this->categoriaModel->getCategoriasInactivasData(); 
+    private function obtenerCategoriasData()
+    {
+        $act = $this->categoriaModel->getCategoriasActivasData();
+        $inact = $this->categoriaModel->getCategoriasInactivasData();
+        $min = $this->categoriaModel->getMinPreguntas();
 
-        $MIN_PREGUNTAS = $this->categoriaModel->getMinPreguntas();
-
-        foreach ($categoriasInact as &$cat) {
-            $cat['faltantes'] = max(0, $MIN_PREGUNTAS - $cat['cantidad_preguntas']);
+        foreach ($inact as &$c) {
+            $c["faltantes"] = max(0, $min - $c["cantidad_preguntas"]);
         }
 
+        return [
+            "activas" => $act,
+            "inactivas" => $inact,
+            "min" => $min
+        ];
+    }
+    private function armarDataVista($metricas, $categorias, $mensajeCat)
+    {
         $foto = $_SESSION['foto_perfil'] ?? 'public/imagenes/usuarioImagenDefault.png';
 
-        $data = [
+        return [
             "usuario" => $_SESSION["usuario"],
 
-            "usuariosNuevos"      => $totalUsuarios,
-            "partidasJugadas"     => $partidasJugadas,
-            "preguntasTotales"    => $preguntasTotales,
-            "preguntasReportadas" => $preguntasReportadas,
-            "usuarios" => $usuarios,
-            "categoriasAct" => $categoriasAct,
-            "categoriasInact" => $categoriasInact,
+            "usuariosNuevos"      => $metricas["usuariosTotales"],
+            "partidasJugadas"     => $metricas["partidasJugadas"],
+            "preguntasTotales"    => $metricas["preguntasTotales"],
+            "preguntasReportadas" => $metricas["preguntasReportadas"],
+            "usuarios"            => $metricas["usuarios"],
+
+            "categoriasAct"       => $categorias["activas"],
+            "categoriasInact"     => $categorias["inactivas"],
 
             "foto_perfil" => $foto,
-            "grafUsuariosSexo" => "/public/graficos/usuarios_por_sexo.png",
-            "grafUsuariosEdad" => "/public/graficos/usuarios_por_edad.png",
-            "grafUsuariosPais" => "/public/graficos/usuarios_por_pais.png",
-            "grafUsuariosRol"  => "/public/graficos/usuarios_por_rol.png",
+
+            "grafUsuariosSexo"    => "/public/graficos/usuarios_por_sexo.png",
+            "grafUsuariosEdad"    => "/public/graficos/usuarios_por_edad.png",
+            "grafUsuariosPais"    => "/public/graficos/usuarios_por_pais.png",
+            "grafUsuariosRol"     => "/public/graficos/usuarios_por_rol.png",
             "grafUsuariosPeriodo" => "/public/graficos/usuarios_por_periodo.png",
 
             "mensajeCat" => $mensajeCat
         ];
-
-        $this->renderer->render("inicioAdmin", $data);
     }
 
     public function cambiarRol(){
@@ -169,15 +181,15 @@ class inicioAdminController{
 
     public function crearCategoria()
     {
-        $nombreCategoria = $_POST['categoriaNombre'] ?? null; 
-        $fotoCategoria = null; 
+        $nombreCategoria = $_POST['categoriaNombre'] ?? null;
+        $fotoCategoria = null;
         if(!empty($_FILES['categoriaImagen']['name'])) {
             $imagen = "public/imagenes/";
             $fotoCategoria = $imagen . basename($_FILES['categoriaImagen']['name']);
-            move_uploaded_file($_FILES['categoriaImagen']['tmp_name'], $fotoCategoria); 
+            move_uploaded_file($_FILES['categoriaImagen']['tmp_name'], $fotoCategoria);
         }
         $sePudo = $this->categoriaModel->crearNuevaCategoria($nombreCategoria, $fotoCategoria);
-        if(!$sePudo) { //De momento sin mensajes especificos segun error
+        if(!$sePudo) {
             $this->cargarData("No se puso agregar la categoria.");
         } else {
             $this->cargarData("Se agrego la categoria exitosamente.");
@@ -191,57 +203,7 @@ class inicioAdminController{
         $cssFile = __DIR__ . '/../public/css/pdfStyle.css';
         $css = file_exists($cssFile) ? file_get_contents($cssFile) : '';
 
-//        $html = $this->model->obtenerDatosParaPdf($css, $usuarios, $graficos);
-        $html = ' <html>
-    <head>
-        <style>' . $css . '</style>
-    </head>
-    <body>';
-
-        $html .= '<h1>Panel de Administración</h1>';
-        $html .= '<h2>Gestión de Usuarios</h2>';
-        $html .= '<table><thead><tr>
-                        <th>Id</th><th>Usuario</th><th>Mail</th><th>Nombre completo</th>
-                        <th>Año nacimiento</th><th>Sexo</th><th>Pais</th>
-                        <th>% Correctas</th><th>Rol</th>
-                    </tr> </thead> <tbody>';
-        foreach ($usuarios as $u) {
-            $html .= '<tr>
-                    <td>'.$u['id'].'</td>
-                    <td>'.$u['usuario'].'</td>
-                    <td>'.$u['mail'].'</td>
-                    <td>'.$u['nombre_completo'].'</td>
-                    <td>'.$u['anio_nacimiento'].'</td>
-                    <td>'.$u['sexo'].'</td>
-                    <td>'.$u['pais'].'</td>
-                    <td>'.$u['porcentaje_correctas'].'</td>
-                    <td>'.$u['rol'].'</td>
-                  </tr>';
-        }
-        $html .= '</tbody></table>';
-
-        $grafPeriodo = $graficos[4];
-        $html .= '<h3>'.$grafPeriodo['titulo'].'</h3>';
-        $html .= '<img src="'.$grafPeriodo['base64'].'">';
-        $html .= '<div class="page-break"></div>';
-
-        $graficosRestantes = array_slice($graficos, 0, 4);
-        for ($i = 0; $i < count($graficosRestantes); $i += 2) {
-            $html .= '<div>';
-            $html .= '<h3>'.$graficosRestantes[$i]['titulo'].'</h3>';
-            $html .= '<img src="'.$graficosRestantes[$i]['base64'].'">';
-            if (isset($graficosRestantes[$i+1])) {
-                $html .= '<h3>'.$graficosRestantes[$i+1]['titulo'].'</h3>';
-                $html .= '<img src="'.$graficosRestantes[$i+1]['base64'].'">';
-            }
-            $html .= '</div>';
-            if ($i + 2 < count($graficosRestantes)) {
-                $html .= '<div class="page-break"></div>';
-            }
-        }
-
-        $html .= '</body></html>';
-
+        $html = $this->model->obtenerDatosParaPdf($css, $usuarios, $graficos);
         $options = new Options();
         $options->set('isRemoteEnabled', true);
 

@@ -10,13 +10,10 @@ class PartidaModel {
 
     public function actualizarNivelJugador($idUsuario,$turno) {
         $partidasMinimas=$this->elJugadorCumpleConLasPartidasMinimas($idUsuario,$turno);
-        //Despues validar que tengan un min de preguntas hechas
 
         if($partidasMinimas){
-        //Actualizar por categoria
         $this->actualizarNivelJugadorPorCategoria($turno, $idUsuario);
         }
-        //Actualizar general
         $this->actualizarNivelJugadorGeneral($idUsuario);
     }
 
@@ -94,12 +91,6 @@ class PartidaModel {
     }
 
     public function crearPartida($idUsuario) {
-//        $idUsuario = is_numeric($usuario) ? $usuario : $this->usuarioModel->obtenerIdUsuarioPorNombre($usuario);
-//        if ($oponente !== null) {
-//            $idOponente = is_numeric($oponente) ? $oponente : $this->usuarioModel->obtenerIdUsuarioPorNombre($oponente);
-//        }
-//        $idOponenteSql = (!empty($idOponente) && $idOponente > 0) ? $idOponente : "NULL";
-//        $sql = "INSERT INTO partidas (id_usuario, id_oponente) VALUES ($idUsuario, $idOponenteSql)";
         $sql = "INSERT INTO partidas (id_usuario) VALUES ($idUsuario)";
         $this->conexion->query($sql);
 
@@ -253,21 +244,6 @@ class PartidaModel {
             WHERE id = $idTurno";
         $this->conexion->query($sqlUpdateAciertos);
     }
-//En caso de ponerle NULL por defecto
-//    public function acreditarIntentoFallido($idTurno, $idPregunta) {
-//        $sql = "UPDATE turno_pregunta
-//            SET respondida = true,
-//            acierto= false
-//            WHERE id_turno = $idTurno AND id_pregunta = $idPregunta";
-//        $this->conexion->query($sql);
-//
-//        $sqlUpdateAciertos = "
-//            UPDATE turno
-//            SET activo =  1 ,
-//            aciertos = 0
-//            WHERE id = $idTurno";
-//        $this->conexion->query($sqlUpdateAciertos);
-//    }
 
     public function acreditarFueraPasadoDeTiempo($idTurno, $idPregunta) {
         $sql = "UPDATE turno_pregunta
@@ -387,7 +363,6 @@ class PartidaModel {
             $vistas = 0;
         }
 
-//      se obtiene preguntas de la categoria y que no haya hecho el jugador
         $sql = "
             SELECT p.*
             FROM pregunta p
@@ -406,14 +381,7 @@ class PartidaModel {
         $resultado = $this->conexion->query($sql);
 
 
-        //En caso de que no encuentre una, borra all y vuelve a cargar el resultado
         if (empty($resultado)) {
-//            $this->conexion->query("
-//            DELETE FROM preguntasVistas
-//            WHERE id_usuario = $idUsuario
-//              AND id_pregunta IN (
-//                  SELECT id_pregunta FROM pregunta WHERE id_categoria = $idCategoria)");
-//            $resultado = $this->conexion->query($sql);
             $resultado = $this->obtenerPreguntaRandomNoHecha($idUsuario, $idCategoria);
         }
 
@@ -448,33 +416,6 @@ class PartidaModel {
         $resultado = $this->conexion->query($sql);
         return $resultado;
     }
-
-    /*public function finalizarTurno($idTurno){
-        $sql = "UPDATE turno SET fin_turno= NOW() WHERE id = $idTurno";
-        $this->conexion->query($sql);
-    }
-
-
-    todo esto era para calcular tiempo desde la base de datos
-    public function calcularTiempoDeRespuesta($idTurno){
-        $sql = "SELECT TIMESTAMPDIFF(SECOND, inicio_turno, fin_turno) as tiempoSegundos FROM turno WHERE id = $idTurno";
-        $resultado = $this->conexion->query($sql);
-        if ($resultado && count($resultado) > 0) {
-            return $resultado[0]["tiempoSegundos"];
-        }
-        return null;
-    }
-
-    public function verificarTiempoDelTurno($idTurno){
-        $tiempoLimiteSegundos = 15; //desde aca modificamos el tiempo limite en el backend
-        $tiempoRespuesta = $this->calcularTiempoDeRespuesta($idTurno);
-        if ($tiempoRespuesta !== null) {
-            return $tiempoRespuesta <= $tiempoLimiteSegundos;
-        }
-        return false; // Si no se pudo calcular el tiempo, consideramos que no está dentro del límite
-    }*/
-
-
     public function mensajeDeRevisionDeErrores(){
         var_dump("llegue");
         die();
