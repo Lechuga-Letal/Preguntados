@@ -82,12 +82,10 @@ class PartidaController{
         $usuario = $_SESSION['usuario'];
         $idUsuario = $this->usuarioModel->obtenerIdUsuarioPorNombre($usuario);
         $dataDePartidasFinalizadas = $this->model->obtenerPartidasFinalizadasPorId($idUsuario);
-//        $dataDePartidasFinalizadas = $this->model->obtenerDataDePartidasPorEstado($idUsuario, "finalizada");
         $dataDePartidasEnEspera = $this->model->obtenerDataDePartidasPorEstado($idUsuario, "en curso");
         $data = [
             "usuario" => $usuario,
             "partidas_finalizadas" => $dataDePartidasFinalizadas,
-//            "partidas_enCurso" => $dataDePartidasEnEspera
             "foto_perfil" => $foto,
         ];
 
@@ -121,18 +119,16 @@ class PartidaController{
         ];
 
 
-        $this->inicioCronometroAPI();// inicia el cronometro al cargar la partida asi es solouna vez(?)
+        $this->inicioCronometroAPI();
         $this->renderer->render("partida", $model);
     }
 
     public function crearTurno()
     {
-        //si hay un turno pendiente o si el tiempo del turno no termino
         $usuarioId = $this->usuarioModel->obtenerIdUsuarioPorNombre($_SESSION["usuario"]);
         if (isset($_SESSION["pregunta_turno"])) {
 
             $tiempoRestante = 15 - (time() - $_SESSION["cronometro"]);
-            // Arreglar cronometro
 
             $model = [
                 'id_turno' => $_SESSION["turno"],
@@ -153,15 +149,6 @@ class PartidaController{
             $idPartida = $_SESSION['id'] ?? $this->model->crearPartida($usuarioId);
             $_SESSION['id'] = $idPartida;
 
-            /*
-            $mapaCategorias = [
-                'Deportes' => 1,
-                'Entretenimiento' => 2,
-                'Informática' => 3,
-                'Matemáticas' => 4,
-                'Historia' => 5
-            ]; */
-            //$idCategoria = $mapaCategorias[$categoria] ?? null;
             $idCategoria = intval($categoria);
             $idTurno = $this->model->crearTurno($usuarioId, $idPartida, $idCategoria);
             $_SESSION['turno'] = $idTurno;
@@ -203,7 +190,6 @@ class PartidaController{
 
         if($fueraDelTiempo || isset($_GET["tiempo"])){
             $this->borradoDeDatosPregunta();
-//            $this->model->acreditarFueraPasadoDeTiempo($turno, $idPregunta);
             $this->redirectModel->redirect("partida/terminarPartida?idTurno=$turno");
             return;
         }
@@ -239,11 +225,8 @@ class PartidaController{
             $this->redirectModel->redirect("partida/iniciarPartida");
             return;
         }
-//        $idTurno = $_GET["idTurno"];
-        $idTurno = $_GET["turno"];
-        $_SESSION['turno'] = $idTurno;
 
-        $idPartida = $this->model->obtenerIdPartidaPorTurno($idTurno);
+        $idPartida = $this->model->obtenerIdPartidaPorTurno($turno);
         $this->borradoDeDatosPregunta();
 
         $URL = "partida/crearTurno?nombreUsuario=$nombreUsuario&idPartida=$idPartida&categoria=$categoria";
@@ -269,20 +252,16 @@ class PartidaController{
                 "respuestaCorrecta" => $this->model->obtenerDescripcionDeLaRepuestaCorrectaDeLaPreguntaPorTurno($idTurno)]);
     }
 
-//    public function inicioCronometro()
-//    {
-//        $_SESSION['cronometro'] = time(); // HORA DE INICIO tiempo
-//    }
     public function inicioCronometro()
     {
         if (!isset($_SESSION['cronometro'])){
-            $_SESSION['cronometro'] = time(); // HORA DE INICIO tiempo
+            $_SESSION['cronometro'] = time();
         }
     }
 
     public function duracionTiempoMaximoPorTurno()
     {
-        $tiempoMaximoEnResponder = 15; // segundos
+        $tiempoMaximoEnResponder = 15;
         return $tiempoMaximoEnResponder;
     }
 
@@ -302,27 +281,16 @@ class PartidaController{
         $data = [
             'tiempoMaximoPorTurno' => $tiempoMaximoPorTurno,
             'tiempoInicio' => $tiempoInicio,
-            'tiempoFin' => $tiempoFin //no se si es necesario aca, no lo usamos
+            'tiempoFin' => $tiempoFin
         ];
-        /*  Estos son los datos que muestra, setea el inicio del cronometro, duracion y fin
-      */
+
 
         echo json_encode($data);
     }
 
     public function controlarTiempo()
     {
-//        $terminarPartida = false;
-//        $turno=$_SESSION['turno'];
-//        $finCronometro = $this->finCronometro();
-//        $tiempoActual = time();
-//        $this->mensajeDeRevisionDeErrores();
-//        if($finCronometro <= $tiempoActual){
-//            $terminarPartida = true;
-//            $this->terminarPartida();
-//
-//        }
-//        echo $terminarPartida;
+
         $terminarPartida = false;
         $finCronometro = $this->finCronometro();
         $tiempoActual = time();
@@ -339,12 +307,6 @@ class PartidaController{
         echo json_encode(['tiempoRestante' => $tiempoRestante]);
     }
 
-    /*
-    public function terminarPartidaPorTiempoMaximo(){
-        $turno=$_SESSION['turno'];
-        $this->redirectModel->redirect("partida/terminarPartida?idTurno=$turno");
-
-    }*/
 
     public function mensajeDeRevisionDeErrores()
     {
@@ -364,7 +326,6 @@ class PartidaController{
 
     public function borradoDeDatosPregunta()
     {
-//        $valoresPartidaBorradosSession = ["cronometro", "pregunta_turno", "turno", "categoria_actual", "preguntas_respondidas"];
         $valoresPartidaBorradosSession = ["pregunta_turno","cronometro"];
         foreach ($valoresPartidaBorradosSession as $clave) {
             if (isset($_SESSION[$clave])) {
@@ -374,7 +335,6 @@ class PartidaController{
     }
 
     public function borradoDeDatosPreguntaYcronometro(){
-//        $valoresPartidaBorradosSession = ["cronometro", "pregunta_turno", "turno", "categoria_actual", "preguntas_respondidas"];
         $valoresPartidaBorradosSession = ["pregunta_turno","cronometro"];
         foreach ($valoresPartidaBorradosSession as $clave) {
             if (isset($_SESSION[$clave])) {

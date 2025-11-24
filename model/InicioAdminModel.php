@@ -155,58 +155,58 @@ class InicioAdminModel {
         return $resultado;
     }
 
-//    public function obtenerDatosParaPdf($css, $usuarios, $graficos){
-//        $html = ' <html>
-//    <head>
-//        <style>' . $css . '</style>
-//    </head>
-//    <body>';
-//
-//        $html .= '<h1>Panel de Administración</h1>';
-//        $html .= '<h2>Gestión de Usuarios</h2>';
-//        $html .= '<table><thead><tr>
-//                        <th>Id</th><th>Usuario</th><th>Mail</th><th>Nombre completo</th>
-//                        <th>Año nacimiento</th><th>Sexo</th><th>Pais</th>
-//                        <th>% Correctas</th><th>Rol</th>
-//                    </tr> </thead> <tbody>';
-//        foreach ($usuarios as $u) {
-//            $html .= '<tr>
-//                    <td>'.$u['id'].'</td>
-//                    <td>'.$u['usuario'].'</td>
-//                    <td>'.$u['mail'].'</td>
-//                    <td>'.$u['nombre_completo'].'</td>
-//                    <td>'.$u['anio_nacimiento'].'</td>
-//                    <td>'.$u['sexo'].'</td>
-//                    <td>'.$u['pais'].'</td>
-//                    <td>'.$u['porcentaje_correctas'].'</td>
-//                    <td>'.$u['rol'].'</td>
-//                  </tr>';
-//        }
-//        $html .= '</tbody></table>';
-//
-//        $grafPeriodo = $graficos[4];
-//        $html .= '<h3>'.$grafPeriodo['titulo'].'</h3>';
-//        $html .= '<img src="'.$grafPeriodo['base64'].'">';
-//        $html .= '<div class="page-break"></div>';
-//
-//        $graficosRestantes = array_slice($graficos, 0, 4);
-//        for ($i = 0; $i < count($graficosRestantes); $i += 2) {
-//            $html .= '<div>';
-//            $html .= '<h3>'.$graficosRestantes[$i]['titulo'].'</h3>';
-//            $html .= '<img src="'.$graficosRestantes[$i]['base64'].'">';
-//            if (isset($graficosRestantes[$i+1])) {
-//                $html .= '<h3>'.$graficosRestantes[$i+1]['titulo'].'</h3>';
-//                $html .= '<img src="'.$graficosRestantes[$i+1]['base64'].'">';
-//            }
-//            $html .= '</div>';
-//            if ($i + 2 < count($graficosRestantes)) {
-//                $html .= '<div class="page-break"></div>';
-//            }
-//        }
-//
-//        $html .= '</body></html>';
-//        return $html;
-//    }
+    public function obtenerDatosParaPdf($css, $usuarios, $graficos){
+        $html = ' <html>
+    <head>
+        <style>' . $css . '</style>
+    </head>
+    <body>';
+
+        $html .= '<h1>Panel de Administración</h1>';
+        $html .= '<h2>Gestión de Usuarios</h2>';
+        $html .= '<table><thead><tr>
+                        <th>Id</th><th>Usuario</th><th>Mail</th><th>Nombre completo</th>
+                        <th>Año nacimiento</th><th>Sexo</th><th>Pais</th>
+                        <th>% Correctas</th><th>Rol</th>
+                    </tr> </thead> <tbody>';
+        foreach ($usuarios as $u) {
+            $html .= '<tr>
+                    <td>'.$u['id'].'</td>
+                    <td>'.$u['usuario'].'</td>
+                    <td>'.$u['mail'].'</td>
+                    <td>'.$u['nombre_completo'].'</td>
+                    <td>'.$u['anio_nacimiento'].'</td>
+                    <td>'.$u['sexo'].'</td>
+                    <td>'.$u['pais'].'</td>
+                    <td>'.$u['porcentaje_correctas'].'</td>
+                    <td>'.$u['rol'].'</td>
+                  </tr>';
+        }
+        $html .= '</tbody></table>';
+
+        $grafPeriodo = $graficos[4];
+        $html .= '<h3>'.$grafPeriodo['titulo'].'</h3>';
+        $html .= '<img src="'.$grafPeriodo['base64'].'">';
+        $html .= '<div class="page-break"></div>';
+
+        $graficosRestantes = array_slice($graficos, 0, 4);
+        for ($i = 0; $i < count($graficosRestantes); $i += 2) {
+            $html .= '<div>';
+            $html .= '<h3>'.$graficosRestantes[$i]['titulo'].'</h3>';
+            $html .= '<img src="'.$graficosRestantes[$i]['base64'].'">';
+            if (isset($graficosRestantes[$i+1])) {
+                $html .= '<h3>'.$graficosRestantes[$i+1]['titulo'].'</h3>';
+                $html .= '<img src="'.$graficosRestantes[$i+1]['base64'].'">';
+            }
+            $html .= '</div>';
+            if ($i + 2 < count($graficosRestantes)) {
+                $html .= '<div class="page-break"></div>';
+            }
+        }
+
+        $html .= '</body></html>';
+        return $html;
+    }
 }
 
 
