@@ -31,7 +31,7 @@ class PartidaController{
 
         $usuarioSesionId = $_SESSION['id'];
         $usuario = $this->usuarioModel->getUsuarioById($usuarioSesionId);
-
+        $usuarioNombre = $usuario['usuario'];
         if (!empty($usuario) && $usuario['baneado_definitivo'] == 1) {
             $this->renderer->render("usuarioBaneado");
             return;
@@ -39,7 +39,8 @@ class PartidaController{
 
         $foto = $_SESSION['foto_perfil'] ?? '/public/imagenes/usuarioImagenDefault.png';
         $data =[
-          "foto_perfil" => $foto
+          "foto_perfil" => $foto,
+          "usuario" => $usuarioNombre
         ];
         $this->renderer->render("oponente", $data);
     }
@@ -97,8 +98,10 @@ class PartidaController{
     {
         $idUsuario = $_SESSION['usuario']['id'] ?? $_SESSION['usuario'];
         $foto = $_SESSION['foto_perfil'] ?? '/public/imagenes/usuarioImagenDefault.png';
+        $usuario = $this->usuarioModel->getUsuarioById($idUsuario);
+        $usuarioNombre = $usuario['usuario'];
         $jugadores = $this->usuarioModel->obtenerListadoDeJugadoresMenos($idUsuario);
-        $this->renderer->render("desafiar", ["usuarios" => $jugadores]);
+        $this->renderer->render("desafiar", ["usuarios" => $jugadores, "foto_perfil" => $foto, "usuario" => $idUsuario]);
     }
 
     public function mostrarPartida()
