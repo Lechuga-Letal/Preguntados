@@ -1,0 +1,34 @@
+<title>Reportar</title>
+<link rel="stylesheet" href="../public/css/vistas/reportarPreguntaStyle.css">
+<link rel="stylesheet" href="../public/css/componentes/headerComponente.css">
+<body>
+
+<header class="header">
+    <h2 class="titulo">Preguntados</h2>
+    <div class="user-info">
+        <form method="POST" action="/Preguntados/inicio/logout">
+            <input class="logout-btn" type="submit" value="Cerrar sesión">
+        </form>
+    </div>
+</header>
+
+<main class="container">
+    <h1>Reportar Usuario</h1>
+
+    <section class="pregunta-card">
+        <h2 class="pregunta-titulo">Detalles del reporte</h2>
+
+        <form action="/ReportarUsuario/crearReporteUsuario" method="post">
+            <input type="hidden" name="id" value="{{id}}">
+
+            <div class="mb-3">
+                <label for="motivo">Motivo del reporte:</label>
+                <textarea id="motivo" name="motivo" class="motivo-textarea" rows="3" required></textarea>
+            </div>
+            <div class="acciones">
+                <button type="submit" class="btn btn-volver">Enviar reporte</button>
+                <a href="/inicio" class="btn btn-volver">Volver</a>
+            </div>
+        </form>
+    </section>
+</main>

@@ -58,25 +58,12 @@ body {
     transition: opacity 0.4s ease;
 }
 
-.muñeco .color {
-    opacity: 0;
-}
-
-.muñeco.ganado .color {
-    opacity: 1;
-}
-
-.muñeco.ganado .bw {
-    opacity: 0.2;
-}
 .muñeco img {
     width: 100px;
-    filter: grayscale(100%) brightness(60%);
     transition: filter 0.4s ease;
 }
 
 .muñeco.ganado {
-    filter: brightness(1.2) saturate(1.3);
     transform: scale(1.1);
     transition: 0.3s ease;
 }

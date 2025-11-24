@@ -1,3 +1,15 @@
+body,
+html {
+    background-color: var(--color-bg-dark, #141414)  !important;
+    margin: 0;
+    padding: 0;
+    min-height: 100vh;
+    color: var(--color-text-main);
+}
+main {
+    background: transparent !important;
+    padding: 40px 0;
+}
 .header {
   width: 100%;
   padding: 20px 40px;
@@ -40,7 +52,6 @@
   box-shadow: 0 4px 10px rgba(255, 193, 7, 0.4);
 }
 
-/* Main content */
 .container {
   flex: 1;
   display: flex;

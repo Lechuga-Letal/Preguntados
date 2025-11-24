@@ -251,5 +251,5 @@ class inicioAdminController{
         $dompdf->render();
         $dompdf->stream("panel_administracion.pdf", ["Attachment" => 0]);
     }
+
 }
-?>

@@ -1,0 +1,52 @@
+<title>Reportar</title>
+<link rel="stylesheet" href="../public/css/vistas/reportarPreguntaStyle.css">
+<link rel="stylesheet" href="../public/css/componentes/headerComponente.css">
+<body>
+<header class="header">
+    <h2 class="titulo">Preguntados</h2>
+    <div class="user-info">
+        <form method="POST" action="/Preguntados/inicio/logout">
+            <input class="logout-btn" type="submit" value="Cerrar sesión">
+        </form>
+    </div>
+</header>
+
+<main class="container">
+    <h1>Reportar Usuario</h1>
+
+    <section class="pregunta-card">
+        <h2 class="pregunta-titulo">Perfil del usuario</h2>
+
+        <form action="/reportarUsuario" method="get">
+                <div class="row g-3 align-items-start">
+                    <div class="col-md-6">
+                        <div class="card bg-dark text-light p-3 rounded-3 shadow-sm">
+                            <div class="text-center">
+                                {{#usuario.foto_perfil}}
+                                    <img src="{{usuario.foto_perfil}}" alt="{{usuario.usuario}}" class="img-fluid rounded-circle mb-2" width="90" height="90">
+                                {{/usuario.foto_perfil}}
+
+                                {{^usuario.foto_perfil}}
+                                    <img src="/public/imagenes/usuarioImagenDefault.png" alt="{{usuario.usuario}}" class="img-fluid rounded-circle mb-2" width="90" height="90">
+                                {{/usuario.foto_perfil}}
+
+                                <h5 class="fw-bold mb-0">{{nombre_completo}}</h5>
+                                <small class="text-muted">@{{usuario}}</small><br>
+                            </div>
+
+                            <ul class="list-group list-group-flush mt-3">
+                                <li class="list-group-item bg-dark text-light py-1">Nacimiento: {{anio_nacimiento}}</li>
+                                <li class="list-group-item bg-dark text-light py-1">Sexo: {{sexo}}</li>
+                                <li class="list-group-item bg-dark text-light py-1">Correo: {{mail}}</li>
+                                <li class="list-group-item bg-dark text-light py-1">Rol: {{rol}}</li>
+                            </ul>
+                        </div>
+                    </div>
+
+            <div class="acciones">
+                <a href="/ReportarUsuario/enviar?id={{id}}"  class="btn btn-volver">Seleccionar</a>
+                <a href="/inicio" class="btn btn-volver">Volver</a>
+            </div>
+        </form>
+    </section>
+</main>

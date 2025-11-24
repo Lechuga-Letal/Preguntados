@@ -1,0 +1,66 @@
+<title>Lista de Usuarios Reportados</title>
+<link rel="stylesheet" href="/public/css/vistas/preguntasListaStyle.css">
+<link rel="stylesheet" href="/public/css/componentes/headerComponente.css">
+</head>
+
+<body>
+
+<header class="header">
+    <h2 class="titulo">Preguntados</h2>
+    <div class="user-info">
+        <form method="POST" action="/Preguntados/inicio/logout">
+            <input class="logout-btn" type="submit" value="Cerrar sesión">
+        </form>
+        <p class="username">{{usuario}}</p>
+    </div>
+</header>
+
+<main class="container">
+    <h1>Lista de Usuarios</h1>
+
+    <section class="pregunta-card">
+        {{#reportados}}
+            <div class="card bg-dark text-light p-3 rounded-3 shadow-sm">
+                <div class="text-center">
+                    {{#foto_perfil}}
+                        <img src="{{foto_perfil}}" alt="{{usuario}}" class="img-fluid rounded-circle mb-2" width="90" height="90">
+                    {{/foto_perfil}}
+
+                    {{^foto_perfil}}
+                        <img src="/public/imagenes/usuarioImagenDefault.png" alt="{{usuario}}" class="img-fluid rounded-circle mb-2" width="90" height="90">
+                    {{/foto_perfil}}
+
+                    <h5 class="fw-bold mb-0">{{nombre_completo}}</h5>
+                    <small class="text-muted">@{{usuario}}</small><br>
+                </div>
+
+                <ul class="list-group list-group-flush mt-3">
+                    <li class="list-group-item bg-dark text-light py-1">Nacimiento: {{anio_nacimiento}}</li>
+                    <li class="list-group-item bg-dark text-light py-1">Sexo: {{sexo}}</li>
+                    <li class="list-group-item bg-dark text-light py-1">Correo: {{mail}}</li>
+                    <li class="list-group-item bg-dark text-light py-1">Rol: {{rol}}</li>
+                    <li class="list-group-item bg-dark text-light py-1">Motivo: {{motivo}}</li>
+                </ul>
+                <div class="volver-contenedor">
+                    <a href="/ReportarUsuario/banearDefinitivamente?id={{id}}" class="btn-volver">
+                    Reportar usuario
+                    </a>
+                </div>
+
+                <div class="volver-contenedor">
+                    <a href="/ReportarUsuario/desbanear?id={{id}}" class="btn-volver">
+                    Anular reporte
+                    </a>
+                </div>
+            </div>
+        {{/reportados}}
+
+        {{^reportados}}
+            <div class="alerta">No hay usuarios disponibles.</div>
+        {{/reportados}}
+    </section>
+
+    <div class="volver-contenedor">
+        <a href="/inicioEditor/" class="btn-volver">Volver</a>
+    </div>
+</main>

@@ -23,7 +23,9 @@ CREATE TABLE usuarios (
     ciudad VARCHAR(100) NOT NULL,
     coordenadas VARCHAR(100) NOT NULL,
     foto_perfil VARCHAR(255) DEFAULT NULL,
-    rol ENUM('Administrador', 'Editor', 'Jugador') NOT NULL DEFAULT 'Jugador', -- pasarlo a una tabla Roles
+    baneado TINYINT(1) NOT NULL DEFAULT 0,
+    baneado_definitivo TINYINT(1) NOT NULL DEFAULT 0,
+    rol ENUM('Administrador', 'Editor', 'Jugador') NOT NULL DEFAULT 'Jugador',
     creacion DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
@@ -50,6 +52,16 @@ CREATE TABLE reporte (
     descripcion TEXT NOT NULL,
     FOREIGN KEY (id_pregunta) REFERENCES pregunta(id_pregunta) ON DELETE CASCADE,
     FOREIGN KEY (id_usuario) REFERENCES usuarios(id) ON DELETE CASCADE
+);
+
+CREATE TABLE reporteUsuario (
+                         id_reporte INT AUTO_INCREMENT PRIMARY KEY,
+                         id_usuario INT NOT NULL,
+                         id_usuarioReportado INT NOT NULL,
+                         descripcion TEXT NOT NULL,
+                         FOREIGN KEY (id_usuario) REFERENCES usuarios(id) ON DELETE CASCADE,
+                         FOREIGN KEY (id_usuarioReportado) REFERENCES usuarios(id) ON DELETE CASCADE
+
 );
 
 -- Preguntas Sugeridas
@@ -104,12 +116,11 @@ CREATE TABLE turno_pregunta (
     FOREIGN KEY (id_turno) REFERENCES turno(id)
         ON DELETE CASCADE
         ON UPDATE CASCADE,
-        
+
     FOREIGN KEY (id_pregunta) REFERENCES pregunta(id_pregunta)
         ON DELETE CASCADE
         ON UPDATE CASCADE
 );
-
 -- Las contrasenias son 123!
 INSERT INTO usuarios (usuario, mail, password, nombre_completo, anio_nacimiento, sexo, pais, ciudad, coordenadas)
 VALUES
@@ -315,7 +326,7 @@ INSERT INTO respuesta_sugerida (descripcion, es_correcta, id_sugerencia) VALUES
 CREATE TABLE categoria (
 id_categoria INT AUTO_INCREMENT PRIMARY KEY,
 nombre VARCHAR(50) NOT NULL,
-foto_categoria VARCHAR(50) NOT NULL, 
+foto_categoria VARCHAR(50) NOT NULL,
 estado INT NOT NULL
 );
 
