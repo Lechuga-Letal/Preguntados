@@ -416,6 +416,19 @@ class PartidaModel {
         $resultado = $this->conexion->query($sql);
         return $resultado;
     }
+
+    public function buscarPartidaIncompleta($idUsuario){
+        $sql="SELECT id FROM partidas 
+            WHERE id_usuario = $idUsuario
+            AND estado='en curso'";
+        var_dump($sql);
+        $result=$this->conexion->query($sql);
+
+        var_dump($result);
+
+        return $result[0]["id"];
+    }
+
     public function mensajeDeRevisionDeErrores(){
         var_dump("llegue");
         die();

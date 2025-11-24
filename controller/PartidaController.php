@@ -51,9 +51,18 @@ class PartidaController{
             exit();
         }
 
+        $idUsuario=$this->usuarioModel->obtenerIdUsuarioPorNombre($_SESSION["usuario"]);
+        $idPartidaPendiente=$this->model->buscarPartidaIncompleta($idUsuario);
+
         if($_SESSION["id"]){
             $puntaje=$this->model->obtenerTotalAciertosPorPartida($_SESSION["id"]);
             $this->model->finalizarPartida($_SESSION["id"],$puntaje);
+            $this->borradoDeDatosPartidaEnSession();
+        }
+
+        if($idPartidaPendiente){
+            $puntaje=$this->model->obtenerTotalAciertosPorPartida($idPartidaPendiente);
+            $this->model->finalizarPartida($idPartidaPendiente,$puntaje);
             $this->borradoDeDatosPartidaEnSession();
         }
         $this->redirectModel->redirect("partida/iniciarPartida");
