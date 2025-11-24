@@ -42,18 +42,24 @@ class NuevaPreguntaController
         $rol = $_SESSION['rol'] ?? 'Jugador';
         $foto = $_SESSION['foto_perfil'] ?? '/public/imagenes/usuarioImagenDefault.png';
 
+        $idUsuario = $_SESSION['id'] ?? $_SESSION['usuario'];
+        $usuario = $this->usuarioModel->getUsuarioById($idUsuario);
+        $usuarioNombre = $usuario['usuario'];
+
         if ($rol == 'Jugador') {
             return [
                 'categorias' => $this->categoriasModel->getCategoriasActivas(),
                 'Editor' => false,
-                'foto_perfil' => $foto
+                'foto_perfil' => $foto,
+                'usuario' => $usuarioNombre
             ];
         }
 
         return [
             'categorias' => $this->categoriasModel->getAllCategorias(),
             'Editor' => true,
-            'foto_perfil' => $foto
+            'foto_perfil' => $foto,
+            'usuario' => $usuarioNombre
         ];
     }
 

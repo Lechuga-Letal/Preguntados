@@ -92,11 +92,11 @@ class ConfigFactory
 
         $this->objetos["MapaController"] = new MapaController();
 
-        $this->objetos["InicioEditorController"] = new InicioEditorController(($this->conexion), $this->renderer);
+        $this->objetos["InicioEditorController"] = new InicioEditorController(($this->conexion), $this->renderer, $this->usuarioModel);
 
         $this->objetos["NuevaPreguntaController"] = new NuevaPreguntaController(($this->conexion), $this->renderer, $this->redirectModel, $this->preguntasModel, $this->respuestasModel, $this->usuarioModel, $this->categoriasModel);
 
-        $this->objetos["PreguntasListaController"] = new PreguntasListaController(($this->conexion), $this->renderer, $this->redirectModel, $this->preguntasModel, $this->categoriasModel);
+        $this->objetos["PreguntasListaController"] = new PreguntasListaController(($this->conexion), $this->renderer, $this->redirectModel, $this->preguntasModel, $this->categoriasModel, $this->usuarioModel);
 
         $this->objetos["GestionarPreguntaController"] = new GestionarPreguntaController(($this->conexion), $this->renderer, $this->redirectModel, $this->preguntasModel, $this->respuestasModel, $this->reportesModel, $this->categoriasModel);
     

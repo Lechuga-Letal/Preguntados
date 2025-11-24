@@ -7,13 +7,15 @@ class PreguntasListaController
     private $redirectModel; 
     private $preguntasModel; 
     private $categoriasModel; 
-    public function __construct($model, $renderer, $redirectModel, $preguntasModel, $categoriasModel)
+    private $usuarioModel; 
+    public function __construct($model, $renderer, $redirectModel, $preguntasModel, $categoriasModel, $usuairoModel)
     {
         $this->model = $model;     
         $this->renderer = $renderer; 
         $this->redirectModel = $redirectModel;
         $this->preguntasModel = $preguntasModel;    
         $this->categoriasModel = $categoriasModel;
+        $this->usuarioModel = $usuairoModel;
     }
 
     public function base()
@@ -84,9 +86,17 @@ class PreguntasListaController
             $cat['seleccionada'] = ($cat['nombre'] === $categoria);
         }
 
+        $foto = $_SESSION['foto_perfil'] ?? '/public/imagenes/usuarioImagenDefault.png';
+        $idUsuario = $_SESSION['id'] ?? $_SESSION['usuario'];
+        $usuario = $this->usuarioModel->getUsuarioById($idUsuario);
+        $usuarioNombre = $usuario['usuario'];
+
+
         $this->renderer->render("preguntasLista", [
             'preguntas'       => $agrupadas,
-            'categorias'      => $categorias
+            'categorias'      => $categorias,
+            "foto_perfil" => $foto,
+            "usuario" => $usuarioNombre
         ]);
     }
 

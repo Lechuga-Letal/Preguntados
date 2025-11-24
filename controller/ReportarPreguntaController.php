@@ -53,6 +53,11 @@ class ReportarPreguntaController
         $pregunta = $this->preguntasModel->obtenerPreguntaPorId($id_pregunta);
         $respuestas = $this->respuestasModel->obtenerRespuestasPorPregunta($id_pregunta);
 
+        $foto = $_SESSION['foto_perfil'] ?? '/public/imagenes/usuarioImagenDefault.png';
+        $idUsuario = $_SESSION['id'] ?? $_SESSION['usuario'];
+        $usuario = $this->usuarioModel->getUsuarioById($idUsuario);
+        $usuarioNombre = $usuario['usuario'];
+
         if (!$pregunta) {
             unset($_SESSION['id_pregunta_reportar']);
             $this->renderer->render('error', ['mensaje' => 'La pregunta no existe.']);
@@ -61,7 +66,9 @@ class ReportarPreguntaController
 
         $data = [
             'pregunta' => $pregunta,
-            'respuestas' => $respuestas
+            'respuestas' => $respuestas,
+            "usuario" => $usuarioNombre,
+            "foto_perfil" => $foto
         ];
 
         if (!empty($_SESSION['report_success'])) {
@@ -85,8 +92,15 @@ class ReportarPreguntaController
         $idJugador=$this->usuarioModel->obtenerIdUsuarioPorNombre($_SESSION['usuario']);
         $preguntasDelJugador=$this->preguntasModel->obtenerPreguntasDeLaUltimaPartidaDelJugador($idJugador);
 
+        $foto = $_SESSION['foto_perfil'] ?? '/public/imagenes/usuarioImagenDefault.png';
+        $idUsuario = $_SESSION['id'] ?? $_SESSION['usuario'];
+        $usuario = $this->usuarioModel->getUsuarioById($idUsuario);
+        $usuarioNombre = $usuario['usuario'];
+        
         $data=[
             "preguntas"=>$preguntasDelJugador,
+            "foto_perfil" => $foto,
+            "usuario" => $usuarioNombre
         ];
 
         $this->renderer->render('reportarPreguntaLista', $data);
@@ -107,7 +121,6 @@ class ReportarPreguntaController
 
 
         $id_reporte = $this->reportesModel->crearReporte($id_pregunta, $id_usuario, $motivo);
-        $this->redirectModel->redirect('/localhost/inicio');
-
+        $this->redirectModel->redirect("reportarPregunta/getPregunta");
     }
 }
